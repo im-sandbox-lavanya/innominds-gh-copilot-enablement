@@ -1,11 +1,15 @@
-Quality, Security & Optimization
-	· Unit & Integration Test Generation
-	· Test Automation (Playwright)
-	· Test Data Generation
-	· Automated Code Review (PR Comments)
-	· Bug Fixing
-	· Security Scanning (Vulnerabilities)
-	· Security Report & Prioritization
-	· Fixing Security Issues
-	· DB Migration Scripts Generation
-	· Monitoring & Observability
+Day 5 – Quality, Security & Optimization
+
+| # | Topic | Details | Copilot Features |
+|---|-------|---------|------------------|
+| 1 | Unit & Integration Test Generation | Generating unit tests, mocking dependencies, test coverage, integration test scaffolding | `/tests`, Agent Mode, Chat |
+| 2 | Test Automation (Playwright) | End-to-end test generation, page object models, test selectors, cross-browser testing | Agent Mode, Chat, `@workspace` |
+| 3 | Test Data Generation | Generating realistic test data, fixtures, edge cases, boundary values | Chat, Inline Suggestions |
+| 4 | Automated Code Review (PR Comments) | AI-powered PR reviews, Copilot code review, review suggestions, addressing feedback | Copilot Code Review, `@github` |
+| 5 | Bug Fixing | Debugging with Copilot, `/fix` command, error analysis, root cause identification | `/fix`, Agent Mode, Chat |
+| 6 | Security Scanning (Vulnerabilities) | CodeQL integration, GHAS alerts, dependency vulnerabilities, Copilot Autofix | GHAS, Copilot Autofix, `@github` |
+| 7 | Security Report & Prioritization | Security overview dashboard, triaging alerts, risk assessment, remediation planning | Chat, `@workspace`, Copilot Spaces |
+| 8 | Fixing Security Issues | Applying Copilot Autofix, manual remediation, secure coding patterns | Copilot Autofix, `/fix`, Agent Mode |
+| 9 | DB Migration Scripts Generation | Schema migrations, rollback scripts, data migrations, version control | Agent Mode, Chat, Inline Suggestions |
+| 10 | Monitoring & Observability | Logging instrumentation, metrics, alerting configs, dashboard generation | Chat, Agent Mode, `@terminal` |
+| 11 | Q & A | Open discussion, key takeaways, and course wrap-up | — |

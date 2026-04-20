@@ -1,13 +1,17 @@
-Build, Design & Modernization
-	· Prompt Engineering & Practical Use Cases
-	· Requirements → User Stories
-	· Design & Architectural Artifacts
-	· ER Diagrams, Class Diagrams, OpenAPI Specs
-	· Codebase Analysis, Documentation & Key Metrics
-	· User Guide Preparation
-	· New Feature Implementation
-	· Tech Upgrade (e.g., Spring Boot)
-	· Tech Modernization (Angular → React)
-	· CI/CD Pipeline Creation
-	· Containerization
-	· Infrastructure as Code (Terraform Scripts)
+Day 4 – Build, Design & Modernization
+
+| # | Topic | Details |
+|---|-------|---------|
+| 1 | Prompt Engineering & Practical Use Cases | Crafting effective prompts, context-setting strategies, iterative refinement |
+| 2 | Requirements → User Stories | Converting business requirements to user stories, acceptance criteria, test scenarios |
+| 3 | Design & Architectural Artifacts | System design docs, ADRs, component diagrams, interface definitions |
+| 4 | ER Diagrams, Class Diagrams, OpenAPI Specs | Generating technical diagrams with Copilot, Mermaid syntax, Swagger/OpenAPI generation |
+| 5 | Codebase Analysis, Documentation & Key Metrics | Using @workspace for analysis, extracting dependencies, generating documentation |
+| 6 | User Guide Preparation | README generation, API docs, end-user guides and tutorials |
+| 7 | New Feature Implementation | Feature planning with Plan Mode, multi-file changes with Agent Mode |
+| 8 | Tech Upgrade (e.g., Spring Boot) | Framework upgrades, dependency updates, deprecation handling |
+| 9 | Tech Modernization (Angular → React) | Frontend migrations, code translation patterns, incremental migration strategies |
+| 10 | CI/CD Pipeline Creation | GitHub Actions workflow generation, build/test/deploy pipelines, environment configs |
+| 11 | Containerization | Dockerfile generation, Docker Compose, multi-stage builds and optimization |
+| 12 | Infrastructure as Code (Terraform Scripts) | Terraform generation, cloud resource provisioning, IaC best practices |
+| 13 | Q & A | Open discussion and wrap-up |
