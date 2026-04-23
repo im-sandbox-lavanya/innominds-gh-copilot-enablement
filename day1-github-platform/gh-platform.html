@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Platform Overview – GHAS, Copilot & Subscriptions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../shared/presentation.css">
+</head>
+
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Slide Header with Logo -->
+    <div class="slide-header" style="justify-content: space-between;">
+        <a href="../index.html" class="back-home-btn" title="Back to Courses"
+            style="padding: 6px 10px; font-size: 0; gap: 0; width: 32px; height: 32px; justify-content: center; opacity: 0.5;">
+            <i class="fas fa-arrow-left" style="font-size: 0.8rem;"></i>
+        </a>
+        <div class="logo logo-infomagnus">
+            <i class="fab fa-github github-icon"></i>
+            <span><span>Info</span><span class="magnus-text">Magnus</span></span>
+        </div>
+    </div>
+
+    <div class="presentation" id="presentation">
+
+        <!-- ============================================================
+             SLIDE 1: Title
+             ============================================================ -->
+        <div class="slide title-slide active" data-slide="1">
+            <div class="logo-container animate">
+                <div class="copilot-logo">
+                    <i class="fab fa-github"></i>
+                </div>
+            </div>
+            <h1 class="animate">GitHub Platform<br>Overview</h1>
+            <p class="subtitle animate">GHAS, Copilot & Subscriptions</p>
+            <div class="meta animate">
+                <span><i class="fas fa-clock"></i> Duration: 90 min content + 25 min demos</span>
+                <span><i class="fas fa-users"></i> Participants: up to 30</span>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 2: Trainer Introduction
+             ============================================================ -->
+        <div class="slide intro-slide" data-slide="2">
+            <div class="intro-content">
+                <img src="../shared/images/copilot-avatar.png" alt="GitHub Copilot" class="trainer-photo animate">
+                <div class="trainer-info">
+                    <h2 class="animate">GitHub Trainer Name</h2>
+                    <p class="title animate">GitHub Certified Trainer</p>
+                    <div class="company animate">
+                        <i class="fab fa-github"></i>
+                        <span><span style="color: #8b949e;">Info</span><span
+                                style="color: #58a6ff;">Magnus</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 3: Course Agenda
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="3">
+            <h2>Course Agenda</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="card animate">
+                    <div class="card-icon"><i class="fab fa-github"></i></div>
+                    <h3>Introduction to GitHub</h3>
+                    <p>Repositories, branches, pull requests, GitHub Flow</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i
+                            class="fas fa-server"></i></div>
+                    <h3>Deployment Options</h3>
+                    <p>GHEC, EMU, GHES — when to use what</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i
+                            class="fas fa-shield-alt"></i></div>
+                    <h3>GitHub Advanced Security</h3>
+                    <p>Code Scanning, Secret Scanning, Dependabot, Security Overview</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i
+                            class="fas fa-tags"></i></div>
+                    <h3>GHAS Subscriptions</h3>
+                    <p>Plans, per-committer licensing, availability</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i
+                            class="fas fa-robot"></i></div>
+                    <h3>GitHub Copilot Overview</h3>
+                    <p>What is Copilot, supported IDEs, how it works</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #3fb950, #238636);"><i
+                            class="fas fa-credit-card"></i></div>
+                    <h3>Copilot Subscriptions</h3>
+                    <p>Free, Pro, Business, Enterprise — features & pricing</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #ffa657, #f78166);"><i
+                            class="fas fa-sliders-h"></i></div>
+                    <h3>Copilot Admin Controls</h3>
+                    <p>Org settings, content exclusions, seat management</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #79c0ff, #58a6ff);"><i
+                            class="fas fa-question-circle"></i></div>
+                    <h3>Q &amp; A</h3>
+                    <p>Open discussion and wrap-up</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SECTION 01: Introduction to GitHub
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="4">
+            <span class="section-number">01</span>
+            <h2>Introduction<br>to GitHub</h2>
+            <p class="subtitle" style="color: var(--text-muted); font-size: 1.3rem;">Repositories, branches, pull requests, and GitHub Flow</p>
+        </div>
+
+        <!-- Slide: What is GitHub? -->
+        <div class="slide content-slide" data-slide="5">
+            <h2>What is GitHub?</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-code-branch"></i></div>
+                            <div class="feature-content">
+                                <h4>World's Largest Developer Platform</h4>
+                                <p>100M+ developers, 420M+ repositories — the home for open source and enterprise software</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-cloud"></i></div>
+                            <div class="feature-content">
+                                <h4>Git-Based Version Control</h4>
+                                <p>Built on Git — distributed version control that tracks every change with full history</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-users"></i></div>
+                            <div class="feature-content">
+                                <h4>Collaboration at Scale</h4>
+                                <p>Teams collaborate on code, review changes, manage projects, and ship software together</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-infinity"></i></div>
+                            <div class="feature-content">
+                                <h4>Full DevOps Platform</h4>
+                                <p>From planning to security to deployment — CI/CD, Actions, Packages, Security all in one place</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="card-grid" style="grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                        <div class="card" style="text-align: center; padding: 20px;">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--primary);">100M+</div>
+                            <div style="color: var(--text-muted); font-size: 0.9rem;">Developers</div>
+                        </div>
+                        <div class="card" style="text-align: center; padding: 20px;">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--secondary);">420M+</div>
+                            <div style="color: var(--text-muted); font-size: 0.9rem;">Repositories</div>
+                        </div>
+                        <div class="card" style="text-align: center; padding: 20px;">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--accent);">90%</div>
+                            <div style="color: var(--text-muted); font-size: 0.9rem;">Fortune 100 use GitHub</div>
+                        </div>
+                        <div class="card" style="text-align: center; padding: 20px;">
+                            <div style="font-size: 2rem; font-weight: 700; color: #d2a8ff;">4M+</div>
+                            <div style="color: var(--text-muted); font-size: 0.9rem;">Organizations</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Repositories, Branches & Commits -->
+        <div class="slide content-slide" data-slide="6">
+            <h2>Repositories, Branches &amp; Commits</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="card animate">
+                    <div class="card-icon"><i class="fas fa-folder-open"></i></div>
+                    <h3>Repository</h3>
+                    <p style="margin-bottom: 15px;">The container for your project — contains all code, history, issues, and settings</p>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: disc; padding-left: 20px;">
+                        <li style="margin-bottom: 6px;">Public or private</li>
+                        <li style="margin-bottom: 6px;">Forking for open source</li>
+                        <li>README, LICENSE, .gitignore</li>
+                    </ul>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i
+                            class="fas fa-code-branch"></i></div>
+                    <h3>Branches</h3>
+                    <p style="margin-bottom: 15px;">Isolated lines of development that diverge from and merge back to main</p>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: disc; padding-left: 20px;">
+                        <li style="margin-bottom: 6px;"><code>main</code> / <code>develop</code> as defaults</li>
+                        <li style="margin-bottom: 6px;">Feature branches per task</li>
+                        <li>Branch protection rules</li>
+                    </ul>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i
+                            class="fas fa-history"></i></div>
+                    <h3>Commits</h3>
+                    <p style="margin-bottom: 15px;">Snapshots of your changes — each commit has an author, message, and SHA hash</p>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: disc; padding-left: 20px;">
+                        <li style="margin-bottom: 6px;">Atomic, purposeful changes</li>
+                        <li style="margin-bottom: 6px;">Commit messages matter</li>
+                        <li>Blame, log, diff views</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tip-box animate" style="margin-top: 30px; width: 100%;">
+                <h4><i class="fas fa-lightbulb"></i> Best Practice: Commit Early, Commit Often</h4>
+                <p>Small, focused commits with clear messages make code review easier and history meaningful. Use conventional commits (<code>feat:</code>, <code>fix:</code>, <code>chore:</code>) for consistency.</p>
+            </div>
+        </div>
+
+        <!-- Slide: Pull Requests & Code Review -->
+        <div class="slide content-slide" data-slide="7">
+            <h2>Pull Requests &amp; Code Review</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-code-merge"></i></div>
+                            <div class="feature-content">
+                                <h4>Pull Requests (PRs)</h4>
+                                <p>Propose changes from a branch. Trigger discussion, review, CI checks before merging to main</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-eye"></i></div>
+                            <div class="feature-content">
+                                <h4>Code Review</h4>
+                                <p>Reviewers comment on specific lines, request changes, or approve. Required reviewers enforced by branch rules</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="feature-content">
+                                <h4>Status Checks</h4>
+                                <p>CI/CD pipelines must pass before merge. Enforces quality gates automatically</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                            <div class="feature-content">
+                                <h4>Copilot PR Summaries</h4>
+                                <p>GitHub Copilot auto-generates PR descriptions and review suggestions</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="demo-box">
+                        <h4 style="color: var(--secondary); margin-bottom: 15px;"><i class="fas fa-shield-alt"></i> Branch Protection Rules</h4>
+                        <ul style="color: var(--text-muted); font-size: 0.95rem; list-style: none; padding: 0;">
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--surface-light);">✅ Require pull request reviews before merging</li>
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--surface-light);">✅ Require status checks to pass</li>
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--surface-light);">✅ Require signed commits</li>
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--surface-light);">✅ Restrict who can push to branch</li>
+                            <li style="padding: 8px 0;">✅ Require linear history</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: GitHub Flow -->
+        <div class="slide content-slide" data-slide="8">
+            <h2>GitHub Flow</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(6, 1fr);">
+                <div class="card animate" style="text-align: center; padding: 20px;">
+                    <div class="card-icon" style="margin: 0 auto 12px; width: 50px; height: 50px; background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-code-branch"></i></div>
+                    <h3 style="font-size: 0.95rem;">1. Branch</h3>
+                    <p style="font-size: 0.85rem;">Create a feature branch from main</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 20px;">
+                    <div class="card-icon" style="margin: 0 auto 12px; width: 50px; height: 50px; background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-edit"></i></div>
+                    <h3 style="font-size: 0.95rem;">2. Commit</h3>
+                    <p style="font-size: 0.85rem;">Make commits with clear messages</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 20px;">
+                    <div class="card-icon" style="margin: 0 auto 12px; width: 50px; height: 50px; background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-paper-plane"></i></div>
+                    <h3 style="font-size: 0.95rem;">3. Pull Request</h3>
+                    <p style="font-size: 0.85rem;">Open a PR to start discussion</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 20px;">
+                    <div class="card-icon" style="margin: 0 auto 12px; width: 50px; height: 50px; background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-comments"></i></div>
+                    <h3 style="font-size: 0.95rem;">4. Review</h3>
+                    <p style="font-size: 0.85rem;">Team reviews and approves</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 20px;">
+                    <div class="card-icon" style="margin: 0 auto 12px; width: 50px; height: 50px; background: linear-gradient(135deg, #3fb950, #238636);"><i class="fas fa-rocket"></i></div>
+                    <h3 style="font-size: 0.95rem;">5. Deploy</h3>
+                    <p style="font-size: 0.85rem;">Deploy from branch to verify</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 20px;">
+                    <div class="card-icon" style="margin: 0 auto 12px; width: 50px; height: 50px; background: linear-gradient(135deg, #79c0ff, #58a6ff);"><i class="fas fa-code-merge"></i></div>
+                    <h3 style="font-size: 0.95rem;">6. Merge</h3>
+                    <p style="font-size: 0.85rem;">Merge to main and delete branch</p>
+                </div>
+            </div>
+            <div class="tip-box animate" style="margin-top: 25px; width: 100%;">
+                <h4><i class="fas fa-lightbulb"></i> GitHub Flow vs Git Flow</h4>
+                <p>GitHub Flow is simpler — one main branch, short-lived feature branches. Ideal for teams deploying continuously. Git Flow adds release/hotfix branches and suits teams with scheduled releases.</p>
+            </div>
+        </div>
+
+        <!-- Demo: GitHub Basics -->
+        <div class="slide demo-slide" data-slide="9">
+            <div class="demo-icon animate"><i class="fas fa-laptop-code"></i></div>
+            <h2 class="animate">Demo Time</h2>
+            <p class="demo-subtitle animate">Introduction to GitHub</p>
+            <div class="demo-topics animate">
+                <span class="demo-topic">Create Repo & Branch</span>
+                <span class="demo-topic">Open a Pull Request</span>
+                <span class="demo-topic">GitHub Flow in Practice</span>
+            </div>
+            <p class="animate" style="margin-top: 24px; color: var(--text-muted); font-size: 1rem;">
+                <i class="fas fa-clock"></i> Estimated time: <span class="highlight-text">5 minutes</span>
+            </p>
+        </div>
+
+        <!-- Quiz: Section 01 -->
+        <div class="slide quiz-slide" data-slide="q1">
+            <h2 class="animate">Quick Check</h2>
+            <p class="quiz-question animate">In GitHub Flow, what happens immediately after opening a Pull Request?</p>
+            <div class="quiz-options animate">
+                <div class="quiz-option">
+                    <div class="quiz-option-value">The branch is automatically deleted</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">The team reviews, discusses, and CI checks run before merging</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">The code is immediately merged to main</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SECTION 02: GitHub Deployment Options
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="10">
+            <span class="section-number">02</span>
+            <h2>GitHub Deployment<br>Options</h2>
+            <p class="subtitle" style="color: var(--text-muted); font-size: 1.3rem;">GHEC, EMU, and GHES — when to use what</p>
+        </div>
+
+        <!-- Slide: GitHub.com Plans -->
+        <div class="slide content-slide" data-slide="11">
+            <h2>GitHub.com – Free &amp; Team Plans</h2>
+            <div class="two-column">
+                <div>
+                    <div class="card animate" style="margin-bottom: 20px; border: 2px solid var(--secondary);">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
+                            <div class="card-icon" style="width: 40px; height: 40px; margin: 0; background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-user"></i></div>
+                            <h3 style="margin: 0;">GitHub Free</h3>
+                        </div>
+                        <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: disc; padding-left: 20px;">
+                            <li style="margin-bottom: 6px;">Unlimited public &amp; private repos</li>
+                            <li style="margin-bottom: 6px;">2,000 Actions minutes/month</li>
+                            <li style="margin-bottom: 6px;">500 MB Packages storage</li>
+                            <li>Community support</li>
+                        </ul>
+                    </div>
+                    <div class="card animate" style="border: 2px solid var(--primary);">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
+                            <div class="card-icon" style="width: 40px; height: 40px; margin: 0; background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-users"></i></div>
+                            <h3 style="margin: 0;">GitHub Team — $4/user/month</h3>
+                        </div>
+                        <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: disc; padding-left: 20px;">
+                            <li style="margin-bottom: 6px;">3,000 Actions minutes/month</li>
+                            <li style="margin-bottom: 6px;">2 GB Packages storage</li>
+                            <li style="margin-bottom: 6px;">Required reviewers &amp; CODEOWNERS</li>
+                            <li>Draft pull requests</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="animate">
+                    <div class="tip-box" style="margin-top: 0;">
+                        <h4><i class="fas fa-lightbulb"></i> Who Is This For?</h4>
+                        <p><strong>Free:</strong> Individuals, open-source projects, small personal teams with no compliance needs.</p>
+                        <br>
+                        <p><strong>Team:</strong> Small-to-medium businesses that need collaboration features, required reviews, and more CI minutes — without enterprise compliance requirements.</p>
+                    </div>
+                    <div class="warning-box" style="margin-top: 20px;">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Limitation</h4>
+                        <p>Free and Team plans share GitHub.com's multi-tenant infrastructure. Data residency, SAML SSO, and advanced audit logs require Enterprise plans.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: GitHub Enterprise Cloud (GHEC) -->
+        <div class="slide content-slide" data-slide="12">
+            <h2>GitHub Enterprise Cloud (GHEC)</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-building"></i></div>
+                            <div class="feature-content">
+                                <h4>Enterprise Organizations</h4>
+                                <p>Centrally manage multiple organizations under a single enterprise account with unified billing and policies</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-id-badge"></i></div>
+                            <div class="feature-content">
+                                <h4>SAML SSO &amp; SCIM</h4>
+                                <p>Integrate with your IdP (Okta, Azure AD, etc.) for single sign-on and automated user provisioning</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-scroll"></i></div>
+                            <div class="feature-content">
+                                <h4>Audit Log &amp; Compliance</h4>
+                                <p>Full audit log streaming to your SIEM, IP allow lists, SOC 2 Type II &amp; ISO 27001 certified</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #3fb950, #238636);"><i class="fas fa-infinity"></i></div>
+                            <div class="feature-content">
+                                <h4>50,000 Actions Minutes</h4>
+                                <p>50K hosted runner minutes/month plus GitHub-hosted runners up to 64 cores</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="demo-box">
+                        <h4 style="color: var(--secondary); margin-bottom: 15px;"><i class="fas fa-check-double"></i> GHEC Use Cases</h4>
+                        <ul style="color: var(--text-muted); font-size: 0.95rem; list-style: none; padding: 0;">
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--surface-light);">✅ Large enterprise with compliance requirements</li>
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--surface-light);">✅ Centralized SSO with existing IdP</li>
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--surface-light);">✅ Need GitHub.com's full ecosystem &amp; integrations</li>
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--surface-light);">✅ Don't want to manage server infrastructure</li>
+                            <li style="padding: 8px 0;">✅ Want access to all latest GitHub features first</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Enterprise Managed Users (EMU) -->
+        <div class="slide content-slide" data-slide="13">
+            <h2>Enterprise Managed Users (EMU)</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-user-lock"></i></div>
+                    <h3>What is EMU?</h3>
+                    <p>A variant of GHEC where all user accounts are <strong>fully managed by your IdP</strong>. Users cannot create personal GitHub.com accounts.</p>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: disc; padding-left: 20px; margin-top: 12px;">
+                        <li style="margin-bottom: 6px;">Corporate identity controls everything</li>
+                        <li style="margin-bottom: 6px;">Users can only see enterprise repos</li>
+                        <li>No mixing personal &amp; work identities</li>
+                    </ul>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-check-circle"></i></div>
+                    <h3>When to Choose EMU</h3>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: none; padding: 0; margin-top: 12px;">
+                        <li style="padding: 6px 0; border-bottom: 1px solid var(--surface-light);">✅ Strict identity governance required</li>
+                        <li style="padding: 6px 0; border-bottom: 1px solid var(--surface-light);">✅ Regulated industries (finance, govt, healthcare)</li>
+                        <li style="padding: 6px 0; border-bottom: 1px solid var(--surface-light);">✅ No developer personal accounts allowed</li>
+                        <li style="padding: 6px 0; border-bottom: 1px solid var(--surface-light);">✅ Full offboarding control needed</li>
+                        <li style="padding: 6px 0;">❌ Not for teams needing open source contribution</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="warning-box animate" style="margin-top: 25px; width: 100%;">
+                <h4><i class="fas fa-exclamation-triangle"></i> EMU Trade-Off</h4>
+                <p>EMU users <strong>cannot contribute to public repos</strong> or interact with GitHub.com outside the enterprise. Choose EMU when isolation is more important than ecosystem openness.</p>
+            </div>
+        </div>
+
+        <!-- Slide: GitHub Enterprise Server (GHES) -->
+        <div class="slide content-slide" data-slide="14">
+            <h2>GitHub Enterprise Server (GHES)</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-server"></i></div>
+                            <div class="feature-content">
+                                <h4>Self-Hosted Deployment</h4>
+                                <p>Run GitHub on your own infrastructure — on-premises data centers or private cloud (AWS, Azure, GCP)</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-network-wired"></i></div>
+                            <div class="feature-content">
+                                <h4>Air-Gapped Support</h4>
+                                <p>Fully disconnected from the internet — ideal for classified or highly regulated environments</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-database"></i></div>
+                            <div class="feature-content">
+                                <h4>Data Residency Control</h4>
+                                <p>All data stays within your network. You control backups, HA, disaster recovery</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-wrench"></i></div>
+                            <div class="feature-content">
+                                <h4>Admin &amp; Customization</h4>
+                                <p>Full admin control — custom auth, hooks, integrations, and GitHub Connect for hybrid scenarios</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="warning-box" style="margin-top: 0;">
+                        <h4><i class="fas fa-exclamation-triangle"></i> GHES Trade-Offs</h4>
+                        <p>You own the infrastructure: patching, upgrades, HA, monitoring. GHES trails GitHub.com by 3-6 months on features. Requires dedicated platform engineering resources.</p>
+                    </div>
+                    <div class="tip-box" style="margin-top: 20px;">
+                        <h4><i class="fas fa-lightbulb"></i> GitHub Connect</h4>
+                        <p>Connect GHES to GitHub.com for hybrid benefits: use GitHub Actions hosted runners, access GitHub Marketplace, and enable Dependabot updates across the air gap.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Choosing the Right Option -->
+        <div class="slide content-slide" data-slide="15">
+            <h2>Choosing the Right Deployment</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="card animate" style="border: 2px solid var(--secondary);">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-cloud"></i></div>
+                    <h3>GitHub.com (Free/Team)</h3>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: disc; padding-left: 20px;">
+                        <li style="margin-bottom: 6px;">Startups, SMBs</li>
+                        <li style="margin-bottom: 6px;">Open source projects</li>
+                        <li style="margin-bottom: 6px;">No compliance needs</li>
+                        <li>Fast time-to-value</li>
+                    </ul>
+                </div>
+                <div class="card animate" style="border: 2px solid var(--primary);">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-building"></i></div>
+                    <h3>GHEC / EMU</h3>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: disc; padding-left: 20px;">
+                        <li style="margin-bottom: 6px;">Large enterprises</li>
+                        <li style="margin-bottom: 6px;">Need SSO/SCIM</li>
+                        <li style="margin-bottom: 6px;">Compliance + audit logs</li>
+                        <li>No infra to manage</li>
+                    </ul>
+                </div>
+                <div class="card animate" style="border: 2px solid var(--accent);">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-server"></i></div>
+                    <h3>GHES</h3>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: disc; padding-left: 20px;">
+                        <li style="margin-bottom: 6px;">Air-gapped / regulated</li>
+                        <li style="margin-bottom: 6px;">Strict data residency</li>
+                        <li style="margin-bottom: 6px;">Full infra control</li>
+                        <li>Govt / defence / finance</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tip-box animate" style="margin-top: 25px; width: 100%;">
+                <h4><i class="fas fa-lightbulb"></i> Hybrid Approach</h4>
+                <p>Many enterprises run GHEC for most teams and GHES for specific classified or regulated workloads, connected via <strong>GitHub Connect</strong> for a unified experience.</p>
+            </div>
+        </div>
+
+        <!-- Quiz: Section 02 -->
+        <div class="slide quiz-slide" data-slide="q2">
+            <h2 class="animate">Quick Check</h2>
+            <p class="quiz-question animate">Which deployment option is best suited for a government agency needing air-gapped, on-premises GitHub?</p>
+            <div class="quiz-options animate">
+                <div class="quiz-option">
+                    <div class="quiz-option-value">GitHub Free — it has unlimited private repos</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">GitHub Enterprise Server (GHES) — self-hosted, air-gap capable</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">GitHub Enterprise Cloud (GHEC) — largest feature set</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SECTION 03: GitHub Advanced Security (GHAS)
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="16">
+            <span class="section-number">03</span>
+            <h2>GitHub Advanced<br>Security (GHAS)</h2>
+            <p class="subtitle" style="color: var(--text-muted); font-size: 1.3rem;">Code Scanning, Secret Scanning, Dependabot, and Security Overview</p>
+        </div>
+
+        <!-- Slide: What is GHAS? -->
+        <div class="slide content-slide" data-slide="17">
+            <h2>What is GitHub Advanced Security?</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-shield-alt"></i></div>
+                            <div class="feature-content">
+                                <h4>Security Built Into the Developer Workflow</h4>
+                                <p>GHAS embeds security analysis directly into GitHub — scanning happens automatically on every push and pull request</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-search-plus"></i></div>
+                            <div class="feature-content">
+                                <h4>Find Vulnerabilities Early</h4>
+                                <p>Shift security left — catch issues at code review time instead of post-deployment</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-lock"></i></div>
+                            <div class="feature-content">
+                                <h4>Four Core Capabilities</h4>
+                                <p>Code Scanning, Secret Scanning, Dependabot alerts, and Security Overview dashboard</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="card-grid" style="grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                        <div class="card" style="text-align: center; padding: 20px;">
+                            <div style="font-size: 1.8rem; margin-bottom: 8px;"><i class="fas fa-code" style="color: var(--primary);"></i></div>
+                            <div style="font-weight: 600; font-size: 0.95rem;">Code Scanning</div>
+                            <div style="color: var(--text-muted); font-size: 0.8rem; margin-top: 6px;">SAST via CodeQL</div>
+                        </div>
+                        <div class="card" style="text-align: center; padding: 20px;">
+                            <div style="font-size: 1.8rem; margin-bottom: 8px;"><i class="fas fa-key" style="color: var(--accent);"></i></div>
+                            <div style="font-weight: 600; font-size: 0.95rem;">Secret Scanning</div>
+                            <div style="color: var(--text-muted); font-size: 0.8rem; margin-top: 6px;">200+ token patterns</div>
+                        </div>
+                        <div class="card" style="text-align: center; padding: 20px;">
+                            <div style="font-size: 1.8rem; margin-bottom: 8px;"><i class="fas fa-box-open" style="color: var(--secondary);"></i></div>
+                            <div style="font-weight: 600; font-size: 0.95rem;">Dependabot</div>
+                            <div style="color: var(--text-muted); font-size: 0.8rem; margin-top: 6px;">Dependency alerts &amp; PRs</div>
+                        </div>
+                        <div class="card" style="text-align: center; padding: 20px;">
+                            <div style="font-size: 1.8rem; margin-bottom: 8px;"><i class="fas fa-chart-bar" style="color: #d2a8ff;"></i></div>
+                            <div style="font-weight: 600; font-size: 0.95rem;">Security Overview</div>
+                            <div style="color: var(--text-muted); font-size: 0.8rem; margin-top: 6px;">Org-wide dashboard</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Code Scanning -->
+        <div class="slide content-slide" data-slide="18">
+            <h2>Code Scanning</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-search-plus"></i></div>
+                            <div class="feature-content">
+                                <h4>Static Application Security Testing (SAST)</h4>
+                                <p>Analyzes source code for security vulnerabilities — SQL injection, XSS, buffer overflows, path traversal and more</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-database"></i></div>
+                            <div class="feature-content">
+                                <h4>Powered by CodeQL</h4>
+                                <p>GitHub's semantic code analysis engine — treats code as a database and queries it for vulnerability patterns</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-plug"></i></div>
+                            <div class="feature-content">
+                                <h4>Third-Party Tool Support</h4>
+                                <p>Integrate any SARIF-compatible scanner (Semgrep, Snyk, Checkmarx) into GitHub's unified alerts interface</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="demo-box">
+                        <h4 style="color: var(--secondary); margin-bottom: 15px;"><i class="fas fa-code"></i> Supported Languages</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                            <span style="background: var(--surface-light); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">C / C++</span>
+                            <span style="background: var(--surface-light); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">C#</span>
+                            <span style="background: var(--surface-light); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Go</span>
+                            <span style="background: var(--surface-light); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Java</span>
+                            <span style="background: var(--surface-light); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">JavaScript</span>
+                            <span style="background: var(--surface-light); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">TypeScript</span>
+                            <span style="background: var(--surface-light); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Python</span>
+                            <span style="background: var(--surface-light); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Ruby</span>
+                            <span style="background: var(--surface-light); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Swift</span>
+                            <span style="background: var(--surface-light); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Kotlin</span>
+                        </div>
+                    </div>
+                    <div class="tip-box" style="margin-top: 20px;">
+                        <h4><i class="fas fa-lightbulb"></i> PR Blocking</h4>
+                        <p>Configure Code Scanning to <strong>block merges</strong> when high-severity vulnerabilities are detected in a PR — enforce security gates automatically.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Secret Scanning -->
+        <div class="slide content-slide" data-slide="19">
+            <h2>Secret Scanning</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-key"></i></div>
+                            <div class="feature-content">
+                                <h4>Detects Hardcoded Credentials</h4>
+                                <p>Scans every commit and push for 200+ secret patterns — API keys, tokens, passwords, certificates</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-bell"></i></div>
+                            <div class="feature-content">
+                                <h4>Partner Notifications</h4>
+                                <p>GitHub automatically notifies service providers (AWS, Azure, Slack, Stripe) when their tokens are detected — even in public repos</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-hand-paper"></i></div>
+                            <div class="feature-content">
+                                <h4>Push Protection</h4>
+                                <p>Blocks pushes containing secrets before they reach the repository — prevent exposure at the source</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="warning-box" style="margin-top: 0;">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Secrets in Public Repos</h4>
+                        <p>Secret Scanning runs for FREE on all public repositories. Any secret committed is treated as compromised — rotate it immediately, even after removal from history.</p>
+                    </div>
+                    <div class="tip-box" style="margin-top: 20px;">
+                        <h4><i class="fas fa-lightbulb"></i> Push Protection = Prevention</h4>
+                        <p>Enable Push Protection to block secrets <strong>before</strong> they land in any branch. Developers get an actionable error message with remediation guidance.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Dependabot -->
+        <div class="slide content-slide" data-slide="20">
+            <h2>Dependabot</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-exclamation-triangle"></i></div>
+                    <h3>Dependabot Alerts</h3>
+                    <p>Notifies you when a dependency has a known CVE vulnerability. Works with npm, pip, Maven, Gradle, NuGet, RubyGems, Cargo, and more.</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-code-branch"></i></div>
+                    <h3>Dependabot Security Updates</h3>
+                    <p>Automatically opens PRs to bump vulnerable dependencies to a patched version — no manual intervention needed.</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-sync-alt"></i></div>
+                    <h3>Dependabot Version Updates</h3>
+                    <p>Keeps all dependencies up-to-date on a schedule — configure per-ecosystem, per-repo, with grouping and ignore rules.</p>
+                </div>
+            </div>
+            <div class="tip-box animate" style="margin-top: 25px; width: 100%;">
+                <h4><i class="fas fa-lightbulb"></i> Available on Free Plans Too</h4>
+                <p>Dependabot alerts and security updates are available on <strong>all plans</strong> (including Free). Dependabot version updates require at minimum GitHub Free. GHAS extends the depth of detection in private repos.</p>
+            </div>
+        </div>
+
+        <!-- Slide: Security Overview Dashboard -->
+        <div class="slide content-slide" data-slide="21">
+            <h2>Security Overview Dashboard</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-chart-bar"></i></div>
+                            <div class="feature-content">
+                                <h4>Org-Wide Visibility</h4>
+                                <p>Single pane of glass for all GHAS findings across every repository in an organization</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-filter"></i></div>
+                            <div class="feature-content">
+                                <h4>Filter &amp; Prioritize</h4>
+                                <p>Filter by severity, alert type, team, or repository. Focus remediation on highest-risk issues first</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-chart-line"></i></div>
+                            <div class="feature-content">
+                                <h4>Trend Reporting</h4>
+                                <p>Track mean time to remediate, alert volume over time, and security posture improvements across teams</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="demo-box">
+                        <h4 style="color: var(--secondary); margin-bottom: 15px;"><i class="fas fa-eye"></i> What You Can See</h4>
+                        <ul style="color: var(--text-muted); font-size: 0.95rem; list-style: none; padding: 0;">
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--surface-light);">📊 Total open alerts by type &amp; severity</li>
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--surface-light);">📊 Repos with most critical alerts</li>
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--surface-light);">📊 GHAS coverage (enabled vs not)</li>
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--surface-light);">📊 Alert age and fix rate</li>
+                            <li style="padding: 8px 0;">📊 Enterprise-level roll-up view</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo: GHAS Features -->
+        <div class="slide demo-slide" data-slide="22">
+            <div class="demo-icon animate"><i class="fas fa-laptop-code"></i></div>
+            <h2 class="animate">Demo Time</h2>
+            <p class="demo-subtitle animate">GitHub Advanced Security in Action</p>
+            <div class="demo-topics animate">
+                <span class="demo-topic">Enable Code Scanning</span>
+                <span class="demo-topic">Secret Scanning Alert</span>
+                <span class="demo-topic">Security Overview Dashboard</span>
+            </div>
+            <p class="animate" style="margin-top: 24px; color: var(--text-muted); font-size: 1rem;">
+                <i class="fas fa-clock"></i> Estimated time: <span class="highlight-text">8 minutes</span>
+            </p>
+        </div>
+
+        <!-- Quiz: GHAS -->
+        <div class="slide quiz-slide" data-slide="q3">
+            <h2 class="animate">Quick Check</h2>
+            <p class="quiz-question animate">What does Dependabot Security Updates do automatically?</p>
+            <div class="quiz-options animate">
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Scans source code for SQL injection and XSS vulnerabilities</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Blocks hardcoded secrets from being pushed to a repository</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Opens PRs to upgrade vulnerable dependencies to a patched version</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SECTION 04: GHAS Subscription & Plans
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="23">
+            <span class="section-number">04</span>
+            <h2>GHAS Subscription<br>&amp; Plans</h2>
+            <p class="subtitle" style="color: var(--text-muted); font-size: 1.3rem;">Plan availability, per-committer licensing, and enabling GHAS</p>
+        </div>
+
+        <!-- Slide: GHAS Availability per Plan -->
+        <div class="slide content-slide" data-slide="24">
+            <h2>GHAS Availability per Plan</h2>
+            <div style="overflow-x: auto; margin-top: 20px;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                    <thead>
+                        <tr style="background: var(--surface-light);">
+                            <th style="padding: 12px 16px; text-align: left; border-bottom: 2px solid var(--primary); color: var(--text-primary);">Feature</th>
+                            <th style="padding: 12px 16px; text-align: center; border-bottom: 2px solid var(--primary); color: var(--text-muted);">Free</th>
+                            <th style="padding: 12px 16px; text-align: center; border-bottom: 2px solid var(--primary); color: var(--text-muted);">Team</th>
+                            <th style="padding: 12px 16px; text-align: center; border-bottom: 2px solid var(--primary); color: var(--secondary);">GHEC</th>
+                            <th style="padding: 12px 16px; text-align: center; border-bottom: 2px solid var(--primary); color: var(--accent);">GHES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid var(--surface-light);">
+                            <td style="padding: 10px 16px;">Dependabot Alerts</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--secondary);">✅</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--secondary);">✅</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--secondary);">✅</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--secondary);">✅</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--surface-light); background: rgba(255,255,255,0.02);">
+                            <td style="padding: 10px 16px;">Dependabot Security Updates</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--secondary);">✅</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--secondary);">✅</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--secondary);">✅</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--secondary);">✅</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--surface-light);">
+                            <td style="padding: 10px 16px;">Secret Scanning (Public Repos)</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--secondary);">✅</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--secondary);">✅</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--secondary);">✅</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--secondary);">✅</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--surface-light); background: rgba(255,255,255,0.02);">
+                            <td style="padding: 10px 16px;">Code Scanning (Private Repos)</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--accent);">❌</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--accent);">❌</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--secondary);">✅ GHAS</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--secondary);">✅ GHAS</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--surface-light);">
+                            <td style="padding: 10px 16px;">Secret Scanning (Private Repos)</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--accent);">❌</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--accent);">❌</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--secondary);">✅ GHAS</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--secondary);">✅ GHAS</td>
+                        </tr>
+                        <tr style="background: rgba(255,255,255,0.02);">
+                            <td style="padding: 10px 16px;">Security Overview Dashboard</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--accent);">❌</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--accent);">❌</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--secondary);">✅ GHAS</td>
+                            <td style="padding: 10px 16px; text-align: center; color: var(--secondary);">✅ GHAS</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Slide: Per-Committer Licensing -->
+        <div class="slide content-slide" data-slide="25">
+            <h2>GHAS Per-Committer Licensing</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-user-tag"></i></div>
+                            <div class="feature-content">
+                                <h4>What is a Committer?</h4>
+                                <p>Any unique user who committed code to at least one GHAS-enabled private repo within the last 90 days</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-calculator"></i></div>
+                            <div class="feature-content">
+                                <h4>License Counting</h4>
+                                <p>Licenses are consumed per unique committer — the same developer working in 10 repos counts as <strong>1 seat</strong></p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-chart-pie"></i></div>
+                            <div class="feature-content">
+                                <h4>Partial-Month Billing</h4>
+                                <p>On GHEC, GHAS is billed per active committer per month — enables gradual rollout by repository</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="tip-box" style="margin-top: 0;">
+                        <h4><i class="fas fa-lightbulb"></i> Rolling Out GHAS Progressively</h4>
+                        <p>Enable GHAS on high-risk repositories first. Monitor committer count and costs. Expand to more repos as your security program matures. Use the committer dashboard in enterprise settings to track seat usage.</p>
+                    </div>
+                    <div class="demo-box" style="margin-top: 20px;">
+                        <h4 style="color: var(--secondary); margin-bottom: 10px;"><i class="fas fa-dollar-sign"></i> Example</h4>
+                        <p style="color: var(--text-muted); font-size: 0.95rem;">50 developers commit to GHAS-enabled repos → 50 GHAS seats consumed. A bot that commits code also counts as 1 seat unless it's a GitHub Actions machine user exemption.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz: GHAS Plans -->
+        <div class="slide quiz-slide" data-slide="q4">
+            <h2 class="animate">Quick Check</h2>
+            <p class="quiz-question animate">A developer commits to 5 different GHAS-enabled repos in one month. How many GHAS seats does this consume?</p>
+            <div class="quiz-options animate">
+                <div class="quiz-option">
+                    <div class="quiz-option-value">5 seats — one per repository</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">1 seat — unique committer regardless of repo count</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">0 seats — Dependabot handles this for free</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SECTION 05: GitHub Copilot – Overview
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="26">
+            <span class="section-number">05</span>
+            <h2>GitHub Copilot<br>Overview</h2>
+            <p class="subtitle" style="color: var(--text-muted); font-size: 1.3rem;">What is Copilot, supported IDEs, and how it works under the hood</p>
+        </div>
+
+        <!-- Slide: What is GitHub Copilot? -->
+        <div class="slide content-slide" data-slide="27">
+            <h2>What is GitHub Copilot?</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                            <div class="feature-content">
+                                <h4>AI Pair Programmer</h4>
+                                <p>An AI assistant built into your IDE that helps you write, understand, test, and fix code faster</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-magic"></i></div>
+                            <div class="feature-content">
+                                <h4>Inline Completions</h4>
+                                <p>Ghost-text suggestions appear as you type — accept with Tab, reject with Esc. Works in any language</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-comments"></i></div>
+                            <div class="feature-content">
+                                <h4>Copilot Chat</h4>
+                                <p>Conversational AI in your IDE. Ask questions, get explanations, generate code, fix bugs — all in natural language</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-cogs"></i></div>
+                            <div class="feature-content">
+                                <h4>Agent Mode</h4>
+                                <p>Autonomous multi-file editing and task execution — Copilot plans, executes, and validates complex changes independently</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="tip-box" style="margin-top: 0;">
+                        <h4><i class="fas fa-chart-line"></i> Productivity Impact</h4>
+                        <p>GitHub studies show developers with Copilot complete tasks <strong>55% faster</strong>, report higher job satisfaction, and spend more time on creative problem-solving vs. boilerplate.</p>
+                    </div>
+                    <div class="card" style="margin-top: 20px; text-align: center; padding: 20px;">
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--primary);">55%</div>
+                        <div style="color: var(--text-muted);">faster task completion</div>
+                        <div style="font-size: 1.8rem; font-weight: 700; color: var(--secondary); margin-top: 15px;">46%</div>
+                        <div style="color: var(--text-muted);">less mental fatigue reported</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: How Copilot Works Under the Hood -->
+        <div class="slide content-slide" data-slide="28">
+            <h2>How Copilot Works Under the Hood</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="card animate" style="text-align: center; padding: 25px;">
+                    <div class="card-icon" style="margin: 0 auto 15px; background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-file-code"></i></div>
+                    <h3 style="font-size: 1rem;">1. Context Collection</h3>
+                    <p style="font-size: 0.85rem;">Open files, cursor position, recently viewed files, comments, and repo context are gathered</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 25px;">
+                    <div class="card-icon" style="margin: 0 auto 15px; background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-compress-alt"></i></div>
+                    <h3 style="font-size: 1rem;">2. Prompt Construction</h3>
+                    <p style="font-size: 0.85rem;">Context is assembled into a prompt respecting the model's token limit via intelligent truncation</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 25px;">
+                    <div class="card-icon" style="margin: 0 auto 15px; background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-brain"></i></div>
+                    <h3 style="font-size: 1rem;">3. LLM Inference</h3>
+                    <p style="font-size: 0.85rem;">Prompt is sent to GitHub's hosted models (GPT-4o, Claude, Gemini) — your code never trains the model</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 25px;">
+                    <div class="card-icon" style="margin: 0 auto 15px; background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-check-circle"></i></div>
+                    <h3 style="font-size: 1rem;">4. Suggestion Delivery</h3>
+                    <p style="font-size: 0.85rem;">Completions are filtered, ranked, and displayed as inline ghost text or chat responses</p>
+                </div>
+            </div>
+            <div class="warning-box animate" style="margin-top: 25px; width: 100%;">
+                <h4><i class="fas fa-lock"></i> Privacy &amp; Data Handling</h4>
+                <p>Copilot does <strong>NOT</strong> use your code to train AI models. With Business/Enterprise plans, prompts are not retained. Your code stays private.</p>
+            </div>
+        </div>
+
+        <!-- Slide: Supported IDEs & Environments -->
+        <div class="slide content-slide" data-slide="29">
+            <h2>Supported IDEs &amp; Environments</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="card animate" style="border: 2px solid var(--primary);">
+                    <div class="card-icon"><i class="fas fa-code"></i></div>
+                    <h3>Visual Studio Code</h3>
+                    <p>Full feature set — completions, chat, agent mode, edits, terminal assistance, and extensions</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-laptop-code"></i></div>
+                    <h3>JetBrains IDEs</h3>
+                    <p>IntelliJ IDEA, PyCharm, WebStorm, Rider, GoLand — completions and chat</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-window-maximize"></i></div>
+                    <h3>Visual Studio</h3>
+                    <p>Completions and Copilot Chat for C#, C++, VB.NET, and .NET development</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-terminal"></i></div>
+                    <h3>Neovim</h3>
+                    <p>Inline completions via the copilot.vim plugin — full keymap customization</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fab fa-github"></i></div>
+                    <h3>GitHub.com</h3>
+                    <p>Copilot Chat on github.com, Copilot in PRs (summaries &amp; review suggestions), and Copilot in Issues</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #3fb950, #238636);"><i class="fas fa-mobile-alt"></i></div>
+                    <h3>GitHub Mobile &amp; CLI</h3>
+                    <p>Copilot in GitHub Mobile for chat and Copilot CLI for terminal command suggestions</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo: Copilot in Action -->
+        <div class="slide demo-slide" data-slide="30">
+            <div class="demo-icon animate"><i class="fas fa-laptop-code"></i></div>
+            <h2 class="animate">Demo Time</h2>
+            <p class="demo-subtitle animate">GitHub Copilot Overview</p>
+            <div class="demo-topics animate">
+                <span class="demo-topic">Inline Completions</span>
+                <span class="demo-topic">Copilot Chat</span>
+                <span class="demo-topic">Agent Mode Basics</span>
+            </div>
+            <p class="animate" style="margin-top: 24px; color: var(--text-muted); font-size: 1rem;">
+                <i class="fas fa-clock"></i> Estimated time: <span class="highlight-text">7 minutes</span>
+            </p>
+        </div>
+
+        <!-- Quiz: Copilot Overview -->
+        <div class="slide quiz-slide" data-slide="q5">
+            <h2 class="animate">Quick Check</h2>
+            <p class="quiz-question animate">Which statement about Copilot's data handling is true?</p>
+            <div class="quiz-options animate">
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Copilot uses your code to continuously train its AI model</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">With Business/Enterprise plans, prompts are not retained and code is never used for training</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Copilot only works with JavaScript and Python</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SECTION 06: Copilot Subscription & Plans
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="31">
+            <span class="section-number">06</span>
+            <h2>Copilot Subscription<br>&amp; Plans</h2>
+            <p class="subtitle" style="color: var(--text-muted); font-size: 1.3rem;">Free, Pro, Business, and Enterprise — feature comparison &amp; pricing</p>
+        </div>
+
+        <!-- Slide: Copilot Free & Pro -->
+        <div class="slide content-slide" data-slide="32">
+            <h2>Copilot Free &amp; Pro</h2>
+            <div class="two-column">
+                <div>
+                    <div class="card animate" style="margin-bottom: 20px; border: 2px solid var(--secondary);">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
+                            <div class="card-icon" style="width: 40px; height: 40px; margin: 0; background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-gift"></i></div>
+                            <h3 style="margin: 0;">Copilot Free</h3>
+                        </div>
+                        <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: disc; padding-left: 20px;">
+                            <li style="margin-bottom: 6px;">2,000 completions / month</li>
+                            <li style="margin-bottom: 6px;">50 Copilot Chat messages / month</li>
+                            <li style="margin-bottom: 6px;">Available to all GitHub Free users</li>
+                            <li>Access to GPT-4o mini model</li>
+                        </ul>
+                    </div>
+                    <div class="card animate" style="border: 2px solid var(--primary);">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
+                            <div class="card-icon" style="width: 40px; height: 40px; margin: 0; background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-user-graduate"></i></div>
+                            <h3 style="margin: 0;">Copilot Pro — $10/month</h3>
+                        </div>
+                        <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: disc; padding-left: 20px;">
+                            <li style="margin-bottom: 6px;">Unlimited completions</li>
+                            <li style="margin-bottom: 6px;">Unlimited Chat messages</li>
+                            <li style="margin-bottom: 6px;">GPT-4o, Claude 3.5 Sonnet, o3-mini</li>
+                            <li>Copilot Extensions (MCP)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="animate">
+                    <div class="tip-box" style="margin-top: 0;">
+                        <h4><i class="fas fa-graduation-cap"></i> Students &amp; Teachers</h4>
+                        <p>GitHub Copilot Pro is available <strong>free</strong> to verified students and educators through the GitHub Education program. Applies to accredited institutions worldwide.</p>
+                    </div>
+                    <div class="warning-box" style="margin-top: 20px;">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Free Plan Limits</h4>
+                        <p>Copilot Free is designed for individual exploration. Teams and enterprises should evaluate Business or Enterprise plans for unlimited access, admin controls, and privacy guarantees.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Copilot Business & Enterprise -->
+        <div class="slide content-slide" data-slide="33">
+            <h2>Copilot Business &amp; Enterprise</h2>
+            <div class="two-column">
+                <div>
+                    <div class="card animate" style="margin-bottom: 20px; border: 2px solid var(--secondary);">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
+                            <div class="card-icon" style="width: 40px; height: 40px; margin: 0; background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-briefcase"></i></div>
+                            <h3 style="margin: 0;">Copilot Business — $19/user/month</h3>
+                        </div>
+                        <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: disc; padding-left: 20px;">
+                            <li style="margin-bottom: 6px;">All Pro features, org-managed</li>
+                            <li style="margin-bottom: 6px;">No prompt/snippet retention</li>
+                            <li style="margin-bottom: 6px;">Content exclusions by path/file</li>
+                            <li>Audit log for usage</li>
+                        </ul>
+                    </div>
+                    <div class="card animate" style="border: 2px solid var(--primary);">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
+                            <div class="card-icon" style="width: 40px; height: 40px; margin: 0; background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-building"></i></div>
+                            <h3 style="margin: 0;">Copilot Enterprise — $39/user/month</h3>
+                        </div>
+                        <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: disc; padding-left: 20px;">
+                            <li style="margin-bottom: 6px;">All Business features</li>
+                            <li style="margin-bottom: 6px;">Copilot Knowledge Bases (Bing RAG)</li>
+                            <li style="margin-bottom: 6px;">PR summaries &amp; review on GitHub.com</li>
+                            <li>Fine-tuned models (custom models)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="animate">
+                    <div class="tip-box" style="margin-top: 0;">
+                        <h4><i class="fas fa-lightbulb"></i> When to Choose Enterprise</h4>
+                        <p>Upgrade from Business to Enterprise when you need:</p>
+                        <ul style="color: var(--text-muted); font-size: 0.9rem; margin-top: 10px; padding-left: 20px;">
+                            <li style="margin-bottom: 6px;">Copilot to understand your internal docs &amp; wikis (Knowledge Bases)</li>
+                            <li style="margin-bottom: 6px;">Automated PR summaries at scale</li>
+                            <li>Custom fine-tuned models on your codebase</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Feature Comparison Table -->
+        <div class="slide content-slide" data-slide="34">
+            <h2>Copilot Plan Comparison</h2>
+            <div style="overflow-x: auto; margin-top: 15px;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                    <thead>
+                        <tr style="background: var(--surface-light);">
+                            <th style="padding: 10px 14px; text-align: left; border-bottom: 2px solid var(--primary); color: var(--text-primary);">Feature</th>
+                            <th style="padding: 10px 14px; text-align: center; border-bottom: 2px solid var(--primary); color: var(--text-muted);">Free</th>
+                            <th style="padding: 10px 14px; text-align: center; border-bottom: 2px solid var(--primary); color: var(--text-muted);">Pro</th>
+                            <th style="padding: 10px 14px; text-align: center; border-bottom: 2px solid var(--primary); color: var(--secondary);">Business</th>
+                            <th style="padding: 10px 14px; text-align: center; border-bottom: 2px solid var(--primary); color: #d2a8ff;">Enterprise</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid var(--surface-light);">
+                            <td style="padding: 8px 14px;">Inline completions</td>
+                            <td style="padding: 8px 14px; text-align: center;">2,000/mo</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--secondary);">Unlimited</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--secondary);">Unlimited</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--secondary);">Unlimited</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--surface-light); background: rgba(255,255,255,0.02);">
+                            <td style="padding: 8px 14px;">Chat messages</td>
+                            <td style="padding: 8px 14px; text-align: center;">50/mo</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--secondary);">Unlimited</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--secondary);">Unlimited</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--secondary);">Unlimited</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--surface-light);">
+                            <td style="padding: 8px 14px;">No prompt retention</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--accent);">❌</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--accent);">❌</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--secondary);">✅</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--secondary);">✅</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--surface-light); background: rgba(255,255,255,0.02);">
+                            <td style="padding: 8px 14px;">Org-level policy controls</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--accent);">❌</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--accent);">❌</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--secondary);">✅</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--secondary);">✅</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--surface-light);">
+                            <td style="padding: 8px 14px;">Content exclusions</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--accent);">❌</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--accent);">❌</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--secondary);">✅</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--secondary);">✅</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--surface-light); background: rgba(255,255,255,0.02);">
+                            <td style="padding: 8px 14px;">Knowledge Bases</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--accent);">❌</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--accent);">❌</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--accent);">❌</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--secondary);">✅</td>
+                        </tr>
+                        <tr style="background: rgba(255,255,255,0.02);">
+                            <td style="padding: 8px 14px;">PR summaries (github.com)</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--accent);">❌</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--accent);">❌</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--accent);">❌</td>
+                            <td style="padding: 8px 14px; text-align: center; color: var(--secondary);">✅</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Quiz: Copilot Plans -->
+        <div class="slide quiz-slide" data-slide="q6">
+            <h2 class="animate">Quick Check</h2>
+            <p class="quiz-question animate">Which Copilot plan is the minimum required to enforce content exclusions across an organization?</p>
+            <div class="quiz-options animate">
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Copilot Free — available to all GitHub Free users</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Copilot Pro — full features for individual developers</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Copilot Business — minimum plan with org-level policy controls</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SECTION 07: Copilot Admin & Policy Controls
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="35">
+            <span class="section-number">07</span>
+            <h2>Copilot Admin &amp;<br>Policy Controls</h2>
+            <p class="subtitle" style="color: var(--text-muted); font-size: 1.3rem;">Org-level settings, content exclusions, and managing seat assignments</p>
+        </div>
+
+        <!-- Slide: Org-Level Settings -->
+        <div class="slide content-slide" data-slide="36">
+            <h2>Organization-Level Settings</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-toggle-on"></i></div>
+                            <div class="feature-content">
+                                <h4>Enable / Disable Copilot</h4>
+                                <p>Admins can enable Copilot for all members or specific teams. Granular control at org and team levels.</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-code"></i></div>
+                            <div class="feature-content">
+                                <h4>Duplication Detection</h4>
+                                <p>Block suggestions that match public code — reduce IP risk by filtering suggestions resembling open-source code</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-comment-slash"></i></div>
+                            <div class="feature-content">
+                                <h4>Chat in IDE</h4>
+                                <p>Control whether Copilot Chat is available to users — enable for all, specific teams, or disable org-wide</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-chart-line"></i></div>
+                            <div class="feature-content">
+                                <h4>Usage Metrics</h4>
+                                <p>View acceptance rates, active users, languages used — accessible via API and the org's Copilot usage dashboard</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="demo-box">
+                        <h4 style="color: var(--secondary); margin-bottom: 15px;"><i class="fas fa-map-marker-alt"></i> Where to Find Settings</h4>
+                        <ul style="color: var(--text-muted); font-size: 0.95rem; list-style: none; padding: 0;">
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--surface-light);">
+                                <code>github.com/organizations/{org}/settings/copilot</code>
+                            </li>
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--surface-light);">→ Policies tab: duplication, chat, CLI settings</li>
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--surface-light);">→ Access tab: seat assignments &amp; team access</li>
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--surface-light);">→ Content exclusions: file/path-level filtering</li>
+                            <li style="padding: 8px 0;">→ Usage: adoption metrics per user &amp; team</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Content Exclusions -->
+        <div class="slide content-slide" data-slide="37">
+            <h2>Content Exclusions</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-ban"></i></div>
+                            <div class="feature-content">
+                                <h4>What Are Content Exclusions?</h4>
+                                <p>Configure Copilot to <strong>ignore specific files or paths</strong> — it won't use them as context or generate suggestions when working in them</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-file-alt"></i></div>
+                            <div class="feature-content">
+                                <h4>Glob Pattern Syntax</h4>
+                                <p>Use glob patterns to exclude files: <code>**/secrets/**</code>, <code>**/*.env</code>, <code>src/proprietary/**</code></p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-layer-group"></i></div>
+                            <div class="feature-content">
+                                <h4>Scoping Options</h4>
+                                <p>Set at org level (applies to all repos) or at individual repo level via <code>.github/copilot-exclusions.yaml</code></p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="demo-box">
+                        <h4 style="color: var(--secondary); margin-bottom: 15px;"><i class="fas fa-code"></i> Example Exclusion Config</h4>
+                        <div class="code-block" style="font-size: 0.85rem;">
+                            <span style="color: var(--text-muted);"># .github/copilot-exclusions.yaml</span><br>
+                            <span class="keyword">paths</span>:<br>
+                            &nbsp;&nbsp;<span class="string">- "**/secrets/**"</span><br>
+                            &nbsp;&nbsp;<span class="string">- "**/.env*"</span><br>
+                            &nbsp;&nbsp;<span class="string">- "**/proprietary/**"</span><br>
+                            &nbsp;&nbsp;<span class="string">- "src/auth/tokens.ts"</span>
+                        </div>
+                    </div>
+                    <div class="tip-box" style="margin-top: 20px;">
+                        <h4><i class="fas fa-lightbulb"></i> Use Case</h4>
+                        <p>Exclude files containing proprietary algorithms, secrets management code, or sensitive PII data from Copilot's context window to prevent accidental exposure.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Managing Seat Assignments -->
+        <div class="slide content-slide" data-slide="38">
+            <h2>Managing Seat Assignments</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-user-plus"></i></div>
+                    <h3>Assigning Seats</h3>
+                    <p>Grant Copilot access to individual users or entire teams. Changes take effect immediately — no restart required.</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-user-minus"></i></div>
+                    <h3>Revoking Seats</h3>
+                    <p>Remove Copilot access from users who leave teams or the org. Seats are freed instantly and billing adjusts next cycle.</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-clock"></i></div>
+                    <h3>Inactive Seat Cleanup</h3>
+                    <p>Filter by "Last active" to identify unused seats. GitHub reports seats not used in 30+ days — reclaim to optimize costs.</p>
+                </div>
+            </div>
+            <div class="tip-box animate" style="margin-top: 25px; width: 100%;">
+                <h4><i class="fas fa-lightbulb"></i> Manage at Scale via API</h4>
+                <p>Use the GitHub REST API (<code>POST /orgs/{org}/copilot/billing/seats</code>) to automate seat provisioning — integrate with your HR system or SCIM provider for zero-touch lifecycle management.</p>
+            </div>
+        </div>
+
+        <!-- Demo: Admin & Policy Controls -->
+        <div class="slide demo-slide" data-slide="39">
+            <div class="demo-icon animate"><i class="fas fa-laptop-code"></i></div>
+            <h2 class="animate">Demo Time</h2>
+            <p class="demo-subtitle animate">Copilot Admin &amp; Policy Controls</p>
+            <div class="demo-topics animate">
+                <span class="demo-topic">Org Settings Walkthrough</span>
+                <span class="demo-topic">Configure Content Exclusions</span>
+                <span class="demo-topic">Seat Management</span>
+            </div>
+            <p class="animate" style="margin-top: 24px; color: var(--text-muted); font-size: 1rem;">
+                <i class="fas fa-clock"></i> Estimated time: <span class="highlight-text">5 minutes</span>
+            </p>
+        </div>
+
+        <!-- Quiz: Admin Controls -->
+        <div class="slide quiz-slide" data-slide="q7">
+            <h2 class="animate">Quick Check</h2>
+            <p class="quiz-question animate">What is the purpose of Copilot content exclusions?</p>
+            <div class="quiz-options animate">
+                <div class="quiz-option">
+                    <div class="quiz-option-value">To prevent Copilot from suggesting code in any language other than JavaScript</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">To stop Copilot from using or generating suggestions for specified sensitive files or paths</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">To limit the number of completions per user per day</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SECTION 08: Q & A
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="40">
+            <span class="section-number">08</span>
+            <h2>Q &amp; A</h2>
+            <p class="subtitle" style="color: var(--text-muted); font-size: 1.3rem;">Open discussion and wrap-up</p>
+        </div>
+
+        <!-- Slide: Key Takeaways -->
+        <div class="slide content-slide" data-slide="41">
+            <h2>Key Takeaways</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="card animate">
+                    <div class="card-icon"><i class="fab fa-github"></i></div>
+                    <h3>GitHub Platform</h3>
+                    <p>The world's largest developer platform — Git-based, collaborative, and the full DevOps lifecycle in one place</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-server"></i></div>
+                    <h3>Right Deployment</h3>
+                    <p>Free/Team for SMBs, GHEC for enterprises, EMU for strict identity control, GHES for air-gapped environments</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-shield-alt"></i></div>
+                    <h3>GHAS = Shift Left</h3>
+                    <p>Code Scanning, Secret Scanning, Dependabot — security embedded in the developer workflow, not bolted on after</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-robot"></i></div>
+                    <h3>Copilot at Every Level</h3>
+                    <p>Free for individuals, Business for teams with admin controls, Enterprise for org-wide AI with custom knowledge</p>
+                </div>
+            </div>
+            <div class="tip-box animate" style="margin-top: 25px; width: 100%;">
+                <h4><i class="fas fa-arrow-right"></i> Next Steps</h4>
+                <p>Evaluate your current GitHub plan, identify GHAS gaps in private repos, and pilot Copilot Business with a small team. Measure productivity gains and expand based on adoption data.</p>
+            </div>
+        </div>
+
+        <!-- Slide: Resources -->
+        <div class="slide content-slide" data-slide="42">
+            <h2>Resources &amp; Further Reading</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="card animate">
+                    <div class="card-icon"><i class="fas fa-book"></i></div>
+                    <h3>Documentation</h3>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: none; padding: 0;">
+                        <li style="padding: 6px 0; border-bottom: 1px solid var(--surface-light);"><a href="https://docs.github.com" style="color: var(--primary);">docs.github.com</a> — official GitHub docs</li>
+                        <li style="padding: 6px 0; border-bottom: 1px solid var(--surface-light);">GHAS docs: docs.github.com/en/code-security</li>
+                        <li style="padding: 6px 0;">Copilot docs: docs.github.com/en/copilot</li>
+                    </ul>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-graduation-cap"></i></div>
+                    <h3>Learning Paths</h3>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: none; padding: 0;">
+                        <li style="padding: 6px 0; border-bottom: 1px solid var(--surface-light);">GitHub Learning Lab — learn.github.com</li>
+                        <li style="padding: 6px 0; border-bottom: 1px solid var(--surface-light);">Microsoft Learn — GitHub Foundations</li>
+                        <li style="padding: 6px 0;">GitHub Skills — skills.github.com</li>
+                    </ul>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-certificate"></i></div>
+                    <h3>Certifications</h3>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: none; padding: 0;">
+                        <li style="padding: 6px 0; border-bottom: 1px solid var(--surface-light);">GitHub Foundations</li>
+                        <li style="padding: 6px 0; border-bottom: 1px solid var(--surface-light);">GitHub Actions</li>
+                        <li style="padding: 6px 0;">GitHub Advanced Security</li>
+                    </ul>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-calculator"></i></div>
+                    <h3>Tools</h3>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: none; padding: 0;">
+                        <li style="padding: 6px 0; border-bottom: 1px solid var(--surface-light);">GitHub Pricing Calculator</li>
+                        <li style="padding: 6px 0; border-bottom: 1px solid var(--surface-light);">GHAS Committer Dashboard (Enterprise Settings)</li>
+                        <li style="padding: 6px 0;">Copilot Usage API &amp; Metrics Dashboard</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Open Q&A -->
+        <div class="slide content-slide" data-slide="43">
+            <h2>Open Discussion</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-question-circle"></i></div>
+                    <h3>Common Questions</h3>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: disc; padding-left: 20px;">
+                        <li style="margin-bottom: 8px;">Which plan fits our team's size &amp; compliance needs?</li>
+                        <li style="margin-bottom: 8px;">How do we measure Copilot ROI?</li>
+                        <li style="margin-bottom: 8px;">What's the migration path from GHES to GHEC?</li>
+                        <li>How do we roll out GHAS progressively?</li>
+                    </ul>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-lightbulb"></i></div>
+                    <h3>Your Questions</h3>
+                    <div style="color: var(--text-muted); font-size: 1rem; padding-top: 20px; text-align: center;">
+                        <p style="font-size: 1.2rem; margin-bottom: 20px;">What questions do <em>you</em> have about:</p>
+                        <p>GitHub Platform &amp; Plans</p>
+                        <p style="margin: 8px 0;">GHAS &amp; Security</p>
+                        <p>GitHub Copilot</p>
+                    </div>
+                </div>
+            </div>
+            <div class="tip-box animate" style="margin-top: 25px; width: 100%;">
+                <h4><i class="fas fa-hands-helping"></i> We're Here to Help</h4>
+                <p>Your InfoMagnus trainer is available for follow-up questions, demos, and planning sessions. Reach out after the session for a customized GitHub adoption roadmap for your team.</p>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             Thank You
+             ============================================================ -->
+        <div class="slide title-slide" data-slide="44">
+            <div class="logo-container animate">
+                <div class="copilot-logo">
+                    <i class="fab fa-github"></i>
+                </div>
+            </div>
+            <h1 class="animate">Thank You!</h1>
+            <p class="subtitle animate">Questions &amp; Discussion</p>
+            <div class="meta animate">
+                <span><i class="fas fa-envelope"></i> training@infomagnus.com</span>
+                <span><i class="fab fa-github"></i> github.com/infomagnus</span>
+            </div>
+            <div class="animate" style="margin-top: 50px;">
+                <p style="color: var(--text-muted); font-size: 1rem;">GitHub Platform Overview — GHAS, Copilot &amp; Subscriptions</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <span class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides"></span>
+        </span>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        <div style="width: 1px; height: 30px; background: var(--surface-light); margin: 0 5px;"></div>
+        <button class="nav-btn" id="fullscreenBtn" onclick="toggleFullscreen()" title="Fullscreen (F)">
+            <i class="fas fa-expand" id="fullscreenIcon"></i>
+        </button>
+        <div style="width: 1px; height: 30px; background: var(--surface-light); margin: 0 5px;"></div>
+        <button class="nav-btn pdf-btn" onclick="exportToPDF()" title="Save as PDF">
+            <i class="fas fa-file-pdf"></i> PDF
+        </button>
+    </div>
+
+    <script src="../shared/presentation.js"></script>
+    <script>
+        initPresentation({
+            storageKey: 'gh-platform',
+            pdfFilename: 'gh-platform.pdf'
+        });
+    </script>
+</body>
+
+</html>
