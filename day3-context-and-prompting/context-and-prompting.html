@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d1117">
+    <meta name="color-scheme" content="dark">
+    <title>Day 3 – Context Setting &amp; Advanced Prompting</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../shared/presentation.css">
+    <style>
+        /* ── Day 3 course-specific styles ── */
+
+        /* Flow diagram */
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .flow-step {
+            background: var(--surface);
+            border: 2px solid var(--surface-light);
+            border-radius: 12px;
+            padding: 14px 20px;
+            text-align: center;
+            min-width: 130px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .flow-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+        .flow-step .step-icon {
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+        }
+        .flow-step h4 {
+            font-size: 0.95rem;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .flow-step p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+        .flow-arrow {
+            font-size: 1.4rem;
+            color: var(--text-muted);
+        }
+
+        /* Comparison layout */
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            width: 100%;
+        }
+        .compare-col h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--surface-light);
+        }
+        .compare-col ul {
+            list-style: none;
+        }
+        .compare-col li {
+            font-size: 1.1rem;
+            margin-bottom: 14px;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.5;
+            color: var(--text);
+        }
+        .compare-col li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .compare-col.good li::before { background: var(--primary); }
+        .compare-col.bad li::before  { background: var(--accent); }
+
+        /* Badge / Tag pills */
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .tag {
+            background: var(--surface);
+            border: 1px solid var(--surface-light);
+            color: var(--text);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Stat cards */
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        /* Capability grid */
+        .cap-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 100%;
+        }
+        .cap-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 18px 22px;
+            border: 1px solid var(--surface-light);
+            transition: transform 0.3s ease;
+        }
+        .cap-item:hover { transform: translateY(-2px); }
+        .cap-icon {
+            font-size: 1.5rem;
+            width: 44px;
+            min-width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: var(--surface-light);
+        }
+        .cap-text h4 {
+            font-size: 1.05rem;
+            color: #fff;
+            margin-bottom: 3px;
+        }
+        .cap-text p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Table styling */
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1rem;
+        }
+        .styled-table th {
+            background: var(--surface);
+            color: var(--secondary);
+            padding: 14px 18px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid var(--surface-light);
+        }
+        .styled-table td {
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--surface-light);
+            color: var(--text);
+            line-height: 1.5;
+        }
+        .styled-table tr:hover td {
+            background: rgba(88, 166, 255, 0.05);
+        }
+        .styled-table code {
+            background: var(--surface);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.88rem;
+            color: var(--secondary);
+        }
+
+        /* Numbered steps */
+        .step-list {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+        .step-list li {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 55px;
+            margin-bottom: 28px;
+        }
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: -2px;
+            width: 38px;
+            height: 38px;
+            background: var(--surface);
+            border: 2px solid var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--secondary);
+        }
+        .step-list li h4 {
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .step-list li p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        /* Agent mode badge */
+        .mode-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+        .mode-badge.new   { background: rgba(63,185,80,0.2); color: var(--primary); }
+        .mode-badge.preview { background: rgba(163,113,247,0.2); color: var(--purple); }
+
+        /* Fix: prevent nav controls from overlapping slide content */
+        .keyboard-hints { display: none; }
+        .content-slide, .demo-slide { padding-bottom: 110px !important; }
+        .nav-controls { bottom: 16px; padding: 10px 24px; }
+    </style>
+</head>
+
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Slide Header with Logo -->
+    <div class="slide-header" style="justify-content: space-between;">
+        <a href="../index.html" class="back-home-btn" title="Back to Courses"
+            style="padding: 6px 10px; font-size: 0; gap: 0; width: 32px; height: 32px; justify-content: center; opacity: 0.5;">
+            <i class="fas fa-arrow-left" style="font-size: 0.8rem;"></i>
+        </a>
+        <div class="logo logo-infomagnus">
+            <i class="fab fa-github github-icon"></i>
+            <span><span>Info</span><span class="magnus-text">Magnus</span></span>
+        </div>
+    </div>
+
+    <div class="presentation" id="presentation">
+
+        <!-- ============================================================
+             SLIDE 1: Title
+             ============================================================ -->
+        <div class="slide title-slide active" data-slide="1">
+            <div class="logo-container animate">
+                <div class="copilot-logo">
+                    <i class="fas fa-brain"></i>
+                </div>
+            </div>
+            <h1 class="animate">Context Setting &amp;<br>Advanced Prompting</h1>
+            <p class="subtitle animate">Day 3 — Mastering GitHub Copilot's Context Engine &amp; Agentic Workflows</p>
+            <div class="meta animate">
+                <span><i class="fas fa-clock"></i> Duration: 2 hrs</span>
+                <span><i class="fas fa-chalkboard-teacher"></i> Slides + Live Demos</span>
+                <span><i class="fas fa-users"></i> Innominds Developer Enablement</span>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 2: Trainer Introduction
+             ============================================================ -->
+        <div class="slide intro-slide" data-slide="2">
+            <div class="intro-content">
+                <img src="../shared/images/copilot-avatar.png" alt="GitHub Copilot" class="trainer-photo animate">
+                <div class="trainer-info">
+                    <h2 class="animate">GitHub Trainer Name</h2>
+                    <p class="title animate">GitHub Certified Trainer</p>
+                    <div class="company animate">
+                        <i class="fab fa-github"></i>
+                        <span><span style="color: #8b949e;">Info</span><span style="color: #58a6ff;">Magnus</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 3: Session Agenda
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="3">
+            <h2>Session Agenda <span style="font-size:1rem; font-weight:400; color:var(--text-muted); border-bottom:none; padding:0;">— 2 hrs · slides + demos</span></h2>
+            <div class="card-grid" style="grid-template-columns: repeat(5, 1fr);">
+                <div class="card animate" style="padding: 20px 16px; text-align: center;">
+                    <div class="card-icon" style="margin: 0 auto 12px;"><i class="fas fa-crosshairs"></i></div>
+                    <h3 style="font-size: 1rem;">Why Context Matters</h3>
+                    <p style="font-size: 0.8rem;">How Copilot reads your workspace</p>
+                </div>
+                <div class="card animate" style="padding: 20px 16px; text-align: center;">
+                    <div class="card-icon" style="margin: 0 auto 12px; background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-sliders-h"></i></div>
+                    <h3 style="font-size: 1rem;">Context Techniques</h3>
+                    <p style="font-size: 0.8rem;">Pinning, ordering &amp; anchors</p>
+                </div>
+                <div class="card animate" style="padding: 20px 16px; text-align: center;">
+                    <div class="card-icon" style="margin: 0 auto 12px; background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-file-alt"></i></div>
+                    <h3 style="font-size: 1rem;">Custom Instructions</h3>
+                    <p style="font-size: 0.8rem;">copilot-instructions.md</p>
+                </div>
+                <div class="card animate" style="padding: 20px 16px; text-align: center;">
+                    <div class="card-icon" style="margin: 0 auto 12px; background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-pen-fancy"></i></div>
+                    <h3 style="font-size: 1rem;">Prompt Engineering</h3>
+                    <p style="font-size: 0.8rem;">Zero-shot, few-shot, CoT</p>
+                </div>
+                <div class="card animate" style="padding: 20px 16px; text-align: center;">
+                    <div class="card-icon" style="margin: 0 auto 12px; background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-rocket"></i></div>
+                    <h3 style="font-size: 1rem;">Advanced Prompting</h3>
+                    <p style="font-size: 0.8rem;">Refactors, patterns, tests</p>
+                </div>
+                <div class="card animate" style="padding: 20px 16px; text-align: center;">
+                    <div class="card-icon" style="margin: 0 auto 12px; background: linear-gradient(135deg, #3fb950, #238636);"><i class="fas fa-robot"></i></div>
+                    <h3 style="font-size: 1rem;">Agentic Behaviour</h3>
+                    <p style="font-size: 0.8rem;">Autonomous AI execution</p>
+                </div>
+                <div class="card animate" style="padding: 20px 16px; text-align: center;">
+                    <div class="card-icon" style="margin: 0 auto 12px; background: linear-gradient(135deg, #f0883e, #ffa657);"><i class="fas fa-cogs"></i></div>
+                    <h3 style="font-size: 1rem;">Agentic in Practice</h3>
+                    <p style="font-size: 0.8rem;">Workflows &amp; tool use</p>
+                </div>
+                <div class="card animate" style="padding: 20px 16px; text-align: center;">
+                    <div class="card-icon" style="margin: 0 auto 12px; background: linear-gradient(135deg, #58a6ff, #a371f7);"><i class="fas fa-search-plus"></i></div>
+                    <h3 style="font-size: 1rem;">@workspace Deep-Dive</h3>
+                    <p style="font-size: 0.8rem;">Codebase-wide queries</p>
+                </div>
+                <div class="card animate" style="padding: 20px 16px; text-align: center;">
+                    <div class="card-icon" style="margin: 0 auto 12px; background: linear-gradient(135deg, #79c0ff, #58a6ff);"><i class="fas fa-terminal"></i></div>
+                    <h3 style="font-size: 1rem;">CLI &amp; Cloud Agent</h3>
+                    <p style="font-size: 0.8rem;">Copilot CLI &amp; integrations</p>
+                </div>
+                <div class="card animate" style="padding: 20px 16px; text-align: center;">
+                    <div class="card-icon" style="margin: 0 auto 12px; background: linear-gradient(135deg, #d2a8ff, #a371f7);"><i class="fas fa-comments"></i></div>
+                    <h3 style="font-size: 1rem;">Q &amp; A</h3>
+                    <p style="font-size: 0.8rem;">Takeaways &amp; resources</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 4: Section — Why Context Matters
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="4">
+            <span class="section-number">01</span>
+            <h2>Why Context Matters</h2>
+            <p style="font-size: 1.4rem; color: var(--text-muted); max-width: 700px; margin-top: 10px;">How Copilot uses open files, tabs, and workspace to generate suggestions</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 5: How Copilot Gathers Context
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="5">
+            <h2>How Copilot Gathers Context</h2>
+            <div class="flow-diagram animate">
+                <div class="flow-step" style="border-color: var(--secondary);">
+                    <div class="step-icon" style="color: var(--secondary);"><i class="fas fa-file-code"></i></div>
+                    <h4>Current File</h4>
+                    <p>Code above &amp; below cursor</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step" style="border-color: var(--purple);">
+                    <div class="step-icon" style="color: var(--purple);"><i class="fas fa-folder-open"></i></div>
+                    <h4>Open Tabs</h4>
+                    <p>Neighboring files &amp; imports</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step" style="border-color: var(--primary);">
+                    <div class="step-icon" style="color: var(--primary);"><i class="fas fa-sitemap"></i></div>
+                    <h4>Workspace Index</h4>
+                    <p>Semantic search of all files</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step" style="border-color: var(--accent);">
+                    <div class="step-icon" style="color: var(--accent);"><i class="fas fa-history"></i></div>
+                    <h4>Chat History</h4>
+                    <p>Prior conversation context</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step" style="border-color: #3fb950;">
+                    <div class="step-icon" style="color: #3fb950;"><i class="fas fa-file-alt"></i></div>
+                    <h4>Instructions</h4>
+                    <p>Custom &amp; repo-level rules</p>
+                </div>
+            </div>
+            <div class="two-column animate" style="margin-top: 20px;">
+                <div>
+                    <div class="tip-box" style="margin-top: 0;">
+                        <h4><i class="fas fa-lightbulb"></i> Context Quality = Suggestion Quality</h4>
+                        <p>Copilot can only suggest based on what it <strong>sees</strong>. Vague function names, no comments, and closed relevant files all reduce suggestion quality. <em>Garbage in, garbage out.</em></p>
+                    </div>
+                </div>
+                <div>
+                    <div class="demo-box" style="margin-top: 0;">
+                        <h4 style="color: var(--secondary); margin-bottom: 12px;"><i class="fas fa-layer-group"></i> Context Priority Order</h4>
+                        <ul style="list-style: none; color: var(--text); font-size: 1.05rem;">
+                            <li style="margin-bottom: 8px;"><span class="highlight-text">1.</span> Selected / highlighted code</li>
+                            <li style="margin-bottom: 8px;"><span class="highlight-text">2.</span> Current active file content</li>
+                            <li style="margin-bottom: 8px;"><span class="highlight-text">3.</span> Open editor tabs</li>
+                            <li style="margin-bottom: 8px;"><span class="highlight-text">4.</span> Workspace semantic index</li>
+                            <li><span class="highlight-text">5.</span> Custom instructions files</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 6: Context Sources Deep-Dive
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="6">
+            <h2>Context Sources — What Copilot Actually Reads</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="card animate" style="text-align: center; padding: 25px 20px;">
+                    <div class="card-icon" style="margin: 0 auto 14px; background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-i-cursor"></i></div>
+                    <h3 style="font-size: 1.05rem;">Inline Completions</h3>
+                    <p style="font-size: 0.9rem;">Current file + open tabs.<br>Code above/below cursor weighted highest.</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 25px 20px;">
+                    <div class="card-icon" style="margin: 0 auto 14px; background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-comments"></i></div>
+                    <h3 style="font-size: 1.05rem;">Copilot Chat</h3>
+                    <p style="font-size: 0.9rem;">Chat history + referenced files via <code>#file</code> + selected code.</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 25px 20px;">
+                    <div class="card-icon" style="margin: 0 auto 14px; background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-robot"></i></div>
+                    <h3 style="font-size: 1.05rem;">Agent Mode</h3>
+                    <p style="font-size: 0.9rem;">Full workspace via semantic search, grep, file reads, usages, and terminal output.</p>
+                </div>
+            </div>
+            <div class="warning-box animate" style="margin-top: 25px; width: 100%;">
+                <h4><i class="fas fa-exclamation-triangle"></i> Key Insight</h4>
+                <p>Agent mode has access to <strong>significantly more context</strong> than inline completions. For complex tasks, switch from inline completions to Chat or Agent mode to give Copilot the full picture of your codebase.</p>
+            </div>
+        </div>
+
+        <!-- Quiz 1: Context Gathering -->
+        <div class="slide quiz-slide" data-slide="q1">
+            <h2 class="animate">Quick Check</h2>
+            <p class="quiz-question animate">What is Copilot's <strong>highest-priority</strong> context source when generating inline suggestions?</p>
+            <div class="quiz-options animate">
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Workspace semantic index</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Selected / highlighted code &amp; current active file</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Chat history from previous sessions</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 7: Section — Context Setting Techniques
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="7">
+            <span class="section-number">02</span>
+            <h2>Context Setting Techniques</h2>
+            <p style="font-size: 1.4rem; color: var(--text-muted); max-width: 700px; margin-top: 10px;">Relevant file ordering, pinning files, and using comments as anchors</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 8: Context Optimization Strategies
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="8">
+            <h2>Context Optimization Strategies</h2>
+            <div class="cap-grid animate">
+                <div class="cap-item">
+                    <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-thumbtack"></i></div>
+                    <div class="cap-text">
+                        <h4>Pin Key Files</h4>
+                        <p>Keep architecture docs, interfaces, and config files pinned in editor tabs</p>
+                    </div>
+                </div>
+                <div class="cap-item">
+                    <div class="cap-icon" style="color: var(--primary);"><i class="fas fa-sort-amount-up"></i></div>
+                    <div class="cap-text">
+                        <h4>Order Tabs by Relevance</h4>
+                        <p>Open related files before prompting — close irrelevant ones to reduce noise</p>
+                    </div>
+                </div>
+                <div class="cap-item">
+                    <div class="cap-icon" style="color: var(--purple);"><i class="fas fa-comment-dots"></i></div>
+                    <div class="cap-text">
+                        <h4>Use Comments as Anchors</h4>
+                        <p>Write intent comments before code — they're Copilot's strongest signal</p>
+                    </div>
+                </div>
+                <div class="cap-item">
+                    <div class="cap-icon" style="color: var(--accent);"><i class="fas fa-highlighter"></i></div>
+                    <div class="cap-text">
+                        <h4>Select Before Asking</h4>
+                        <p>Highlight specific code snippets, then ask Chat — more precise than entire files</p>
+                    </div>
+                </div>
+                <div class="cap-item">
+                    <div class="cap-icon" style="color: #3fb950;"><i class="fas fa-code"></i></div>
+                    <div class="cap-text">
+                        <h4>Use Exact Code Terms</h4>
+                        <p>Reference actual class/function names like <code>PaymentService</code>, not "payment module"</p>
+                    </div>
+                </div>
+                <div class="cap-item">
+                    <div class="cap-icon" style="color: #79c0ff;"><i class="fas fa-times-circle"></i></div>
+                    <div class="cap-text">
+                        <h4>Close Irrelevant Files</h4>
+                        <p>Too many open tabs = noisy context. Keep only what matters for your current task</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 9: Explicit Context References
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="9">
+            <h2>Explicit Context References in VS Code</h2>
+            <div class="two-column">
+                <div>
+                    <table class="styled-table animate">
+                        <thead>
+                            <tr><th>Reference</th><th>What It Does</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>#file</code></td><td>Include a specific file in chat context</td></tr>
+                            <tr><td><code>#codebase</code></td><td>Force semantic search across entire workspace</td></tr>
+                            <tr><td><code>#selection</code></td><td>Include currently selected code</td></tr>
+                            <tr><td><code>#terminalSelection</code></td><td>Include terminal output in context</td></tr>
+                            <tr><td><code>@workspace</code></td><td>Scope query to full project participant</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="animate">
+                    <div class="code-block" style="margin-bottom: 20px;">
+                        <span class="comment">// Example: Referencing files explicitly</span><br><br>
+                        <span class="variable">@workspace</span> How does the auth flow work?<br>
+                        <span class="comment">// → Copilot searches ALL project files</span><br><br>
+                        <span class="variable">#file:src/auth/login.ts</span> Explain this<br>
+                        <span class="comment">// → Only that specific file in context</span><br><br>
+                        <span class="comment">// Select code → Ctrl+I → Ask about it</span><br>
+                        <span class="comment">// → Only selected lines in context</span>
+                    </div>
+                    <div class="tip-box" style="margin-top: 0;">
+                        <h4><i class="fas fa-lightbulb"></i> Pro Tip</h4>
+                        <p>Combine references: <code>#file:types.ts</code> + selected code + your question = laser-focused context for better answers.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo: Context Setting & File References -->
+        <div class="slide demo-slide" data-slide="10">
+            <div class="demo-icon animate"><i class="fas fa-laptop-code"></i></div>
+            <h2 class="animate">Demo Time</h2>
+            <p class="demo-subtitle animate">Context Setting &amp; File References</p>
+            <div class="demo-topics animate">
+                <span class="demo-topic">Opening Relevant Tabs</span>
+                <span class="demo-topic">Using #file &amp; #selection</span>
+                <span class="demo-topic">@workspace Queries</span>
+                <span class="demo-topic">Context Priority in Action</span>
+            </div>
+            <p class="animate" style="margin-top: 24px; color: var(--text-muted); font-size: 1rem;">
+                Runbook: <span class="highlight-text">demos/demo_01_context_setting.md</span>
+            </p>
+        </div>
+
+        <!-- Quiz 2: Context References -->
+        <div class="slide quiz-slide" data-slide="q2">
+            <h2 class="animate">Quick Check</h2>
+            <p class="quiz-question animate">Which chat reference forces Copilot to <strong>semantically search</strong> your entire workspace?</p>
+            <div class="quiz-options animate">
+                <div class="quiz-option">
+                    <div class="quiz-option-value"><code>#file</code> — includes a single specific file</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value"><code>#selection</code> — includes currently highlighted code</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value"><code>@workspace</code> / <code>#codebase</code> — searches all project files</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 10: Section — Custom Instructions
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="11">
+            <span class="section-number">03</span>
+            <h2>Custom Instructions</h2>
+            <p style="font-size: 1.4rem; color: var(--text-muted); max-width: 700px; margin-top: 10px;">Project-level instructions to steer Copilot responses with copilot-instructions.md</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 11: copilot-instructions.md
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="12">
+            <h2>Repository-Wide Custom Instructions</h2>
+            <div class="two-column">
+                <div>
+                    <div class="code-block animate" style="font-size: 0.85rem;">
+                        <span class="comment"># .github/copilot-instructions.md</span><br><br>
+                        <span class="keyword">## Repository Overview</span><br>
+                        Node.js/React app for task management.<br>
+                        Languages: TypeScript (75%), CSS (20%)<br>
+                        Frameworks: React 18, Express.js, PostgreSQL<br><br>
+                        <span class="keyword">## Coding Conventions</span><br>
+                        - Use functional components with hooks<br>
+                        - Prefer named exports over default<br>
+                        - All functions must have JSDoc comments<br>
+                        - Use Zod for runtime validation<br><br>
+                        <span class="keyword">## Testing</span><br>
+                        - Use Vitest + React Testing Library<br>
+                        - Every component needs a .test.tsx file<br>
+                        - Minimum 80% coverage on new code
+                    </div>
+                </div>
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-file-alt"></i></div>
+                            <div class="feature-content">
+                                <h4>File Location</h4>
+                                <p><code>.github/copilot-instructions.md</code> — Markdown format, auto-injected into all Copilot requests</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-bullseye"></i></div>
+                            <div class="feature-content">
+                                <h4>What to Include</h4>
+                                <p>Project overview, tech stack, coding conventions, build commands, testing standards, file structure</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-layer-group"></i></div>
+                            <div class="feature-content">
+                                <h4>Priority Order</h4>
+                                <p>Personal instructions &gt; Org instructions &gt; Repo instructions (highest to lowest)</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 12: Path-Specific Instructions
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="13">
+            <h2>Path-Specific &amp; Agent Instructions</h2>
+            <div class="two-column">
+                <div>
+                    <h3 style="color: var(--secondary); font-size: 1.5rem; margin-bottom: 20px;"><i class="fas fa-folder-open"></i> Path-Specific Files</h3>
+                    <div class="code-block animate" style="font-size: 0.85rem; margin-bottom: 20px;">
+                        <span class="comment"># .github/instructions/typescript.instructions.md</span><br>
+                        <span class="keyword">---</span><br>
+                        <span class="string">applyTo: "**/*.ts,**/*.tsx"</span><br>
+                        <span class="keyword">---</span><br><br>
+                        <span class="comment"># TypeScript Standards</span><br>
+                        - Use strict mode for all functions<br>
+                        - Prefer interfaces over type aliases<br>
+                        - No <span class="variable">any</span> — use <span class="variable">unknown</span> + type guards
+                    </div>
+                    <div class="tag-row animate">
+                        <span class="tag"><code>*.ts</code> &amp; <code>*.tsx</code></span>
+                        <span class="tag"><code>**/*.py</code></span>
+                        <span class="tag"><code>src/api/**</code></span>
+                        <span class="tag"><code>**/tests/**</code></span>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="color: var(--purple); font-size: 1.5rem; margin-bottom: 20px;"><i class="fas fa-robot"></i> Agent Instructions</h3>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-file-code"></i></div>
+                            <div class="feature-content">
+                                <h4>.github/AGENTS.md</h4>
+                                <p>Universal instructions for all AI agents working on your repo</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-project-diagram"></i></div>
+                            <div class="feature-content">
+                                <h4>CLAUDE.md / GEMINI.md</h4>
+                                <p>Model-specific agent instructions. Nearest file in directory tree wins.</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-magic"></i></div>
+                            <div class="feature-content">
+                                <h4>Auto-Generation</h4>
+                                <p>Use Copilot Cloud Agent at <code>github.com/copilot/agents</code> to auto-generate instructions from your codebase</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo: Custom Instructions Setup -->
+        <div class="slide demo-slide" data-slide="14">
+            <div class="demo-icon animate"><i class="fas fa-laptop-code"></i></div>
+            <h2 class="animate">Demo Time</h2>
+            <p class="demo-subtitle animate">Custom Instructions Setup</p>
+            <div class="demo-topics animate">
+                <span class="demo-topic">Creating copilot-instructions.md</span>
+                <span class="demo-topic">Path-Specific Rules</span>
+                <span class="demo-topic">AGENTS.md Configuration</span>
+                <span class="demo-topic">Before &amp; After Comparison</span>
+            </div>
+            <p class="animate" style="margin-top: 24px; color: var(--text-muted); font-size: 1rem;">
+                Runbook: <span class="highlight-text">demos/demo_02_custom_instructions.md</span>
+            </p>
+        </div>
+
+        <!-- Quiz 3: Custom Instructions -->
+        <div class="slide quiz-slide" data-slide="q3">
+            <h2 class="animate">Quick Check</h2>
+            <p class="quiz-question animate">Where should <strong>repository-wide</strong> Copilot custom instructions be placed?</p>
+            <div class="quiz-options animate">
+                <div class="quiz-option">
+                    <div class="quiz-option-value"><code>.vscode/settings.json</code></div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value"><code>.github/copilot-instructions.md</code></div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value"><code>package.json</code> — under a <code>"copilot"</code> field</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 13: Section — Prompt Engineering Fundamentals
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="15">
+            <span class="section-number">04</span>
+            <h2>Prompt Engineering<br>Fundamentals</h2>
+            <p style="font-size: 1.4rem; color: var(--text-muted); max-width: 700px; margin-top: 10px;">Zero-shot, few-shot, role-based, and chain-of-thought prompting</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 14: Four Core Prompting Strategies
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="16">
+            <h2>4 Core Prompting Strategies</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="card animate" style="padding: 25px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-bolt"></i></div>
+                    <h3>Zero-Shot Prompting</h3>
+                    <p style="margin-bottom: 12px;">Direct instruction with no examples. Works best for straightforward, well-defined tasks.</p>
+                    <div class="code-block" style="font-size: 0.8rem;">
+                        <span class="comment">// "Generate TypeScript interfaces for a</span><br>
+                        <span class="comment">// REST API with auth and refresh tokens"</span>
+                    </div>
+                </div>
+                <div class="card animate" style="padding: 25px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-list-ol"></i></div>
+                    <h3>Few-Shot Prompting</h3>
+                    <p style="margin-bottom: 12px;">Provide input/output examples so Copilot learns the desired pattern and format.</p>
+                    <div class="code-block" style="font-size: 0.8rem;">
+                        <span class="comment">// "findDates('meeting 11/14/23 and 12-1-23')</span><br>
+                        <span class="comment">//  → ['11/14/23', '12-1-23']"</span>
+                    </div>
+                </div>
+                <div class="card animate" style="padding: 25px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-user-shield"></i></div>
+                    <h3>Role-Based Prompting</h3>
+                    <p style="margin-bottom: 12px;">Assign Copilot a persona to shape response style, depth, and focus area.</p>
+                    <div class="code-block" style="font-size: 0.8rem;">
+                        <span class="comment">// "You are a security architect. Review</span><br>
+                        <span class="comment">// this auth flow for vulnerabilities."</span>
+                    </div>
+                </div>
+                <div class="card animate" style="padding: 25px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-project-diagram"></i></div>
+                    <h3>Chain-of-Thought</h3>
+                    <p style="margin-bottom: 12px;">Break complex reasoning into explicit steps. Makes Copilot "think out loud."</p>
+                    <div class="code-block" style="font-size: 0.8rem;">
+                        <span class="comment">// "Step 1: Identify dependencies</span><br>
+                        <span class="comment">// Step 2: Map states → Step 3: Refactor"</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 15: Prompting Best Practices
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="17">
+            <h2>Prompting Best Practices</h2>
+            <div class="compare-grid animate">
+                <div class="compare-col good">
+                    <h3 style="color: var(--primary);"><i class="fas fa-check-circle"></i> Do This</h3>
+                    <ul>
+                        <li>Start broad, then get specific — iterate to refine</li>
+                        <li>Give examples (input/output pairs or unit tests as specs)</li>
+                        <li>Break complex tasks into smaller sequential steps</li>
+                        <li>Use exact names: <code>createUser()</code>, not "the function"</li>
+                        <li>Start new chat threads for different tasks</li>
+                        <li>Keep existing code clean — Copilot mirrors your style</li>
+                    </ul>
+                </div>
+                <div class="compare-col bad">
+                    <h3 style="color: var(--accent);"><i class="fas fa-times-circle"></i> Avoid This</h3>
+                    <ul>
+                        <li>"What does this do?" — ambiguous: what is "this"?</li>
+                        <li>"Use the common library" — which one exactly?</li>
+                        <li>One giant prompt for a full feature — break it down</li>
+                        <li>Ignoring failed results — iterate and guide instead</li>
+                        <li>Keeping irrelevant history — clutters context window</li>
+                        <li>Vague variable names in your code — Copilot reflects them</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tip-box animate" style="margin-top: 25px; width: 100%;">
+                <h4><i class="fas fa-lightbulb"></i> Golden Rule</h4>
+                <p>The best prompt often isn't a prompt at all — it's <strong>well-written code with descriptive names and a leading comment</strong>. Copilot completes what you start.</p>
+            </div>
+        </div>
+
+        <!-- Demo: Prompt Engineering Techniques -->
+        <div class="slide demo-slide" data-slide="18">
+            <div class="demo-icon animate"><i class="fas fa-laptop-code"></i></div>
+            <h2 class="animate">Demo Time</h2>
+            <p class="demo-subtitle animate">Prompt Engineering Techniques</p>
+            <div class="demo-topics animate">
+                <span class="demo-topic">Zero-Shot vs Few-Shot</span>
+                <span class="demo-topic">Role-Based Prompting</span>
+                <span class="demo-topic">Chain-of-Thought in Chat</span>
+                <span class="demo-topic">Iterative Refinement</span>
+            </div>
+            <p class="animate" style="margin-top: 24px; color: var(--text-muted); font-size: 1rem;">
+                Runbook: <span class="highlight-text">demos/demo_03_prompt_engineering.md</span>
+            </p>
+        </div>
+
+        <!-- Quiz 4: Prompting Strategies -->
+        <div class="slide quiz-slide" data-slide="q4">
+            <h2 class="animate">Quick Check</h2>
+            <p class="quiz-question animate">Which prompting strategy provides <strong>input/output examples</strong> to guide Copilot's response format?</p>
+            <div class="quiz-options animate">
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Zero-Shot Prompting — direct instruction, no examples</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Few-Shot Prompting — provides example pairs so Copilot learns the pattern</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Role-Based Prompting — assigns a persona to shape responses</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 16: Section — Advanced Prompting
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="19">
+            <span class="section-number">05</span>
+            <h2>Advanced Prompting</h2>
+            <p style="font-size: 1.4rem; color: var(--text-muted); max-width: 700px; margin-top: 10px;">Complex refactors, design-pattern generation, test scaffolding &amp; multi-file edits</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 17: Advanced Prompting Patterns
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="20">
+            <h2>Advanced Prompting Patterns</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="card animate" style="padding: 22px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-vial"></i></div>
+                    <h3 style="font-size: 1.1rem;">Test-Driven Prompting</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 10px;">Write tests first as your spec, then ask Copilot to generate the implementation that passes them.</p>
+                    <div class="tag-row">
+                        <span class="tag" style="font-size: 0.75rem;">Unit Tests</span>
+                        <span class="tag" style="font-size: 0.75rem;">Integration</span>
+                    </div>
+                </div>
+                <div class="card animate" style="padding: 22px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-drafting-compass"></i></div>
+                    <h3 style="font-size: 1.1rem;">Design Pattern Generation</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 10px;">Request specific patterns: Observer, Factory, Strategy — with typed interfaces and concrete examples.</p>
+                    <div class="tag-row">
+                        <span class="tag" style="font-size: 0.75rem;">GoF Patterns</span>
+                        <span class="tag" style="font-size: 0.75rem;">SOLID</span>
+                    </div>
+                </div>
+                <div class="card animate" style="padding: 22px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-code-branch"></i></div>
+                    <h3 style="font-size: 1.1rem;">Complex Refactoring</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 10px;">Extract modules, migrate frameworks, restructure architectures — with coordinated cross-file changes.</p>
+                    <div class="tag-row">
+                        <span class="tag" style="font-size: 0.75rem;">Monolith → Services</span>
+                        <span class="tag" style="font-size: 0.75rem;">Framework Migration</span>
+                    </div>
+                </div>
+            </div>
+            <div class="demo-box animate" style="margin-top: 25px; width: 100%;">
+                <h4 style="color: var(--secondary); margin-bottom: 12px;"><i class="fas fa-play-circle"></i> Example: Test-Driven Prompt</h4>
+                <div class="code-block" style="font-size: 0.85rem;">
+                    <span class="comment">// "Write unit tests for a calculateMortgage function.</span><br>
+                    <span class="comment">// Cover: valid inputs, edge cases (0 rate, 0 months),</span><br>
+                    <span class="comment">// and invalid inputs. Use Vitest.</span><br>
+                    <span class="comment">// Then generate the function that passes all tests."</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 18: Multi-File Edit Strategies (HIDDEN – covered by Agentic section & demo)
+             ============================================================ -->
+        <div class="content-slide" data-slide="21" style="display:none;">
+            <h2>Multi-File Edit Strategies</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="step-list animate">
+                        <li>
+                            <h4>Describe the Target Architecture</h4>
+                            <p>Tell Copilot the current structure and desired end state clearly</p>
+                        </li>
+                        <li>
+                            <h4>Reference All Affected Files</h4>
+                            <p>Use <code>#file</code> or <code>@workspace</code> to include every file involved in the change</p>
+                        </li>
+                        <li>
+                            <h4>Ask for Coordinated Changes</h4>
+                            <p>Request import/export updates, type changes, and test updates together</p>
+                        </li>
+                        <li>
+                            <h4>Review &amp; Iterate</h4>
+                            <p>Accept or reject file-by-file. Ask follow-ups for missed edge cases.</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="code-block" style="font-size: 0.82rem; margin-bottom: 20px;">
+                        <span class="comment">// Multi-file refactoring prompt</span><br><br>
+                        <span class="string">"Extract payment validation from</span><br>
+                        <span class="string">checkout.ts into a new PaymentValidator</span><br>
+                        <span class="string">service. Update OrderController and</span><br>
+                        <span class="string">StripeIntegration to use the new module.</span><br>
+                        <span class="string">Update all imports and add unit tests."</span><br><br>
+                        <span class="comment">// Copilot Agent will:</span><br>
+                        <span class="comment">// 1. Create PaymentValidator.ts</span><br>
+                        <span class="comment">// 2. Move validation logic</span><br>
+                        <span class="comment">// 3. Update imports in 2+ files</span><br>
+                        <span class="comment">// 4. Create PaymentValidator.test.ts</span><br>
+                        <span class="comment">// 5. Run tests to verify ✓</span>
+                    </div>
+                    <div class="tip-box" style="margin-top: 0;">
+                        <h4><i class="fas fa-lightbulb"></i> Agent Mode excels here</h4>
+                        <p>For multi-file edits, use <strong>Agent mode</strong> — it autonomously coordinates changes across files, runs tests, and self-corrects.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo: Advanced Prompting & Multi-File Edits -->
+        <div class="slide demo-slide" data-slide="22">
+            <div class="demo-icon animate"><i class="fas fa-laptop-code"></i></div>
+            <h2 class="animate">Demo Time</h2>
+            <p class="demo-subtitle animate">Advanced Prompting &amp; Multi-File Edits</p>
+            <div class="demo-topics animate">
+                <span class="demo-topic">Test-Driven Prompting</span>
+                <span class="demo-topic">Design Pattern Generation</span>
+                <span class="demo-topic">Cross-File Refactoring</span>
+                <span class="demo-topic">Agent Mode in Action</span>
+            </div>
+            <p class="animate" style="margin-top: 24px; color: var(--text-muted); font-size: 1rem;">
+                Runbook: <span class="highlight-text">demos/demo_04_advanced_prompting.md</span>
+            </p>
+        </div>
+
+        <!-- Quiz 5: Advanced Prompting -->
+        <div class="slide quiz-slide" data-slide="q5">
+            <h2 class="animate">Quick Check</h2>
+            <p class="quiz-question animate">In <strong>test-driven prompting</strong>, what do you give Copilot first?</p>
+            <div class="quiz-options animate">
+                <div class="quiz-option">
+                    <div class="quiz-option-value">The implementation code — then ask it to generate matching tests</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Unit tests as the specification — then ask it to implement the function</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">A detailed design document with UML diagrams</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 19: Section — Copilot Agentic Behaviour
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="23">
+            <span class="section-number">06</span>
+            <h2>Copilot Agentic<br>Behaviour</h2>
+            <p style="font-size: 1.4rem; color: var(--text-muted); max-width: 700px; margin-top: 10px;">Autonomous task execution and multi-step reasoning</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 20: What is Agent Mode?
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="24">
+            <h2>What is Agent Mode? <span class="mode-badge new">GA</span></h2>
+            <div class="two-column">
+                <div>
+                    <p style="font-size: 1.2rem; color: var(--text); margin-bottom: 25px; line-height: 1.6;">
+                        Unlike inline completions, agents take <strong style="color: var(--secondary);">high-level goals</strong> and execute them autonomously — planning, coding, testing, and self-correcting.
+                    </p>
+                    <div class="cap-grid animate" style="grid-template-columns: 1fr;">
+                        <div class="cap-item">
+                            <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-brain"></i></div>
+                            <div class="cap-text">
+                                <h4>Plans Before Coding</h4>
+                                <p>Analyzes codebase, creates implementation strategy</p>
+                            </div>
+                        </div>
+                        <div class="cap-item">
+                            <div class="cap-icon" style="color: var(--primary);"><i class="fas fa-edit"></i></div>
+                            <div class="cap-text">
+                                <h4>Edits Multiple Files</h4>
+                                <p>Coordinated changes across your entire project</p>
+                            </div>
+                        </div>
+                        <div class="cap-item">
+                            <div class="cap-icon" style="color: var(--accent);"><i class="fas fa-terminal"></i></div>
+                            <div class="cap-text">
+                                <h4>Runs Terminal Commands</h4>
+                                <p>Build, test, lint — verifies its own work</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="animate">
+                    <div class="card" style="text-align: center; background: linear-gradient(135deg, var(--surface), #1a2332); padding: 30px;">
+                        <div class="stat-value" style="color: var(--secondary);">The Agent Loop</div>
+                        <div class="flow-diagram" style="flex-direction: column; gap: 6px; margin-top: 15px;">
+                            <div class="flow-step" style="border-color: var(--secondary); width: 100%; min-width: auto; padding: 10px;">
+                                <h4 style="font-size: 0.9rem;">1. Receive Goal</h4>
+                            </div>
+                            <div class="flow-arrow" style="transform: rotate(90deg);">→</div>
+                            <div class="flow-step" style="border-color: var(--purple); width: 100%; min-width: auto; padding: 10px;">
+                                <h4 style="font-size: 0.9rem;">2. Analyze Codebase</h4>
+                            </div>
+                            <div class="flow-arrow" style="transform: rotate(90deg);">→</div>
+                            <div class="flow-step" style="border-color: var(--primary); width: 100%; min-width: auto; padding: 10px;">
+                                <h4 style="font-size: 0.9rem;">3. Implement &amp; Test</h4>
+                            </div>
+                            <div class="flow-arrow" style="transform: rotate(90deg);">→</div>
+                            <div class="flow-step" style="border-color: var(--accent); width: 100%; min-width: auto; padding: 10px;">
+                                <h4 style="font-size: 0.9rem;">4. Self-Correct &amp; Verify</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 21: Agent Types in VS Code
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="25">
+            <h2>Built-in Agent Types in VS Code</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="card animate" style="text-align: center; padding: 25px 18px;">
+                    <div class="card-icon" style="margin: 0 auto 14px; background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-robot"></i></div>
+                    <h3 style="font-size: 1.05rem;">Agent</h3>
+                    <p style="font-size: 0.85rem; margin-bottom: 10px;">Autonomous planning &amp; implementation. Runs terminal commands, invokes tools.</p>
+                    <p style="font-size: 0.8rem; color: var(--primary);"><strong>Best for:</strong> Building features end-to-end</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 25px 18px;">
+                    <div class="card-icon" style="margin: 0 auto 14px; background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-clipboard-list"></i></div>
+                    <h3 style="font-size: 1.05rem;">Plan</h3>
+                    <p style="font-size: 0.85rem; margin-bottom: 10px;">Creates detailed step-by-step plans. Asks clarifying questions before acting.</p>
+                    <p style="font-size: 0.8rem; color: var(--secondary);"><strong>Best for:</strong> Complex refactors &amp; migrations</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 25px 18px;">
+                    <div class="card-icon" style="margin: 0 auto 14px; background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-question-circle"></i></div>
+                    <h3 style="font-size: 1.05rem;">Ask</h3>
+                    <p style="font-size: 0.85rem; margin-bottom: 10px;">Answers questions about code — does NOT make file changes. Read-only Q&amp;A.</p>
+                    <p style="font-size: 0.8rem; color: var(--purple);"><strong>Best for:</strong> Learning &amp; understanding</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 25px 18px;">
+                    <div class="card-icon" style="margin: 0 auto 14px; background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-puzzle-piece"></i></div>
+                    <h3 style="font-size: 1.05rem;">Custom <span class="mode-badge preview">PREVIEW</span></h3>
+                    <p style="font-size: 0.85rem; margin-bottom: 10px;">User-defined agents with specific roles, custom tools, and instructions.</p>
+                    <p style="font-size: 0.8rem; color: var(--accent);"><strong>Best for:</strong> Specialized workflows</p>
+                </div>
+            </div>
+            <div class="tip-box animate" style="margin-top: 25px; width: 100%;">
+                <h4><i class="fas fa-lightbulb"></i> Choosing the Right Mode</h4>
+                <p>Use <strong>Ask</strong> for quick questions → <strong>Plan</strong> to strategize complex changes → <strong>Agent</strong> to execute. Start conservative, escalate when needed.</p>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 22: MCP & Tool Ecosystem
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="26">
+            <h2>MCP — Model Context Protocol <span class="mode-badge new">NEW</span></h2>
+            <div class="two-column">
+                <div>
+                    <p style="font-size: 1.15rem; color: var(--text); margin-bottom: 20px; line-height: 1.6;">
+                        MCP is an <strong style="color: var(--secondary);">open standard</strong> for connecting AI agents to external tools and services — databases, APIs, browsers, and more.
+                    </p>
+                    <div class="card-grid animate" style="grid-template-columns: 1fr 1fr; gap: 14px;">
+                        <div class="card" style="padding: 16px; text-align: center;">
+                            <div style="font-size: 1.8rem; margin-bottom: 6px;">🎭</div>
+                            <h3 style="font-size: 0.95rem;">Playwright</h3>
+                            <p style="font-size: 0.8rem;">Browser automation &amp; testing</p>
+                        </div>
+                        <div class="card" style="padding: 16px; text-align: center;">
+                            <div style="font-size: 1.8rem; margin-bottom: 6px;"><i class="fab fa-github" style="color: var(--text);"></i></div>
+                            <h3 style="font-size: 0.95rem;">GitHub</h3>
+                            <p style="font-size: 0.8rem;">Issues, PRs, repos</p>
+                        </div>
+                        <div class="card" style="padding: 16px; text-align: center;">
+                            <div style="font-size: 1.8rem; margin-bottom: 6px;">🗄️</div>
+                            <h3 style="font-size: 0.95rem;">Database</h3>
+                            <p style="font-size: 0.8rem;">Query &amp; update data</p>
+                        </div>
+                        <div class="card" style="padding: 16px; text-align: center;">
+                            <div style="font-size: 1.8rem; margin-bottom: 6px;">🔧</div>
+                            <h3 style="font-size: 0.95rem;">Custom APIs</h3>
+                            <p style="font-size: 0.8rem;">Your internal tools</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="animate">
+                    <div class="code-block" style="font-size: 0.82rem; margin-bottom: 20px;">
+                        <span class="comment">// User prompt:</span><br>
+                        <span class="string">"Open the website, test the login form,</span><br>
+                        <span class="string"> take a screenshot of the result"</span><br><br>
+                        <span class="comment">// Agent with Playwright MCP:</span><br>
+                        <span class="comment">// 1. Opens browser via MCP tool</span><br>
+                        <span class="comment">// 2. Navigates to login page</span><br>
+                        <span class="comment">// 3. Fills form, clicks submit</span><br>
+                        <span class="comment">// 4. Captures screenshot via MCP</span><br>
+                        <span class="comment">// 5. Returns image + test results ✓</span>
+                    </div>
+                    <div class="warning-box" style="margin-top: 0;">
+                        <h4><i class="fas fa-shield-alt"></i> Permission Control</h4>
+                        <p>Agents request approval before invoking MCP tools. You control what runs: <strong>default approval</strong> (safe tools auto-run) or <strong>always confirm</strong>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 23: Section — Agentic Coding in Practice
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="27">
+            <span class="section-number">07</span>
+            <h2>Agentic Coding<br>in Practice</h2>
+            <p style="font-size: 1.4rem; color: var(--text-muted); max-width: 700px; margin-top: 10px;">Agent-driven workflows, tool use, terminal commands &amp; iterative self-correction</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 24: Agent Workflows
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="28">
+            <h2>Three Agent Workflow Patterns</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="card animate" style="padding: 25px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-laptop-code"></i></div>
+                    <h3>Local Agent <span style="font-size: 0.75rem; color: var(--primary);">(Interactive)</span></h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 14px;">Open Chat → Select Agent mode → Type your goal → Review changes live in editor.</p>
+                    <ul style="list-style: none; font-size: 0.85rem; color: var(--text-muted);">
+                        <li style="margin-bottom: 6px;">✅ Real-time review</li>
+                        <li style="margin-bottom: 6px;">✅ Accept/reject per file</li>
+                        <li>✅ Iterative guidance</li>
+                    </ul>
+                </div>
+                <div class="card animate" style="padding: 25px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-cloud"></i></div>
+                    <h3>Cloud Agent <span style="font-size: 0.75rem; color: var(--purple);">(PR-based)</span></h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 14px;">Assign task → Agent runs remotely → Creates a pull request → Team reviews.</p>
+                    <ul style="list-style: none; font-size: 0.85rem; color: var(--text-muted);">
+                        <li style="margin-bottom: 6px;">✅ Runs asynchronously</li>
+                        <li style="margin-bottom: 6px;">✅ Creates full PRs</li>
+                        <li>✅ Team-friendly workflow</li>
+                    </ul>
+                </div>
+                <div class="card animate" style="padding: 25px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-exchange-alt"></i></div>
+                    <h3>Hand-off <span style="font-size: 0.75rem; color: var(--accent);">(Combined)</span></h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 14px;">Plan → Local Agent prototype → Cloud Agent for production PR. Context carries over.</p>
+                    <ul style="list-style: none; font-size: 0.85rem; color: var(--text-muted);">
+                        <li style="margin-bottom: 6px;">✅ Best of both worlds</li>
+                        <li style="margin-bottom: 6px;">✅ Prototype locally first</li>
+                        <li>✅ Ship via cloud PR</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 25: Tools & Self-Correction
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="29">
+            <h2>Agent Tools &amp; Self-Correction</h2>
+            <div class="two-column">
+                <div>
+                    <h3 style="font-size: 1.3rem; color: var(--secondary); margin-bottom: 20px;"><i class="fas fa-toolbox"></i> Built-in Tools</h3>
+                    <table class="styled-table animate" style="font-size: 0.9rem;">
+                        <thead>
+                            <tr><th>Tool</th><th>Purpose</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>Semantic Search</code></td><td>Find code by meaning</td></tr>
+                            <tr><td><code>Grep Search</code></td><td>Find code by pattern/regex</td></tr>
+                            <tr><td><code>File Search</code></td><td>Locate files by name/glob</td></tr>
+                            <tr><td><code>Usages</code></td><td>Trace symbol references</td></tr>
+                            <tr><td><code>Read File</code></td><td>Read full file contents</td></tr>
+                            <tr><td><code>Terminal</code></td><td>Run build/test/lint commands</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <h3 style="font-size: 1.3rem; color: var(--accent); margin-bottom: 20px;"><i class="fas fa-sync-alt"></i> Self-Correction Loop</h3>
+                    <div class="flow-diagram animate" style="flex-direction: column; gap: 4px; align-items: stretch;">
+                        <div class="flow-step" style="border-color: var(--secondary); min-width: auto; width: 100%; padding: 10px 16px;">
+                            <h4 style="font-size: 0.9rem;"><i class="fas fa-play" style="color: var(--secondary);"></i> Agent runs <code>npm run build</code></h4>
+                        </div>
+                        <div class="flow-arrow" style="text-align: center; transform: rotate(90deg);">→</div>
+                        <div class="flow-step" style="border-color: var(--accent); min-width: auto; width: 100%; padding: 10px 16px;">
+                            <h4 style="font-size: 0.9rem;"><i class="fas fa-exclamation-triangle" style="color: var(--accent);"></i> Build fails — missing import</h4>
+                        </div>
+                        <div class="flow-arrow" style="text-align: center; transform: rotate(90deg);">→</div>
+                        <div class="flow-step" style="border-color: var(--purple); min-width: auto; width: 100%; padding: 10px 16px;">
+                            <h4 style="font-size: 0.9rem;"><i class="fas fa-search" style="color: var(--purple);"></i> Reads error, searches for fix</h4>
+                        </div>
+                        <div class="flow-arrow" style="text-align: center; transform: rotate(90deg);">→</div>
+                        <div class="flow-step" style="border-color: var(--primary); min-width: auto; width: 100%; padding: 10px 16px;">
+                            <h4 style="font-size: 0.9rem;"><i class="fas fa-check-circle" style="color: var(--primary);"></i> Fixes import, re-builds ✓</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 26: Section — @workspace Agent Deep-Dive
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="30">
+            <span class="section-number">08</span>
+            <h2>@workspace Agent<br>Deep-Dive</h2>
+            <p style="font-size: 1.4rem; color: var(--text-muted); max-width: 700px; margin-top: 10px;">Codebase-wide questions, multi-file refactoring &amp; architecture queries</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 27: @workspace in Action
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="31">
+            <h2>@workspace — Your Codebase Assistant</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="card animate" style="padding: 22px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-sitemap"></i></div>
+                    <h3>Architecture Queries</h3>
+                    <div class="code-block" style="font-size: 0.8rem; margin-top: 12px;">
+                        <span class="variable">@workspace</span> <span class="string">Where is authentication</span><br>
+                        <span class="string">handled across the codebase?</span><br><br>
+                        <span class="comment">→ Traces auth logic across middleware,</span><br>
+                        <span class="comment">  services, controllers, and configs</span>
+                    </div>
+                </div>
+                <div class="card animate" style="padding: 22px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-code-branch"></i></div>
+                    <h3>Multi-File Refactoring</h3>
+                    <div class="code-block" style="font-size: 0.8rem; margin-top: 12px;">
+                        <span class="variable">@workspace</span> <span class="string">Migrate all Redux state</span><br>
+                        <span class="string">management to Zustand</span><br><br>
+                        <span class="comment">→ Identifies stores, updates components,</span><br>
+                        <span class="comment">  removes boilerplate, verifies imports</span>
+                    </div>
+                </div>
+                <div class="card animate" style="padding: 22px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-search"></i></div>
+                    <h3>Impact Analysis</h3>
+                    <div class="code-block" style="font-size: 0.8rem; margin-top: 12px;">
+                        <span class="variable">@workspace</span> <span class="string">If we rename User to</span><br>
+                        <span class="string">Account, which files break?</span><br><br>
+                        <span class="comment">→ Lists all references, estimates</span><br>
+                        <span class="comment">  complexity of the rename</span>
+                    </div>
+                </div>
+                <div class="card animate" style="padding: 22px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Pattern Detection</h3>
+                    <div class="code-block" style="font-size: 0.8rem; margin-top: 12px;">
+                        <span class="variable">@workspace</span> <span class="string">Show all API calls</span><br>
+                        <span class="string">without error handling</span><br><br>
+                        <span class="comment">→ Scans entire codebase, highlights</span><br>
+                        <span class="comment">  missing try-catch blocks</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tip-box animate" style="margin-top: 20px; width: 100%;">
+                <h4><i class="fas fa-lightbulb"></i> Semantic vs. Keyword Search</h4>
+                <p><code>@workspace</code> uses <strong>semantic search</strong> — it finds code by <em>meaning</em>, not just keywords. Asking "permission validation" finds <code>checkAuth()</code>, <code>validateAccess()</code>, and <code>isAuthorized()</code> even though none match the search terms.</p>
+            </div>
+        </div>
+
+        <!-- Demo: Agent Mode, @workspace & CLI -->
+        <div class="slide demo-slide" data-slide="32">
+            <div class="demo-icon animate"><i class="fas fa-laptop-code"></i></div>
+            <h2 class="animate">Demo Time</h2>
+            <p class="demo-subtitle animate">Agent Mode, @workspace &amp; CLI</p>
+            <div class="demo-topics animate">
+                <span class="demo-topic">Agentic Workflows</span>
+                <span class="demo-topic">@workspace Codebase Queries</span>
+                <span class="demo-topic">MCP Tool Integration</span>
+                <span class="demo-topic">Copilot CLI Demo</span>
+            </div>
+            <p class="animate" style="margin-top: 24px; color: var(--text-muted); font-size: 1rem;">
+                Runbook: <span class="highlight-text">demos/demo_05_agent_workspace_cli.md</span>
+            </p>
+        </div>
+
+        <!-- Quiz 6: Agentic Behaviour -->
+        <div class="slide quiz-slide" data-slide="q6">
+            <h2 class="animate">Quick Check</h2>
+            <p class="quiz-question animate">Which Copilot chat mode provides answers about code <strong>without making any file changes</strong>?</p>
+            <div class="quiz-options animate">
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Agent mode — autonomous planning &amp; implementation</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Plan mode — creates step-by-step plans before acting</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Ask mode — read-only Q&amp;A, no file modifications</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 28: Section — CLI & PR Summaries
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="33">
+            <span class="section-number">09</span>
+            <h2>Copilot CLI<br>&amp; Cloud Agent</h2>
+            <p style="font-size: 1.4rem; color: var(--text-muted); max-width: 700px; margin-top: 10px;">The new standalone Copilot CLI, programmatic mode &amp; cloud agent integrations</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 29: Copilot CLI & Cloud Agent
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="34">
+            <h2>Copilot CLI &amp; Cloud Agent</h2>
+            <div class="two-column">
+                <div>
+                    <h3 style="font-size: 1.3rem; color: var(--secondary); margin-bottom: 20px;"><i class="fas fa-terminal"></i> Copilot CLI <span class="mode-badge new">NEW</span></h3>
+                    <div class="code-block animate" style="font-size: 0.85rem; margin-bottom: 16px;">
+                        <span class="comment"># Start interactive session</span><br>
+                        <span class="keyword">$</span> <span class="function">copilot</span><br><br>
+                        <span class="comment"># Programmatic (non-interactive)</span><br>
+                        <span class="keyword">$</span> <span class="function">copilot</span> <span class="variable">-p</span> <span class="string">"Add error handling to auth.ts"</span> <span class="keyword">\</span><br>
+                        &nbsp;&nbsp;<span class="variable">--allow-tool</span>=<span class="string">'shell(git)'</span>
+                    </div>
+                    <div class="cap-grid animate" style="grid-template-columns: 1fr;">
+                        <div class="cap-item">
+                            <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-exchange-alt"></i></div>
+                            <div class="cap-text">
+                                <h4>Shift+Tab Toggles Modes</h4>
+                                <p>Switch between ask/execute ↔ plan mode live</p>
+                            </div>
+                        </div>
+                        <div class="cap-item">
+                            <div class="cap-icon" style="color: var(--primary);"><i class="fas fa-shield-alt"></i></div>
+                            <div class="cap-text">
+                                <h4>Tool Permissions</h4>
+                                <p><code>--allow-all-tools</code>, <code>--deny-tool='shell(rm)'</code></p>
+                            </div>
+                        </div>
+                        <div class="cap-item">
+                            <div class="cap-icon" style="color: var(--purple);"><i class="fas fa-brain"></i></div>
+                            <div class="cap-text">
+                                <h4>Default: Claude Sonnet 4.5</h4>
+                                <p>Switch via <code>/model</code> or <code>--model</code> flag</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="font-size: 1.3rem; color: var(--purple); margin-bottom: 20px;"><i class="fas fa-cloud"></i> Cloud Agent &amp; PR Automation</h3>
+                    <div class="card animate" style="padding: 20px;">
+                        <h3 style="font-size: 1rem; color: var(--purple); margin-bottom: 12px;">Cloud Agent Capabilities</h3>
+                        <ul style="list-style: none; font-size: 0.95rem;">
+                            <li style="margin-bottom: 10px; padding-left: 25px; position: relative;">
+                                <span style="position: absolute; left: 0; color: var(--primary);">✅</span> Creates PRs from GitHub Issues
+                            </li>
+                            <li style="margin-bottom: 10px; padding-left: 25px; position: relative;">
+                                <span style="position: absolute; left: 0; color: var(--primary);">✅</span> Auto-generates PR descriptions
+                            </li>
+                            <li style="margin-bottom: 10px; padding-left: 25px; position: relative;">
+                                <span style="position: absolute; left: 0; color: var(--primary);">✅</span> Manages Actions workflows
+                            </li>
+                            <li style="padding-left: 25px; position: relative;">
+                                <span style="position: absolute; left: 0; color: var(--primary);">✅</span> Runs async — review when ready
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card animate" style="padding: 16px; margin-top: 14px; text-align: center;">
+                        <h3 style="font-size: 0.95rem; color: var(--secondary); margin-bottom: 12px;">Integrations</h3>
+                        <div class="tag-row" style="justify-content: center;">
+                            <span class="tag"><i class="fab fa-jira" style="color: #0052CC;"></i> Jira</span>
+                            <span class="tag"><i class="fab fa-slack" style="color: #E01E5A;"></i> Slack</span>
+                            <span class="tag"><i class="fab fa-microsoft" style="color: #6264A7;"></i> Teams</span>
+                            <span class="tag">Linear</span>
+                            <span class="tag"><i class="fab fa-microsoft" style="color: #0078D4;"></i> Azure Boards</span>
+                        </div>
+                    </div>
+                    <div class="warning-box animate" style="margin-top: 14px;">
+                        <h4><i class="fas fa-info-circle"></i> Note</h4>
+                        <p>The old <code>gh copilot suggest</code> / <code>gh copilot explain</code> extension is <strong>retired</strong>. The new <code>copilot</code> binary is standalone.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 30: Key Takeaways
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="35">
+            <h2>Key Takeaways</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="card animate" style="text-align: center; padding: 28px 22px;">
+                    <div class="stat-value" style="color: var(--secondary); font-size: 2rem;">🎯</div>
+                    <h3 style="font-size: 1.1rem;">Context is King</h3>
+                    <p style="font-size: 0.9rem;">Better context = better suggestions. Open relevant files, write clear comments, use <code>#file</code> and <code>@workspace</code> references.</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 28px 22px;">
+                    <div class="stat-value" style="color: var(--primary); font-size: 2rem;">📝</div>
+                    <h3 style="font-size: 1.1rem;">Craft Your Prompts</h3>
+                    <p style="font-size: 0.9rem;">Use zero-shot, few-shot, role-based, and chain-of-thought patterns. Be specific, give examples, iterate.</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 28px 22px;">
+                    <div class="stat-value" style="color: var(--purple); font-size: 2rem;">📋</div>
+                    <h3 style="font-size: 1.1rem;">Set Instructions</h3>
+                    <p style="font-size: 0.9rem;">Create <code>copilot-instructions.md</code> and path-specific rules to make Copilot follow your team's conventions.</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 28px 22px;">
+                    <div class="stat-value" style="color: var(--accent); font-size: 2rem;">🤖</div>
+                    <h3 style="font-size: 1.1rem;">Embrace Agent Mode</h3>
+                    <p style="font-size: 0.9rem;">For complex multi-file tasks, let agents plan, implement, test, and self-correct autonomously.</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 28px 22px;">
+                    <div class="stat-value" style="color: #3fb950; font-size: 2rem;">🔌</div>
+                    <h3 style="font-size: 1.1rem;">Extend with MCP</h3>
+                    <p style="font-size: 0.9rem;">Connect agents to external tools via MCP — databases, browsers, APIs, and your own custom integrations.</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 28px 22px;">
+                    <div class="stat-value" style="color: #79c0ff; font-size: 2rem;">🔄</div>
+                    <h3 style="font-size: 1.1rem;">Iterate &amp; Learn</h3>
+                    <p style="font-size: 0.9rem;">Prompting is a skill. Experiment, refine, keep chat history clean, and learn from what works best for your codebase.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 31: Q & A
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="36">
+            <span class="section-number">10</span>
+            <h2 style="font-size: 4rem;">Q &amp; A</h2>
+            <p style="font-size: 1.5rem; color: var(--text-muted); max-width: 700px; margin-top: 15px;">Questions, Discussion &amp; Next Steps</p>
+            <div style="margin-top: 40px; display: flex; gap: 30px; flex-wrap: wrap; justify-content: center;">
+                <div class="card" style="padding: 18px 28px; text-align: center; min-width: 200px;">
+                    <h3 style="font-size: 1rem; color: var(--secondary);"><i class="fas fa-book"></i> Resources</h3>
+                    <p style="font-size: 0.85rem;">docs.github.com/copilot</p>
+                </div>
+                <div class="card" style="padding: 18px 28px; text-align: center; min-width: 200px;">
+                    <h3 style="font-size: 1rem; color: var(--primary);"><i class="fas fa-laptop-code"></i> VS Code Docs</h3>
+                    <p style="font-size: 0.85rem;">code.visualstudio.com/docs/copilot</p>
+                </div>
+                <div class="card" style="padding: 18px 28px; text-align: center; min-width: 200px;">
+                    <h3 style="font-size: 1rem; color: var(--purple);"><i class="fas fa-graduation-cap"></i> Day 4 Preview</h3>
+                    <p style="font-size: 0.85rem;">Build, Design &amp; Modernization</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" aria-label="Previous slide">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">41</span>
+        </div>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)" aria-label="Next slide">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        <button class="nav-btn" onclick="toggleFullscreen()" aria-label="Toggle fullscreen">
+            <i class="fas fa-expand" id="fullscreenIcon"></i>
+        </button>
+        <button class="nav-btn pdf-btn" onclick="exportToPDF()" aria-label="Export to PDF">
+            <i class="fas fa-file-pdf"></i> PDF
+        </button>
+    </div>
+
+
+
+    <script src="../shared/presentation.js"></script>
+    <script>
+        initPresentation({
+            storageKey: 'day3ContextPromptingSlide',
+            pdfFilename: 'Day3_Context_Setting_Advanced_Prompting.pdf'
+        });
+    </script>
+</body>
+</html>
