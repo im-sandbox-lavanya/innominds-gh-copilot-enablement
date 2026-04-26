@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d1117">
+    <meta name="color-scheme" content="dark">
+    <title>Day 4 – Build, Design &amp; Modernization</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../shared/presentation.css">
+    <style>
+        /* ── Day 4 course-specific styles ── */
+
+        /* Flow diagram */
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .flow-step {
+            background: var(--surface);
+            border: 2px solid var(--surface-light);
+            border-radius: 12px;
+            padding: 14px 20px;
+            text-align: center;
+            min-width: 120px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .flow-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+        .flow-step .step-icon {
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+        }
+        .flow-step h4 {
+            font-size: 0.95rem;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .flow-step p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+        .flow-arrow {
+            font-size: 1.4rem;
+            color: var(--text-muted);
+        }
+
+        /* Comparison layout */
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            width: 100%;
+        }
+        .compare-col h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--surface-light);
+        }
+        .compare-col ul {
+            list-style: none;
+        }
+        .compare-col li {
+            font-size: 1.05rem;
+            margin-bottom: 14px;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.5;
+            color: var(--text);
+        }
+        .compare-col li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .compare-col.good li::before { background: var(--primary); }
+        .compare-col.bad li::before  { background: var(--accent); }
+
+        /* Badge / Tag pills */
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .tag {
+            background: var(--surface);
+            border: 1px solid var(--surface-light);
+            color: var(--text);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Stat cards */
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        /* Capability grid */
+        .cap-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 100%;
+        }
+        .cap-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 18px 22px;
+            border: 1px solid var(--surface-light);
+            transition: transform 0.3s ease;
+        }
+        .cap-item:hover { transform: translateY(-2px); }
+        .cap-icon {
+            font-size: 1.5rem;
+            width: 44px;
+            min-width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: var(--surface-light);
+        }
+        .cap-text h4 {
+            font-size: 1.05rem;
+            color: #fff;
+            margin-bottom: 3px;
+        }
+        .cap-text p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Table styling */
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1rem;
+        }
+        .styled-table th {
+            background: var(--surface);
+            color: var(--secondary);
+            padding: 14px 18px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid var(--surface-light);
+        }
+        .styled-table td {
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--surface-light);
+            color: var(--text);
+            line-height: 1.5;
+        }
+        .styled-table tr:hover td {
+            background: rgba(88, 166, 255, 0.05);
+        }
+        .styled-table code {
+            background: var(--surface);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.88rem;
+            color: var(--secondary);
+        }
+
+        /* Numbered steps */
+        .step-list {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+        .step-list li {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 55px;
+            margin-bottom: 24px;
+        }
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: -2px;
+            width: 38px;
+            height: 38px;
+            background: var(--surface);
+            border: 2px solid var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--secondary);
+        }
+        .step-list li h4 {
+            font-size: 1.15rem;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .step-list li p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        /* Agent mode badge */
+        .mode-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+        .mode-badge.agent   { background: rgba(88,166,255,0.2); color: var(--secondary); }
+        .mode-badge.plan    { background: rgba(163,113,247,0.2); color: var(--purple); }
+        .mode-badge.ask     { background: rgba(63,185,80,0.2); color: var(--primary); }
+        .mode-badge.new     { background: rgba(63,185,80,0.2); color: var(--primary); }
+        .mode-badge.preview { background: rgba(163,113,247,0.2); color: var(--purple); }
+
+        /* Wide flow for lifecycle diagrams */
+        .flow-diagram.wide .flow-step {
+            min-width: 100px;
+            padding: 10px 14px;
+        }
+        .flow-diagram.wide .flow-step h4 {
+            font-size: 0.85rem;
+        }
+        .flow-diagram.wide .flow-step p {
+            font-size: 0.72rem;
+        }
+        .flow-diagram.wide .flow-arrow {
+            font-size: 1.1rem;
+        }
+
+        /* Agenda grid */
+        .agenda-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            width: 100%;
+        }
+        .agenda-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--surface);
+            border: 1px solid var(--surface-light);
+            border-radius: 12px;
+            padding: 14px 18px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .agenda-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        }
+        .agenda-num {
+            width: 36px;
+            min-width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #fff;
+        }
+        .agenda-label {
+            font-size: 0.95rem;
+            color: var(--text);
+            line-height: 1.3;
+        }
+
+        /* Mode comparison columns */
+        .mode-cols {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            width: 100%;
+        }
+        .mode-col {
+            background: var(--surface);
+            border-radius: 14px;
+            padding: 28px;
+            border: 1px solid var(--surface-light);
+            text-align: left;
+        }
+        .mode-col h3 {
+            font-size: 1.3rem;
+            margin-bottom: 6px;
+        }
+        .mode-col .mode-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+        .mode-col ul {
+            list-style: none;
+            padding: 0;
+        }
+        .mode-col li {
+            font-size: 0.95rem;
+            color: var(--text);
+            padding: 6px 0;
+            padding-left: 24px;
+            position: relative;
+            line-height: 1.4;
+        }
+        .mode-col li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Vertical flow for upgrade/migration */
+        .pipeline-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            width: 100%;
+        }
+        .pipeline-stage {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--surface);
+            border: 1px solid var(--surface-light);
+            border-radius: 12px;
+            padding: 14px 24px;
+            width: 80%;
+            max-width: 700px;
+            transition: transform 0.3s ease;
+        }
+        .pipeline-stage:hover {
+            transform: translateX(5px);
+        }
+        .pipeline-stage .stage-icon {
+            font-size: 1.4rem;
+            width: 44px;
+            min-width: 44px;
+            text-align: center;
+        }
+        .pipeline-stage h4 {
+            font-size: 1.05rem;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+        .pipeline-stage p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .pipeline-arrow {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            padding: 4px 0;
+        }
+
+        /* Fix: prevent nav controls from overlapping slide content */
+        .keyboard-hints { display: none; }
+        .content-slide, .demo-slide { padding-bottom: 110px !important; }
+        .nav-controls { bottom: 16px; padding: 10px 24px; }
+
+        /* Compact font for dense slides */
+        .compact-slide li {
+            font-size: 1.2rem;
+            margin-bottom: 18px;
+        }
+
+        /* Code example block inline */
+        .code-inline {
+            background: #0d1117;
+            border-radius: 10px;
+            padding: 18px 22px;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            border: 1px solid var(--surface-light);
+            text-align: left;
+            overflow-x: auto;
+            width: 100%;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        .code-inline .comment  { color: #8b949e; }
+        .code-inline .keyword  { color: #ff7b72; }
+        .code-inline .string   { color: #a5d6ff; }
+        .code-inline .function { color: #d2a8ff; }
+        .code-inline .variable { color: #ffa657; }
+
+        /* Dual panel - code + explanation */
+        .dual-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            width: 100%;
+            align-items: start;
+        }
+
+        /* Accessibility: focus-visible outlines */
+        .nav-btn:focus-visible,
+        .back-home-btn:focus-visible {
+            outline: 2px solid var(--secondary);
+            outline-offset: 2px;
+        }
+        .card:focus-visible,
+        .cap-item:focus-visible,
+        .agenda-item:focus-visible {
+            outline: 2px solid var(--secondary);
+            outline-offset: 2px;
+        }
+
+        /* Accessibility: reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Fix: green text contrast — use brighter green for text on dark backgrounds */
+        .tip-box h4 { color: #3fb950; }
+        .mode-col li::before { color: #3fb950; }
+        .compare-col.good li::before { background: #3fb950; }
+    </style>
+</head>
+
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Slide Header with Logo -->
+    <div class="slide-header" style="justify-content: space-between;">
+        <a href="../index.html" class="back-home-btn" title="Back to Courses"
+            style="padding: 6px 10px; font-size: 0; gap: 0; width: 32px; height: 32px; justify-content: center; opacity: 0.5;">
+            <i class="fas fa-arrow-left" style="font-size: 0.8rem;"></i>
+        </a>
+        <div class="logo logo-infomagnus">
+            <i class="fab fa-github github-icon"></i>
+            <span><span>Info</span><span class="magnus-text">Magnus</span></span>
+        </div>
+    </div>
+
+    <div class="presentation" id="presentation">
+
+        <!-- ============================================================
+             SLIDE 1: Title
+             ============================================================ -->
+        <div class="slide title-slide active" data-slide="1">
+            <div class="logo-container animate">
+                <div class="copilot-logo">
+                    <i class="fas fa-rocket"></i>
+                </div>
+            </div>
+            <h1 class="animate">Build, Design &amp;<br>Modernization</h1>
+            <p class="subtitle animate">Day 4 — From Prompts to Production with GitHub Copilot</p>
+            <div class="meta animate">
+                <span><i class="fas fa-clock"></i> Duration: 2 hrs</span>
+                <span><i class="fas fa-chalkboard-teacher"></i> Slides + Live Demos</span>
+                <span><i class="fas fa-users"></i> Innominds Developer Enablement</span>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 2: Trainer Introduction
+             ============================================================ -->
+        <div class="slide intro-slide" data-slide="2">
+            <div class="intro-content">
+                <img src="../shared/images/copilot-avatar.png" alt="GitHub Copilot" class="trainer-photo animate">
+                <div class="trainer-info">
+                    <h2 class="animate">GitHub Trainer Name</h2>
+                    <p class="title animate">GitHub Certified Trainer</p>
+                    <div class="company animate">
+                        <i class="fab fa-github"></i>
+                        <span><span style="color: #8b949e;">Info</span><span style="color: #58a6ff;">Magnus</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 3: Agenda Overview
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="3">
+            <h2><i class="fas fa-list-check" style="color: var(--secondary); margin-right: 12px;"></i>Today's Agenda</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="agenda-grid">
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: var(--secondary);">1</div>
+                        <span class="agenda-label">Prompt Engineering &amp; Use Cases</span>
+                    </div>
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: var(--purple);">2</div>
+                        <span class="agenda-label">Requirements → User Stories</span>
+                    </div>
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: var(--primary);">3</div>
+                        <span class="agenda-label">Design &amp; Architectural Artifacts</span>
+                    </div>
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: var(--accent);">4</div>
+                        <span class="agenda-label">ER, Class Diagrams &amp; OpenAPI</span>
+                    </div>
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: #f778ba;">5</div>
+                        <span class="agenda-label">Codebase Analysis &amp; Docs</span>
+                    </div>
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: #79c0ff;">6</div>
+                        <span class="agenda-label">User Guide Preparation</span>
+                    </div>
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: var(--secondary);">7</div>
+                        <span class="agenda-label">New Feature Implementation</span>
+                    </div>
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: var(--purple);">8</div>
+                        <span class="agenda-label">Tech Upgrade (Spring Boot)</span>
+                    </div>
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: var(--primary);">9</div>
+                        <span class="agenda-label">Tech Modernization (Ang→React)</span>
+                    </div>
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: var(--accent);">10</div>
+                        <span class="agenda-label">CI/CD Pipeline Creation</span>
+                    </div>
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: #f778ba;">11</div>
+                        <span class="agenda-label">Containerization</span>
+                    </div>
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: #79c0ff;">12</div>
+                        <span class="agenda-label">Infrastructure as Code</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 4: Section — Prompt Engineering
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="4">
+            <div class="section-number">01</div>
+            <h2>Prompt Engineering &amp;<br>Practical Use Cases</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">Crafting effective prompts, context-setting strategies, and iterative refinement techniques</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 5: Prompt Engineering Strategies
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="5">
+            <h2><i class="fas fa-bullseye" style="color: var(--secondary); margin-right: 12px;"></i>Prompt Engineering Strategies</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="cap-grid">
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-layer-group"></i></div>
+                        <div class="cap-text">
+                            <h4>Start General → Get Specific</h4>
+                            <p>Begin with the broad goal, then layer in requirements and constraints</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--primary);"><i class="fas fa-code"></i></div>
+                        <div class="cap-text">
+                            <h4>Provide Examples</h4>
+                            <p>Show sample inputs/outputs; unit tests serve as executable examples</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--purple);"><i class="fas fa-puzzle-piece"></i></div>
+                        <div class="cap-text">
+                            <h4>Decompose Complex Tasks</h4>
+                            <p>Break large requests into sequential smaller prompts for better accuracy</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--accent);"><i class="fas fa-crosshairs"></i></div>
+                        <div class="cap-text">
+                            <h4>Eliminate Ambiguity</h4>
+                            <p>Name functions explicitly, specify libraries, avoid vague references like "this"</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: #f778ba;"><i class="fas fa-file-code"></i></div>
+                        <div class="cap-text">
+                            <h4>Reference Relevant Code</h4>
+                            <p>Use <code>#file</code>, <code>#codebase</code>, open relevant files as context</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: #79c0ff;"><i class="fas fa-rotate"></i></div>
+                        <div class="cap-text">
+                            <h4>Iterate &amp; Refine</h4>
+                            <p>Reference previous responses, delete failed attempts, use threads for new tasks</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 6: Practical Use Cases
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="6">
+            <h2><i class="fas fa-lightbulb" style="color: var(--accent); margin-right: 12px;"></i>Practical Prompt Patterns</h2>
+            <div class="content" style="flex-direction: column; gap: 24px;">
+                <div class="compare-grid">
+                    <div class="compare-col bad">
+                        <h3 style="color: var(--accent);"><i class="fas fa-times-circle"></i> Weak Prompts</h3>
+                        <ul>
+                            <li>"Fix this code"</li>
+                            <li>"Add a function to handle data"</li>
+                            <li>"Make this better"</li>
+                            <li>"Write tests"</li>
+                        </ul>
+                    </div>
+                    <div class="compare-col good">
+                        <h3 style="color: var(--primary);"><i class="fas fa-check-circle"></i> Effective Prompts</h3>
+                        <ul>
+                            <li>"Fix the null pointer in <code>parseUser()</code> when email is missing"</li>
+                            <li>"Add a <code>validateOrder()</code> function using Zod schema for #file:types.ts"</li>
+                            <li>"Refactor to reduce cyclomatic complexity below 10 using early returns"</li>
+                            <li>"Write Jest tests for the edge cases in #file:auth.service.ts"</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tip-box">
+                    <h4><i class="fas fa-wand-magic-sparkles"></i> Pro Tip</h4>
+                    <p>Use <code>.github/copilot-instructions.md</code> to set project-wide conventions so Copilot follows your coding standards automatically in every prompt.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 7: Section — Requirements to User Stories
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="7">
+            <div class="section-number">02</div>
+            <h2>Requirements →<br>User Stories</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">Converting business requirements to user stories, acceptance criteria, and test scenarios</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 8: Requirements → User Stories Flow
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="8">
+            <h2><i class="fas fa-diagram-project" style="color: var(--purple); margin-right: 12px;"></i>From Requirements to Working Code</h2>
+            <div class="content" style="flex-direction: column; gap: 24px;">
+                <div class="flow-diagram">
+                    <div class="flow-step" style="border-color: var(--secondary);">
+                        <div class="step-icon">📋</div>
+                        <h4>Business Requirement</h4>
+                        <p>Stakeholder needs</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--purple);">
+                        <div class="step-icon">📝</div>
+                        <h4>User Stories</h4>
+                        <p>As a… I want… So that…</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--primary);">
+                        <div class="step-icon">✅</div>
+                        <h4>Acceptance Criteria</h4>
+                        <p>Given/When/Then</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--accent);">
+                        <div class="step-icon">🧪</div>
+                        <h4>Test Scenarios</h4>
+                        <p>Edge cases &amp; paths</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: #f778ba;">
+                        <div class="step-icon">💻</div>
+                        <h4>Implementation</h4>
+                        <p>Code + tests</p>
+                    </div>
+                </div>
+                <div class="cap-grid">
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-robot"></i></div>
+                        <div class="cap-text">
+                            <h4>Use Plan Mode</h4>
+                            <p>Ask Copilot to analyze requirements and generate a structured user story breakdown</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--purple);"><i class="fas fa-file-lines"></i></div>
+                        <div class="cap-text">
+                            <h4>Prompt Files (.prompt.md)</h4>
+                            <p>Create reusable templates for consistent story format across your team</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--primary);"><i class="fas fa-vial"></i></div>
+                        <div class="cap-text">
+                            <h4>Auto-generate Test Cases</h4>
+                            <p>Copilot infers edge cases from acceptance criteria and generates test scaffolds</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--accent);"><i class="fas fa-arrows-spin"></i></div>
+                        <div class="cap-text">
+                            <h4>Iterate with Context</h4>
+                            <p>Reference existing stories with <code>#file</code> to maintain consistency</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 9: Section — Design & Architectural Artifacts
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="9">
+            <div class="section-number">03</div>
+            <h2>Design &amp; Architectural<br>Artifacts</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">System design docs, ADRs, component diagrams, and interface definitions</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 10: Artifacts Copilot Can Generate
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="10">
+            <h2><i class="fas fa-drafting-compass" style="color: var(--primary); margin-right: 12px;"></i>Artifacts Copilot Can Generate</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="card" style="padding: 24px;">
+                        <div class="card-icon" style="font-size: 24px; width: 50px; height: 50px; border-radius: 12px;"><i class="fas fa-book"></i></div>
+                        <h3 style="font-size: 1.15rem;">ADRs</h3>
+                        <p>Architecture Decision Records with context, decision rationale, and alternatives considered</p>
+                    </div>
+                    <div class="card" style="padding: 24px;">
+                        <div class="card-icon" style="font-size: 24px; width: 50px; height: 50px; border-radius: 12px;"><i class="fas fa-sitemap"></i></div>
+                        <h3 style="font-size: 1.15rem;">System Design Docs</h3>
+                        <p>Component architecture, data flow, and integration patterns from codebase analysis</p>
+                    </div>
+                    <div class="card" style="padding: 24px;">
+                        <div class="card-icon" style="font-size: 24px; width: 50px; height: 50px; border-radius: 12px;"><i class="fas fa-project-diagram"></i></div>
+                        <h3 style="font-size: 1.15rem;">Component Diagrams</h3>
+                        <p>Mermaid syntax diagrams showing service boundaries, APIs, and dependencies</p>
+                    </div>
+                    <div class="card" style="padding: 24px;">
+                        <div class="card-icon" style="font-size: 24px; width: 50px; height: 50px; border-radius: 12px;"><i class="fas fa-plug"></i></div>
+                        <h3 style="font-size: 1.15rem;">Interface Definitions</h3>
+                        <p>TypeScript interfaces, API contracts, and protocol buffers from requirements</p>
+                    </div>
+                    <div class="card" style="padding: 24px;">
+                        <div class="card-icon" style="font-size: 24px; width: 50px; height: 50px; border-radius: 12px;"><i class="fas fa-arrows-turn-to-dots"></i></div>
+                        <h3 style="font-size: 1.15rem;">Sequence Diagrams</h3>
+                        <p>Interaction flows between services and components using Mermaid syntax</p>
+                    </div>
+                    <div class="card" style="padding: 24px;">
+                        <div class="card-icon" style="font-size: 24px; width: 50px; height: 50px; border-radius: 12px;"><i class="fas fa-scale-balanced"></i></div>
+                        <h3 style="font-size: 1.15rem;">Trade-off Analysis</h3>
+                        <p>Compare architectural approaches with pros, cons, and recommendations</p>
+                    </div>
+                </div>
+                <div class="tip-box">
+                    <h4><i class="fas fa-lightbulb"></i> Best Approach</h4>
+                    <p>Use <strong>Plan mode</strong> to analyze your codebase first, then <strong>Agent mode</strong> to generate the artifacts. Reference specific files with <code>#file</code> for accuracy.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 11: Section — ER, Class Diagrams & OpenAPI
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="11">
+            <div class="section-number">04</div>
+            <h2>ER Diagrams, Class Diagrams<br>&amp; OpenAPI Specs</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">Generating technical diagrams with Copilot using Mermaid syntax and OpenAPI/Swagger</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 12: Technical Diagram Generation
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="12">
+            <h2><i class="fas fa-diagram-project" style="color: var(--accent); margin-right: 12px;"></i>Technical Diagram Generation</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="dual-panel">
+                    <div>
+                        <h3 style="font-size: 1.2rem; color: var(--secondary); margin-bottom: 16px;"><i class="fas fa-database"></i> ER &amp; Class Diagrams</h3>
+                        <div class="code-inline">
+                            <span class="comment">/* Prompt Example */</span><br>
+                            <span class="string">"Analyze #file:models/ and generate<br>
+                            a Mermaid ER diagram showing all<br>
+                            entity relationships, cardinality,<br>
+                            and foreign key constraints"</span><br><br>
+                            <span class="comment">/* Copilot generates: */</span><br>
+                            <span class="keyword">erDiagram</span><br>
+                            &nbsp;&nbsp;USER ||--o{ ORDER : places<br>
+                            &nbsp;&nbsp;ORDER ||--|{ LINE_ITEM : contains<br>
+                            &nbsp;&nbsp;PRODUCT ||--o{ LINE_ITEM : "ordered in"
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.2rem; color: var(--primary); margin-bottom: 16px;"><i class="fas fa-file-code"></i> OpenAPI / Swagger</h3>
+                        <div class="code-inline">
+                            <span class="comment">/* Prompt Example */</span><br>
+                            <span class="string">"Generate an OpenAPI 3.0 spec for<br>
+                            the REST endpoints in #file:routes/<br>
+                            Include request/response schemas,<br>
+                            error codes, and examples"</span><br><br>
+                            <span class="comment">/* Copilot generates: */</span><br>
+                            <span class="keyword">openapi:</span> <span class="string">3.0.3</span><br>
+                            <span class="keyword">paths:</span><br>
+                            &nbsp;&nbsp;<span class="variable">/api/users:</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">get:</span> ...
+                        </div>
+                    </div>
+                </div>
+                <div class="tag-row" style="justify-content: center;">
+                    <span class="tag">Mermaid</span>
+                    <span class="tag">PlantUML</span>
+                    <span class="tag">OpenAPI 3.0</span>
+                    <span class="tag">Swagger</span>
+                    <span class="tag">AsyncAPI</span>
+                    <span class="tag">GraphQL Schema</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 13: Section — Codebase Analysis & Documentation
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="13">
+            <div class="section-number">05</div>
+            <h2>Codebase Analysis,<br>Documentation &amp; User Guides</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">Using #codebase for deep analysis, dependency mapping, and documentation generation</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 14: Codebase Analysis
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="14">
+            <h2><i class="fas fa-magnifying-glass-chart" style="color: var(--secondary); margin-right: 12px;"></i>Codebase Analysis with Copilot</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="cap-grid">
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-sitemap"></i></div>
+                        <div class="cap-text">
+                            <h4>Architecture Questions</h4>
+                            <p>"Where is authentication handled?" — Copilot searches semantically across your workspace</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--primary);"><i class="fas fa-link"></i></div>
+                        <div class="cap-text">
+                            <h4>Dependency Mapping</h4>
+                            <p>Trace function call chains, find usages, and map component relationships</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--purple);"><i class="fas fa-bug"></i></div>
+                        <div class="cap-text">
+                            <h4>Pattern Detection</h4>
+                            <p>"Find exceptions without a catch block" — identify anti-patterns across the repo</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--accent);"><i class="fas fa-chart-bar"></i></div>
+                        <div class="cap-text">
+                            <h4>Key Metrics Extraction</h4>
+                            <p>Analyze complexity, test coverage gaps, and code duplication areas</p>
+                        </div>
+                    </div>
+                </div>
+                <h3 style="font-size: 1.15rem; color: var(--secondary); margin-top: 8px;">How Copilot Searches Your Workspace</h3>
+                <div class="flow-diagram wide">
+                    <div class="flow-step" style="border-color: var(--secondary);">
+                        <h4>Semantic Search</h4>
+                        <p>#codebase</p>
+                    </div>
+                    <div class="flow-arrow">+</div>
+                    <div class="flow-step" style="border-color: var(--purple);">
+                        <h4>Text Search</h4>
+                        <p>Keyword match</p>
+                    </div>
+                    <div class="flow-arrow">+</div>
+                    <div class="flow-step" style="border-color: var(--primary);">
+                        <h4>Grep</h4>
+                        <p>Regex patterns</p>
+                    </div>
+                    <div class="flow-arrow">+</div>
+                    <div class="flow-step" style="border-color: var(--accent);">
+                        <h4>Find Usages</h4>
+                        <p>References</p>
+                    </div>
+                    <div class="flow-arrow">+</div>
+                    <div class="flow-step" style="border-color: #f778ba;">
+                        <h4>File Search</h4>
+                        <p>Glob patterns</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 15: Documentation & User Guides
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="15">
+            <h2><i class="fas fa-file-pen" style="color: var(--primary); margin-right: 12px;"></i>Documentation &amp; User Guide Generation</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="card" style="padding: 24px;">
+                        <div class="card-icon" style="font-size: 24px; width: 50px; height: 50px; border-radius: 12px;"><i class="fab fa-readme"></i></div>
+                        <h3 style="font-size: 1.15rem;">README Generation</h3>
+                        <p>Auto-generate comprehensive README files from project structure and code analysis</p>
+                    </div>
+                    <div class="card" style="padding: 24px;">
+                        <div class="card-icon" style="font-size: 24px; width: 50px; height: 50px; border-radius: 12px;"><i class="fas fa-book-open"></i></div>
+                        <h3 style="font-size: 1.15rem;">API Documentation</h3>
+                        <p>JSDoc, docstrings, Swagger UI docs directly from your endpoint implementations</p>
+                    </div>
+                    <div class="card" style="padding: 24px;">
+                        <div class="card-icon" style="font-size: 24px; width: 50px; height: 50px; border-radius: 12px;"><i class="fas fa-graduation-cap"></i></div>
+                        <h3 style="font-size: 1.15rem;">End-User Tutorials</h3>
+                        <p>Step-by-step guides generated from code workflows, tests, and feature specs</p>
+                    </div>
+                </div>
+                <div class="dual-panel" style="margin-top: 8px;">
+                    <div>
+                        <h3 style="font-size: 1.1rem; color: var(--purple); margin-bottom: 12px;"><i class="fas fa-terminal"></i> Prompt Template Example</h3>
+                        <div class="code-inline" style="font-size: 0.82rem;">
+                            <span class="comment">/* .github/prompts/gen-readme.prompt.md */</span><br>
+                            <span class="keyword">---</span><br>
+                            <span class="variable">agent:</span> <span class="string">agent</span><br>
+                            <span class="variable">description:</span> <span class="string">Generate README</span><br>
+                            <span class="keyword">---</span><br>
+                            <span class="string">Analyze #codebase and generate a<br>
+                            README.md with: project overview,<br>
+                            setup, usage, API reference,<br>
+                            and contributing guidelines.</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.1rem; color: var(--accent); margin-bottom: 12px;"><i class="fas fa-wand-magic-sparkles"></i> Key Capabilities</h3>
+                        <ul class="feature-list" style="margin: 0;">
+                            <li style="margin-bottom: 16px; font-size: 1rem;">
+                                <div class="feature-icon" style="width: 40px; height: 40px; min-width: 40px;"><i class="fas fa-cog" style="font-size: 1rem;"></i></div>
+                                <div class="feature-content">
+                                    <h4 style="font-size: 1rem;">Consistent Templates</h4>
+                                    <p style="font-size: 0.85rem;">Use <code>.prompt.md</code> files for repeatable doc generation</p>
+                                </div>
+                            </li>
+                            <li style="margin-bottom: 16px; font-size: 1rem;">
+                                <div class="feature-icon" style="width: 40px; height: 40px; min-width: 40px;"><i class="fas fa-language" style="font-size: 1rem;"></i></div>
+                                <div class="feature-content">
+                                    <h4 style="font-size: 1rem;">Multi-format Output</h4>
+                                    <p style="font-size: 0.85rem;">Markdown, HTML, JSDoc, Swagger — from the same source</p>
+                                </div>
+                            </li>
+                            <li style="margin-bottom: 0; font-size: 1rem;">
+                                <div class="feature-icon" style="width: 40px; height: 40px; min-width: 40px;"><i class="fas fa-sync" style="font-size: 1rem;"></i></div>
+                                <div class="feature-content">
+                                    <h4 style="font-size: 1rem;">Keep Docs in Sync</h4>
+                                    <p style="font-size: 0.85rem;">Agent mode updates docs when code changes</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 16: Section — Feature Development
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="16">
+            <div class="section-number">06</div>
+            <h2>New Feature<br>Implementation</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">Feature planning with Plan Mode and multi-file changes with Agent Mode</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 17: Plan Mode Workflow
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="17">
+            <h2><i class="fas fa-clipboard-list" style="color: var(--purple); margin-right: 12px;"></i>Plan Mode <span class="mode-badge plan">PLAN</span></h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="flow-diagram">
+                    <div class="flow-step" style="border-color: var(--purple);">
+                        <div class="step-icon">🎯</div>
+                        <h4>Describe Goal</h4>
+                        <p>High-level feature</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--secondary);">
+                        <div class="step-icon">🔍</div>
+                        <h4>Analyze Codebase</h4>
+                        <p>Understand context</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--primary);">
+                        <div class="step-icon">📋</div>
+                        <h4>Generate Plan</h4>
+                        <p>Step-by-step steps</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--accent);">
+                        <div class="step-icon">✏️</div>
+                        <h4>Review &amp; Iterate</h4>
+                        <p>Refine with follow-ups</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: #f778ba;">
+                        <div class="step-icon">🚀</div>
+                        <h4>Hand Off</h4>
+                        <p>Agent implements</p>
+                    </div>
+                </div>
+                <div class="cap-grid">
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--purple);"><i class="fas fa-brain"></i></div>
+                        <div class="cap-text">
+                            <h4>Structured Planning</h4>
+                            <p>Creates a summary, implementation steps, and verification steps before any code is written</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-arrows-split-up-and-left"></i></div>
+                        <div class="cap-text">
+                            <h4>Multi-Destination Handoff</h4>
+                            <p>Execute locally, via CLI in background, or in the cloud via pull request</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--primary);"><i class="fas fa-memory"></i></div>
+                        <div class="cap-text">
+                            <h4>Session Memory</h4>
+                            <p>Plans auto-saved to session memory for reference throughout the implementation</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--accent);"><i class="fas fa-sliders"></i></div>
+                        <div class="cap-text">
+                            <h4>Custom Planning Agents</h4>
+                            <p>Enforce architectural guidelines and specific deliverables with custom agent definitions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 18: Agent Mode
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="18">
+            <h2><i class="fas fa-robot" style="color: var(--secondary); margin-right: 12px;"></i>Agent Mode <span class="mode-badge agent">AGENT</span></h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="mode-cols">
+                    <div class="mode-col" style="border-top: 3px solid var(--secondary);">
+                        <h3 style="color: var(--secondary);"><i class="fas fa-laptop-code"></i> Local Agent</h3>
+                        <p class="mode-desc">Interactive in VS Code with full workspace access</p>
+                        <ul>
+                            <li>Edits multiple files autonomously</li>
+                            <li>Runs terminal commands (with approval)</li>
+                            <li>Self-corrects on build/test failures</li>
+                            <li>Uses workspace tools &amp; MCP servers</li>
+                        </ul>
+                    </div>
+                    <div class="mode-col" style="border-top: 3px solid var(--purple);">
+                        <h3 style="color: var(--purple);"><i class="fas fa-terminal"></i> CLI / Background</h3>
+                        <p class="mode-desc">Autonomous execution on your machine</p>
+                        <ul>
+                            <li>Runs asynchronously in background</li>
+                            <li>Uses Git worktrees for isolation</li>
+                            <li>Ideal for large-scale changes</li>
+                            <li>Checkpoints for safe rollback</li>
+                        </ul>
+                    </div>
+                    <div class="mode-col" style="border-top: 3px solid var(--primary);">
+                        <h3 style="color: var(--primary);"><i class="fas fa-cloud"></i> Cloud Agent</h3>
+                        <p class="mode-desc">Remote execution via GitHub</p>
+                        <ul>
+                            <li>Creates branches automatically</li>
+                            <li>Implements code &amp; opens PRs</li>
+                            <li>Team collaboration via reviews</li>
+                            <li>Accessible from GitHub.com</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tip-box">
+                    <h4><i class="fas fa-circle-info"></i> Agent Workflow</h4>
+                    <p>Goal → Break into steps → Edit files → Run commands → Self-correct on failure → Task complete. Agents automatically use 7+ built-in tools to search, analyze, and modify your codebase.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 19: Plan vs Agent vs Ask
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="19">
+            <h2><i class="fas fa-scale-balanced" style="color: #f778ba; margin-right: 12px;"></i>Choosing the Right Mode</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Capability</th>
+                            <th><span style="color: var(--purple);">Plan</span></th>
+                            <th><span style="color: var(--secondary);">Agent</span></th>
+                            <th><span style="color: var(--primary);">Ask</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Edits files</td>
+                            <td>—</td>
+                            <td style="color: var(--primary);">✓ Multi-file</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>Runs terminal commands</td>
+                            <td>—</td>
+                            <td style="color: var(--primary);">✓ With approval</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>Creates implementation plan</td>
+                            <td style="color: var(--primary);">✓ Primary purpose</td>
+                            <td>✓ Implicit</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>Self-corrects on errors</td>
+                            <td>—</td>
+                            <td style="color: var(--primary);">✓ Automatic</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>Searches workspace</td>
+                            <td style="color: var(--primary);">✓</td>
+                            <td style="color: var(--primary);">✓</td>
+                            <td style="color: var(--primary);">✓</td>
+                        </tr>
+                        <tr>
+                            <td>Best for</td>
+                            <td><em>Planning &amp; strategy</em></td>
+                            <td><em>Building &amp; implementing</em></td>
+                            <td><em>Learning &amp; exploring</em></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="warning-box" style="margin-top: 4px;">
+                    <h4><i class="fas fa-shield-halved"></i> Permission Levels</h4>
+                    <p><strong>Default:</strong> Safe tools auto-approved, others need confirmation &nbsp;|&nbsp; <strong>Bypass:</strong> Auto-approves all &nbsp;|&nbsp; <strong>Autopilot (Preview):</strong> Fully autonomous until task completion</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 20: Section — Upgrades & Modernization
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="20">
+            <div class="section-number">07</div>
+            <h2>Tech Upgrade &amp;<br>Modernization</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">Framework upgrades, dependency updates, deprecation handling, and full-stack migrations</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 21: Tech Upgrade — Spring Boot Example
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="21">
+            <h2><i class="fas fa-arrow-up-right-dots" style="color: var(--secondary); margin-right: 12px;"></i>Tech Upgrade: Spring Boot 2 → 3</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="pipeline-flow">
+                    <div class="pipeline-stage" style="border-top: 2px solid var(--secondary);">
+                        <div class="stage-icon" style="color: var(--secondary);">📊</div>
+                        <div>
+                            <h4>1. Analyze Current State</h4>
+                            <p>Plan mode: "Analyze my Spring Boot 2.x app and identify all breaking changes for Spring Boot 3"</p>
+                        </div>
+                    </div>
+                    <div class="pipeline-arrow">↓</div>
+                    <div class="pipeline-stage" style="border-top: 2px solid var(--purple);">
+                        <div class="stage-icon" style="color: var(--purple);">📋</div>
+                        <div>
+                            <h4>2. Generate Migration Plan</h4>
+                            <p>Identify javax → jakarta namespace changes, deprecated APIs, config migrations</p>
+                        </div>
+                    </div>
+                    <div class="pipeline-arrow">↓</div>
+                    <div class="pipeline-stage" style="border-top: 2px solid var(--primary);">
+                        <div class="stage-icon" style="color: var(--primary);">🔧</div>
+                        <div>
+                            <h4>3. Execute with Agent Mode</h4>
+                            <p>Agent updates dependencies, refactors code, runs tests, self-corrects on failures</p>
+                        </div>
+                    </div>
+                    <div class="pipeline-arrow">↓</div>
+                    <div class="pipeline-stage" style="border-top: 2px solid var(--accent);">
+                        <div class="stage-icon" style="color: var(--accent);">✅</div>
+                        <div>
+                            <h4>4. Verify &amp; Open PR</h4>
+                            <p>Cloud agent runs full test suite, generates PR summary with all changes documented</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tip-box">
+                    <h4><i class="fas fa-link"></i> Reference Official Docs</h4>
+                    <p>Use <code>#fetch</code> to pull migration guides: <code>"Upgrade to Spring Boot 3 #fetch https://spring.io/blog/migration-guide"</code></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 22: Tech Modernization — Angular → React
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="22">
+            <h2><i class="fas fa-arrows-rotate" style="color: var(--purple); margin-right: 12px;"></i>Tech Modernization: Angular → React</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="compare-grid">
+                    <div class="compare-col bad">
+                        <h3 style="color: var(--accent);"><i class="fab fa-angular"></i> Angular (Source)</h3>
+                        <ul>
+                            <li>Component templates &amp; decorators</li>
+                            <li>Two-way data binding</li>
+                            <li>Dependency injection</li>
+                            <li>RxJS observables</li>
+                            <li>NgModules &amp; routing</li>
+                        </ul>
+                    </div>
+                    <div class="compare-col good">
+                        <h3 style="color: var(--primary);"><i class="fab fa-react"></i> React (Target)</h3>
+                        <ul>
+                            <li>JSX with hooks &amp; functional components</li>
+                            <li>Unidirectional data flow</li>
+                            <li>Context API / Zustand</li>
+                            <li>React Query / SWR</li>
+                            <li>React Router with lazy loading</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="cap-grid">
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-map"></i></div>
+                        <div class="cap-text">
+                            <h4>Incremental Migration</h4>
+                            <p>Copilot helps run Angular and React side-by-side during transition</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--purple);"><i class="fas fa-language"></i></div>
+                        <div class="cap-text">
+                            <h4>Code Translation</h4>
+                            <p>Agent converts component-by-component, preserving business logic</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--primary);"><i class="fas fa-vial-virus"></i></div>
+                        <div class="cap-text">
+                            <h4>Test Migration</h4>
+                            <p>Jasmine/Karma tests translated to Jest/Testing Library equivalents</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--accent);"><i class="fas fa-code-compare"></i></div>
+                        <div class="cap-text">
+                            <h4>Build Verification</h4>
+                            <p>Agent runs builds after each migration step, self-corrects on errors</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 23: Section — DevOps & Infrastructure
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="23">
+            <div class="section-number">08</div>
+            <h2>CI/CD, Containers &amp;<br>Infrastructure as Code</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">GitHub Actions workflows, Docker containerization, and Terraform infrastructure generation</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 24: CI/CD Pipeline Creation
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="24">
+            <h2><i class="fas fa-gears" style="color: var(--primary); margin-right: 12px;"></i>CI/CD Pipeline with GitHub Actions</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="flow-diagram">
+                    <div class="flow-step" style="border-color: var(--secondary);">
+                        <div class="step-icon">📦</div>
+                        <h4>Build</h4>
+                        <p>Compile &amp; bundle</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--primary);">
+                        <div class="step-icon">🧪</div>
+                        <h4>Test</h4>
+                        <p>Unit + integration</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--purple);">
+                        <div class="step-icon">🔍</div>
+                        <h4>Scan</h4>
+                        <p>Security &amp; lint</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--accent);">
+                        <div class="step-icon">🐳</div>
+                        <h4>Containerize</h4>
+                        <p>Docker build</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: #f778ba;">
+                        <div class="step-icon">🚀</div>
+                        <h4>Deploy</h4>
+                        <p>Staging → Prod</p>
+                    </div>
+                </div>
+                <div class="dual-panel">
+                    <div>
+                        <h3 style="font-size: 1.1rem; color: var(--secondary); margin-bottom: 12px;"><i class="fab fa-github"></i> Generated Workflow</h3>
+                        <div class="code-inline" style="font-size: 0.8rem;">
+                            <span class="keyword">name:</span> <span class="string">CI/CD Pipeline</span><br>
+                            <span class="keyword">on:</span> [<span class="string">push</span>, <span class="string">pull_request</span>]<br>
+                            <span class="keyword">jobs:</span><br>
+                            &nbsp;&nbsp;<span class="variable">build:</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">runs-on:</span> <span class="string">ubuntu-latest</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">steps:</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="keyword">uses:</span> <span class="string">actions/checkout@v4</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="keyword">uses:</span> <span class="string">actions/setup-node@v4</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="keyword">run:</span> <span class="string">npm ci &amp;&amp; npm test</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px;"><i class="fas fa-wand-magic-sparkles"></i> What Copilot Generates</h3>
+                        <ul class="feature-list" style="margin: 0;">
+                            <li style="margin-bottom: 14px; font-size: 0.95rem;">
+                                <div class="feature-icon" style="width: 38px; height: 38px; min-width: 38px;"><i class="fas fa-code-branch" style="font-size: 1rem;"></i></div>
+                                <div class="feature-content">
+                                    <h4 style="font-size: 1rem;">Multi-environment workflows</h4>
+                                    <p style="font-size: 0.82rem;">Dev, staging, production with approval gates</p>
+                                </div>
+                            </li>
+                            <li style="margin-bottom: 14px; font-size: 0.95rem;">
+                                <div class="feature-icon" style="width: 38px; height: 38px; min-width: 38px;"><i class="fas fa-shield" style="font-size: 1rem;"></i></div>
+                                <div class="feature-content">
+                                    <h4 style="font-size: 1rem;">Security scanning steps</h4>
+                                    <p style="font-size: 0.82rem;">SAST, dependency audit, secret scanning</p>
+                                </div>
+                            </li>
+                            <li style="margin-bottom: 0; font-size: 0.95rem;">
+                                <div class="feature-icon" style="width: 38px; height: 38px; min-width: 38px;"><i class="fas fa-database" style="font-size: 1rem;"></i></div>
+                                <div class="feature-content">
+                                    <h4 style="font-size: 1rem;">Matrix builds &amp; caching</h4>
+                                    <p style="font-size: 0.82rem;">Multi-version testing with dependency caching</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 25: Containerization
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="25">
+            <h2><i class="fab fa-docker" style="color: var(--secondary); margin-right: 12px;"></i>Containerization with Copilot</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="dual-panel">
+                    <div>
+                        <h3 style="font-size: 1.1rem; color: var(--secondary); margin-bottom: 12px;"><i class="fas fa-file-code"></i> Multi-stage Dockerfile</h3>
+                        <div class="code-inline" style="font-size: 0.78rem;">
+                            <span class="comment"># Generated by Copilot Agent</span><br>
+                            <span class="keyword">FROM</span> <span class="string">node:20-alpine</span> <span class="keyword">AS</span> <span class="variable">builder</span><br>
+                            <span class="keyword">WORKDIR</span> <span class="string">/app</span><br>
+                            <span class="keyword">COPY</span> package*.json ./<br>
+                            <span class="keyword">RUN</span> npm ci<br>
+                            <span class="keyword">COPY</span> . .<br>
+                            <span class="keyword">RUN</span> npm run build<br><br>
+                            <span class="keyword">FROM</span> <span class="string">node:20-alpine</span> <span class="keyword">AS</span> <span class="variable">runtime</span><br>
+                            <span class="keyword">COPY</span> --from=builder /app/dist ./dist<br>
+                            <span class="keyword">EXPOSE</span> <span class="variable">3000</span><br>
+                            <span class="keyword">CMD</span> [<span class="string">"node"</span>, <span class="string">"dist/main.js"</span>]
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px;"><i class="fas fa-cubes"></i> Docker Compose</h3>
+                        <div class="code-inline" style="font-size: 0.78rem;">
+                            <span class="comment"># Generated by Copilot Agent</span><br>
+                            <span class="keyword">services:</span><br>
+                            &nbsp;&nbsp;<span class="variable">app:</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">build:</span> <span class="string">.</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">ports:</span> [<span class="string">"3000:3000"</span>]<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">depends_on:</span> [<span class="string">db</span>]<br>
+                            &nbsp;&nbsp;<span class="variable">db:</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">image:</span> <span class="string">postgres:16-alpine</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">environment:</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">POSTGRES_DB:</span> <span class="string">myapp</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">volumes:</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="string">pgdata:/var/lib/postgresql/data</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cap-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-minimize"></i></div>
+                        <div class="cap-text">
+                            <h4>Optimized Images</h4>
+                            <p>Multi-stage builds, Alpine base, minimal layers</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--primary);"><i class="fas fa-shield-halved"></i></div>
+                        <div class="cap-text">
+                            <h4>Security Best Practices</h4>
+                            <p>Non-root user, .dockerignore, no secrets in image</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--accent);"><i class="fas fa-network-wired"></i></div>
+                        <div class="cap-text">
+                            <h4>Multi-service Compose</h4>
+                            <p>App + DB + cache + reverse proxy configs</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 26: Infrastructure as Code — Terraform
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="26">
+            <h2><i class="fas fa-cloud" style="color: var(--purple); margin-right: 12px;"></i>Infrastructure as Code — Terraform</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="dual-panel">
+                    <div>
+                        <h3 style="font-size: 1.1rem; color: var(--purple); margin-bottom: 12px;"><i class="fas fa-code"></i> Terraform Example</h3>
+                        <div class="code-inline" style="font-size: 0.78rem;">
+                            <span class="comment"># Generated by Copilot Agent</span><br>
+                            <span class="keyword">resource</span> <span class="string">"azurerm_resource_group"</span> <span class="variable">"main"</span> {<br>
+                            &nbsp;&nbsp;name &nbsp;&nbsp;&nbsp;= <span class="string">"rg-myapp-prod"</span><br>
+                            &nbsp;&nbsp;location = <span class="string">"eastus"</span><br>
+                            }<br><br>
+                            <span class="keyword">resource</span> <span class="string">"azurerm_service_plan"</span> <span class="variable">"main"</span> {<br>
+                            &nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;= <span class="string">"asp-myapp"</span><br>
+                            &nbsp;&nbsp;sku_name = <span class="string">"P1v3"</span><br>
+                            }<br><br>
+                            <span class="keyword">resource</span> <span class="string">"azurerm_linux_web_app"</span> <span class="variable">"main"</span> {<br>
+                            &nbsp;&nbsp;name = <span class="string">"app-myapp-prod"</span><br>
+                            }
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.1rem; color: var(--accent); margin-bottom: 12px;"><i class="fas fa-list-check"></i> What Copilot Generates</h3>
+                        <div class="cap-grid" style="grid-template-columns: 1fr;">
+                            <div class="cap-item">
+                                <div class="cap-icon" style="color: var(--purple);"><i class="fas fa-puzzle-piece"></i></div>
+                                <div class="cap-text">
+                                    <h4>Modular Structure</h4>
+                                    <p>Variables, outputs, modules, tfvars per environment</p>
+                                </div>
+                            </div>
+                            <div class="cap-item">
+                                <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-cloud-arrow-up"></i></div>
+                                <div class="cap-text">
+                                    <h4>Multi-cloud Resources</h4>
+                                    <p>AWS, Azure, GCP resource provisioning from descriptions</p>
+                                </div>
+                            </div>
+                            <div class="cap-item">
+                                <div class="cap-icon" style="color: var(--primary);"><i class="fas fa-lock"></i></div>
+                                <div class="cap-text">
+                                    <h4>Security &amp; Compliance</h4>
+                                    <p>Network policies, IAM roles, encryption at rest</p>
+                                </div>
+                            </div>
+                            <div class="cap-item">
+                                <div class="cap-icon" style="color: var(--accent);"><i class="fas fa-server"></i></div>
+                                <div class="cap-text">
+                                    <h4>State Management</h4>
+                                    <p>Remote backend setup, state locking, workspace config</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tag-row" style="justify-content: center;">
+                    <span class="tag">Terraform</span>
+                    <span class="tag">AWS CDK</span>
+                    <span class="tag">Pulumi</span>
+                    <span class="tag">Bicep</span>
+                    <span class="tag">CloudFormation</span>
+                    <span class="tag">Kubernetes YAML</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 27: Complete Development Lifecycle
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="27">
+            <h2><i class="fas fa-infinity" style="color: var(--secondary); margin-right: 12px;"></i>Copilot-Powered Development Lifecycle</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="flow-diagram wide">
+                    <div class="flow-step" style="border-color: var(--secondary);">
+                        <div class="step-icon">📋</div>
+                        <h4>Requirements</h4>
+                        <p>User stories</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--purple);">
+                        <div class="step-icon">🏗️</div>
+                        <h4>Design</h4>
+                        <p>ADRs, diagrams</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--primary);">
+                        <div class="step-icon">💻</div>
+                        <h4>Code</h4>
+                        <p>Agent mode</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: #79c0ff;">
+                        <div class="step-icon">🔍</div>
+                        <h4>Review</h4>
+                        <p>AI code review</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--accent);">
+                        <div class="step-icon">🧪</div>
+                        <h4>Test</h4>
+                        <p>Auto-generated</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: #f778ba;">
+                        <div class="step-icon">🚀</div>
+                        <h4>Deploy</h4>
+                        <p>CI/CD + IaC</p>
+                    </div>
+                </div>
+                <div class="card-grid" style="grid-template-columns: repeat(4, 1fr);">
+                    <div class="card" style="padding: 20px; text-align: center;">
+                        <div class="stat-value" style="color: var(--secondary);">55%</div>
+                        <p>Faster task completion</p>
+                    </div>
+                    <div class="card" style="padding: 20px; text-align: center;">
+                        <div class="stat-value" style="color: #3fb950;">46%</div>
+                        <p>New code by Copilot</p>
+                    </div>
+                    <div class="card" style="padding: 20px; text-align: center;">
+                        <div class="stat-value" style="color: var(--purple);">75%</div>
+                        <p>More fulfilled developers</p>
+                    </div>
+                    <div class="card" style="padding: 20px; text-align: center;">
+                        <div class="stat-value" style="color: var(--accent);">1.5M+</div>
+                        <p>Developers using Copilot</p>
+                    </div>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center;">Sources: GitHub/Microsoft Research (2022), GitHub Octoverse &amp; Developer Survey (2024)</p>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 28: Key Takeaways
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="28">
+            <h2><i class="fas fa-trophy" style="color: var(--accent); margin-right: 12px;"></i>Key Takeaways</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="card" style="padding: 24px; border-top: 3px solid var(--secondary);">
+                        <h3 style="font-size: 1.1rem; color: var(--secondary);"><i class="fas fa-bullseye"></i> Prompt Precision</h3>
+                        <p>Effective prompts = specific context + clear intent + examples. Use <code>#file</code>, <code>#codebase</code>, and custom instructions.</p>
+                    </div>
+                    <div class="card" style="padding: 24px; border-top: 3px solid var(--purple);">
+                        <h3 style="font-size: 1.1rem; color: var(--purple);"><i class="fas fa-brain"></i> Plan Before Build</h3>
+                        <p>Plan mode for strategy, Agent mode for execution. Let Copilot analyze your codebase before making changes.</p>
+                    </div>
+                    <div class="card" style="padding: 24px; border-top: 3px solid var(--primary);">
+                        <h3 style="font-size: 1.1rem; color: var(--primary);"><i class="fas fa-arrows-rotate"></i> Full Lifecycle Support</h3>
+                        <p>Requirements → design → code → test → deploy. Copilot assists at every stage of the development lifecycle.</p>
+                    </div>
+                    <div class="card" style="padding: 24px; border-top: 3px solid var(--accent);">
+                        <h3 style="font-size: 1.1rem; color: var(--accent);"><i class="fas fa-rocket"></i> Modernization at Scale</h3>
+                        <p>Framework upgrades, tech migrations, and dependency updates — Agent self-corrects during complex refactors.</p>
+                    </div>
+                    <div class="card" style="padding: 24px; border-top: 3px solid #f778ba;">
+                        <h3 style="font-size: 1.1rem; color: #f778ba;"><i class="fas fa-gears"></i> DevOps Automation</h3>
+                        <p>CI/CD pipelines, Dockerfiles, Terraform scripts — generate production-ready infrastructure from natural language.</p>
+                    </div>
+                    <div class="card" style="padding: 24px; border-top: 3px solid #79c0ff;">
+                        <h3 style="font-size: 1.1rem; color: #79c0ff;"><i class="fas fa-file-lines"></i> Living Documentation</h3>
+                        <p>READMEs, API docs, and user guides stay in sync with code. Use prompt files for consistent generation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 29: Copilot Context Quick Reference
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="29">
+            <h2><i class="fas fa-keyboard" style="color: var(--secondary); margin-right: 12px;"></i>Copilot Context Quick Reference</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <table class="styled-table" style="font-size: 0.95rem;">
+                    <thead>
+                        <tr>
+                            <th>Variable / Command</th>
+                            <th>Purpose</th>
+                            <th>When to Use</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>#file</code></td>
+                            <td>Reference specific files as context</td>
+                            <td>Targeted edits, analysis of known files</td>
+                        </tr>
+                        <tr>
+                            <td><code>#codebase</code></td>
+                            <td>Force semantic search across workspace</td>
+                            <td>Broad architectural questions</td>
+                        </tr>
+                        <tr>
+                            <td><code>#fetch</code></td>
+                            <td>Retrieve content from web URLs</td>
+                            <td>Reference migration guides, official docs</td>
+                        </tr>
+                        <tr>
+                            <td><code>Plan (mode)</code></td>
+                            <td>Select Plan agent from mode dropdown</td>
+                            <td>Before starting feature implementation</td>
+                        </tr>
+                        <tr>
+                            <td><code>/init</code></td>
+                            <td>Auto-generate custom instructions</td>
+                            <td>New project setup</td>
+                        </tr>
+                        <tr>
+                            <td><code>.prompt.md</code></td>
+                            <td>Reusable prompt templates</td>
+                            <td>Consistent team workflows</td>
+                        </tr>
+                        <tr>
+                            <td><code>copilot-instructions.md</code></td>
+                            <td>Project-wide coding conventions</td>
+                            <td>Set once, applied to all prompts</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 30: Q&A
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="30">
+            <div class="section-number" style="font-size: 6rem; color: var(--surface-light);">Q&amp;A</div>
+            <h2 style="color: var(--primary);">Questions &amp; Discussion</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">Open discussion, demo requests, and wrap-up</p>
+            <div class="tag-row" style="margin-top: 30px;">
+                <span class="tag"><i class="fas fa-comments"></i> Open Discussion</span>
+                <span class="tag"><i class="fas fa-desktop"></i> Live Demos</span>
+                <span class="tag"><i class="fas fa-question-circle"></i> Any Topic</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" aria-label="Previous slide">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <span class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">30</span></span>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)" aria-label="Next slide">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        <button class="nav-btn" onclick="toggleFullscreen()" aria-label="Toggle fullscreen">
+            <i class="fas fa-expand" id="fullscreenIcon"></i>
+        </button>
+    </div>
+
+    <div class="keyboard-hints">
+        <kbd>←</kbd> <kbd>→</kbd> Navigate &nbsp;|&nbsp;
+        <kbd>F</kbd> Fullscreen &nbsp;|&nbsp;
+        <kbd>P</kbd> Export PDF
+    </div>
+
+    <script src="../shared/presentation.js"></script>
+    <script>
+        initPresentation({
+            storageKey: 'copilotDay4Slide',
+            pdfFilename: 'Day4_Build_Design_Modernization.pdf'
+        });
+    </script>
+</body>
+</html>
