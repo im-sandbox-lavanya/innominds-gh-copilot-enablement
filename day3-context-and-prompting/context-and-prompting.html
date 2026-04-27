@@ -289,8 +289,8 @@
             <div class="intro-content">
                 <img src="../shared/images/copilot-avatar.png" alt="GitHub Copilot" class="trainer-photo animate">
                 <div class="trainer-info">
-                    <h2 class="animate">GitHub Trainer Name</h2>
-                    <p class="title animate">GitHub Certified Trainer</p>
+                    <h2 class="animate">Lavanya Nooka &amp; Bhaskar Jalagam</h2>
+                    <p class="title animate">GitHub Certified Trainers</p>
                     <div class="company animate">
                         <i class="fab fa-github"></i>
                         <span><span style="color: #8b949e;">Info</span><span style="color: #58a6ff;">Magnus</span></span>
@@ -695,7 +695,7 @@
                 </div>
                 <div>
                     <h3 style="color: var(--purple); font-size: 1.5rem; margin-bottom: 20px;"><i class="fas fa-robot"></i> Agent Instructions</h3>
-                    <ul class="feature-list">
+                    <ul class="feature-list" style="margin-bottom: 12px;">
                         <li class="animate">
                             <div class="feature-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-file-code"></i></div>
                             <div class="feature-content">
@@ -703,6 +703,15 @@
                                 <p>Universal instructions for all AI agents working on your repo</p>
                             </div>
                         </li>
+                    </ul>
+                    <div class="code-block animate" style="font-size: 0.8rem; margin-bottom: 18px;">
+                        <span class="comment"># .github/AGENTS.md</span><br>
+                        - Use <span class="variable">pnpm</span> as the package manager<br>
+                        - Run <span class="variable">pnpm test</span> before committing<br>
+                        - Follow conventional commits format<br>
+                        - Never modify <span class="variable">generated/</span> files directly
+                    </div>
+                    <ul class="feature-list" style="margin-bottom: 12px;">
                         <li class="animate">
                             <div class="feature-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-project-diagram"></i></div>
                             <div class="feature-content">
@@ -710,15 +719,19 @@
                                 <p>Model-specific agent instructions. Nearest file in directory tree wins.</p>
                             </div>
                         </li>
-                        <li class="animate">
-                            <div class="feature-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-magic"></i></div>
-                            <div class="feature-content">
-                                <h4>Auto-Generation</h4>
-                                <p>Use Copilot Cloud Agent at <code>github.com/copilot/agents</code> to auto-generate instructions from your codebase</p>
-                            </div>
-                        </li>
                     </ul>
+                    <div class="code-block animate" style="font-size: 0.8rem;">
+                        <span class="comment"># CLAUDE.md (project root)</span><br>
+                        - Always think step-by-step before writing code<br>
+                        - Use <span class="variable">snake_case</span> for Python, <span class="variable">camelCase</span> for TS<br>
+                        - Write unit tests for every new function<br>
+                        - Prefer <span class="variable">async/await</span> over callbacks
+                    </div>
                 </div>
+            </div>
+            <div class="tip-box animate" style="margin-top: 18px; width: 100%;">
+                <h4><i class="fas fa-lightbulb"></i> Which approach should you use?</h4>
+                <p>Start with a single <code>.github/copilot-instructions.md</code> for project-wide coding standards. Add <code>.instructions.md</code> files when you need different rules for different file types or frameworks. Use <code>AGENTS.md</code> if you work with multiple AI agents in your workspace.</p>
             </div>
         </div>
 
@@ -1181,9 +1194,162 @@
         </div>
 
         <!-- ============================================================
+             SLIDE 22b: MCP — How It Works (Architecture)
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="27">
+            <h2>MCP — How It Works</h2>
+            <p class="animate" style="font-size: 1.15rem; color: var(--text-muted); margin-bottom: 24px;">MCP follows a <strong style="color: var(--secondary);">client-server architecture</strong> where the AI agent acts as the client and each tool is a lightweight server.</p>
+            <div class="card-grid animate" style="grid-template-columns: 1fr auto 1fr auto 1fr; align-items: center; gap: 12px;">
+                <div class="card" style="padding: 20px; text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: 8px;"><i class="fas fa-user" style="color: var(--secondary);"></i></div>
+                    <h3 style="font-size: 1rem;">You (Prompt)</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Natural language request in Copilot Chat</p>
+                </div>
+                <div style="font-size: 1.8rem; color: var(--text-muted);">→</div>
+                <div class="card" style="padding: 20px; text-align: center; border-color: var(--secondary);">
+                    <div style="font-size: 2rem; margin-bottom: 8px;"><i class="fas fa-robot" style="color: var(--primary);"></i></div>
+                    <h3 style="font-size: 1rem;">MCP Client (Agent)</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Copilot decides which tool to call &amp; builds the request</p>
+                </div>
+                <div style="font-size: 1.8rem; color: var(--text-muted);">→</div>
+                <div class="card" style="padding: 20px; text-align: center; border-color: var(--purple);">
+                    <div style="font-size: 2rem; margin-bottom: 8px;"><i class="fas fa-plug" style="color: var(--purple);"></i></div>
+                    <h3 style="font-size: 1rem;">MCP Server (Tool)</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Executes action &amp; returns structured results</p>
+                </div>
+            </div>
+            <div class="two-column animate" style="margin-top: 24px;">
+                <div>
+                    <h3 style="font-size: 1.1rem; color: var(--secondary); margin-bottom: 12px;"><i class="fas fa-cog"></i> Configuration (settings.json)</h3>
+                    <div class="code-block" style="font-size: 0.8rem;">
+                        <span class="string">"mcp"</span>: {<br>
+                        &nbsp;&nbsp;<span class="string">"servers"</span>: {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"playwright"</span>: {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"command"</span>: <span class="string">"npx"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"args"</span>: [<span class="string">"@anthropic/mcp-playwright"</span>]<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"github"</span>: {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"command"</span>: <span class="string">"npx"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"args"</span>: [<span class="string">"@modelcontextprotocol/server-github"</span>]<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                </div>
+                <div>
+                    <h3 style="font-size: 1.1rem; color: var(--purple); margin-bottom: 12px;"><i class="fas fa-stream"></i> How the Flow Works</h3>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><span style="font-weight:700;">1</span></div>
+                            <div class="feature-content">
+                                <h4>Discovery</h4>
+                                <p>Agent reads MCP config and learns available tools &amp; their capabilities</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><span style="font-weight:700;">2</span></div>
+                            <div class="feature-content">
+                                <h4>Tool Selection</h4>
+                                <p>Agent matches your prompt to the right MCP tool automatically</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><span style="font-weight:700;">3</span></div>
+                            <div class="feature-content">
+                                <h4>Execute &amp; Return</h4>
+                                <p>Tool runs, returns structured data, agent incorporates into response</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 22c: MCP — Practical Examples
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="28">
+            <h2>MCP in Action — Real-World Examples</h2>
+            <div class="card-grid animate" style="grid-template-columns: repeat(3, 1fr); gap: 18px;">
+                <div class="card" style="padding: 20px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fab fa-github"></i></div>
+                    <h3>GitHub MCP</h3>
+                    <div class="code-block" style="font-size: 0.78rem; margin-top: 12px;">
+                        <span class="string">"Create a GitHub issue for the</span><br>
+                        <span class="string">login bug we just found"</span><br><br>
+                        <span class="comment">→ Creates issue with title, labels,</span><br>
+                        <span class="comment">  repro steps from chat context</span>
+                    </div>
+                </div>
+                <div class="card" style="padding: 20px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-database"></i></div>
+                    <h3>Database MCP</h3>
+                    <div class="code-block" style="font-size: 0.78rem; margin-top: 12px;">
+                        <span class="string">"Show me all users who signed</span><br>
+                        <span class="string">up in the last 7 days"</span><br><br>
+                        <span class="comment">→ Queries database, returns</span><br>
+                        <span class="comment">  formatted results in chat</span>
+                    </div>
+                </div>
+                <div class="card" style="padding: 20px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-globe"></i></div>
+                    <h3>Fetch / Web MCP</h3>
+                    <div class="code-block" style="font-size: 0.78rem; margin-top: 12px;">
+                        <span class="string">"Read the API docs at this URL</span><br>
+                        <span class="string">and generate a TypeScript client"</span><br><br>
+                        <span class="comment">→ Fetches page, parses endpoints,</span><br>
+                        <span class="comment">  generates typed client code</span>
+                    </div>
+                </div>
+            </div>
+            <div class="two-column animate" style="margin-top: 22px;">
+                <div>
+                    <h3 style="font-size: 1.1rem; color: var(--secondary); margin-bottom: 12px;"><i class="fas fa-cubes"></i> Popular MCP Servers</h3>
+                    <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: 8px; color: var(--secondary); font-weight: 600;">Playwright</td>
+                            <td style="padding: 8px;">Browser automation &amp; E2E testing</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: 8px; color: var(--secondary); font-weight: 600;">GitHub</td>
+                            <td style="padding: 8px;">Issues, PRs, repos, code search</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: 8px; color: var(--secondary); font-weight: 600;">PostgreSQL</td>
+                            <td style="padding: 8px;">Query &amp; manage databases</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: 8px; color: var(--secondary); font-weight: 600;">Filesystem</td>
+                            <td style="padding: 8px;">Read / write files outside workspace</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; color: var(--secondary); font-weight: 600;">Fetch</td>
+                            <td style="padding: 8px;">HTTP requests &amp; web scraping</td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <h3 style="font-size: 1.1rem; color: var(--purple); margin-bottom: 12px;"><i class="fas fa-hammer"></i> Build Your Own MCP Server</h3>
+                    <div class="code-block" style="font-size: 0.78rem;">
+                        <span class="comment">// Minimal MCP server (TypeScript)</span><br>
+                        <span class="keyword">import</span> { <span class="variable">McpServer</span> } <span class="keyword">from</span> <span class="string">"@modelcontextprotocol/sdk"</span>;<br><br>
+                        <span class="keyword">const</span> <span class="variable">server</span> = <span class="keyword">new</span> <span class="function">McpServer</span>(<span class="string">"my-tool"</span>);<br><br>
+                        <span class="variable">server</span>.<span class="function">tool</span>(<span class="string">"get_status"</span>, <br>
+                        &nbsp;&nbsp;<span class="string">"Check deployment status"</span>,<br>
+                        &nbsp;&nbsp;{ <span class="variable">env</span>: z.<span class="function">string</span>() },<br>
+                        &nbsp;&nbsp;<span class="keyword">async</span> ({ <span class="variable">env</span> }) => ({<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">content</span>: [{ <span class="variable">type</span>: <span class="string">"text"</span>, <span class="variable">text</span>: <span class="string">`Deployed to ${env}`</span> }]<br>
+                        &nbsp;&nbsp;})<br>
+                        );
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
              SLIDE 23: Section — Agentic Coding in Practice
              ============================================================ -->
-        <div class="slide section-slide" data-slide="27">
+        <div class="slide section-slide" data-slide="29">
             <span class="section-number">07</span>
             <h2>Agentic Coding<br>in Practice</h2>
             <p style="font-size: 1.4rem; color: var(--text-muted); max-width: 700px; margin-top: 10px;">Agent-driven workflows, tool use, terminal commands &amp; iterative self-correction</p>
@@ -1192,7 +1358,7 @@
         <!-- ============================================================
              SLIDE 24: Agent Workflows
              ============================================================ -->
-        <div class="slide content-slide" data-slide="28">
+        <div class="slide content-slide" data-slide="30">
             <h2>Three Agent Workflow Patterns</h2>
             <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
                 <div class="card animate" style="padding: 25px;">
@@ -1231,7 +1397,7 @@
         <!-- ============================================================
              SLIDE 25: Tools & Self-Correction
              ============================================================ -->
-        <div class="slide content-slide" data-slide="29">
+        <div class="slide content-slide" data-slide="31">
             <h2>Agent Tools &amp; Self-Correction</h2>
             <div class="two-column">
                 <div>
@@ -1276,7 +1442,7 @@
         <!-- ============================================================
              SLIDE 26: Section — @workspace Agent Deep-Dive
              ============================================================ -->
-        <div class="slide section-slide" data-slide="30">
+        <div class="slide section-slide" data-slide="32">
             <span class="section-number">08</span>
             <h2>@workspace Agent<br>Deep-Dive</h2>
             <p style="font-size: 1.4rem; color: var(--text-muted); max-width: 700px; margin-top: 10px;">Codebase-wide questions, multi-file refactoring &amp; architecture queries</p>
@@ -1285,7 +1451,7 @@
         <!-- ============================================================
              SLIDE 27: @workspace in Action
              ============================================================ -->
-        <div class="slide content-slide" data-slide="31">
+        <div class="slide content-slide" data-slide="33">
             <h2>@workspace — Your Codebase Assistant</h2>
             <div class="card-grid" style="grid-template-columns: repeat(2, 1fr);">
                 <div class="card animate" style="padding: 22px;">
@@ -1336,7 +1502,7 @@
         </div>
 
         <!-- Demo: Agent Mode, @workspace & CLI -->
-        <div class="slide demo-slide" data-slide="32">
+        <div class="slide demo-slide" data-slide="34">
             <div class="demo-icon animate"><i class="fas fa-laptop-code"></i></div>
             <h2 class="animate">Demo Time</h2>
             <p class="demo-subtitle animate">Agent Mode, @workspace &amp; CLI</p>
@@ -1374,7 +1540,7 @@
         <!-- ============================================================
              SLIDE 28: Section — CLI & PR Summaries
              ============================================================ -->
-        <div class="slide section-slide" data-slide="33">
+        <div class="slide section-slide" data-slide="35">
             <span class="section-number">09</span>
             <h2>Copilot CLI<br>&amp; Cloud Agent</h2>
             <p style="font-size: 1.4rem; color: var(--text-muted); max-width: 700px; margin-top: 10px;">The new standalone Copilot CLI, programmatic mode &amp; cloud agent integrations</p>
@@ -1383,7 +1549,7 @@
         <!-- ============================================================
              SLIDE 29: Copilot CLI & Cloud Agent
              ============================================================ -->
-        <div class="slide content-slide" data-slide="34">
+        <div class="slide content-slide" data-slide="36">
             <h2>Copilot CLI &amp; Cloud Agent</h2>
             <div class="two-column">
                 <div>
@@ -1459,7 +1625,7 @@
         <!-- ============================================================
              SLIDE 30: Key Takeaways
              ============================================================ -->
-        <div class="slide content-slide" data-slide="35">
+        <div class="slide content-slide" data-slide="37">
             <h2>Key Takeaways</h2>
             <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
                 <div class="card animate" style="text-align: center; padding: 28px 22px;">
@@ -1498,7 +1664,7 @@
         <!-- ============================================================
              SLIDE 31: Q & A
              ============================================================ -->
-        <div class="slide section-slide" data-slide="36">
+        <div class="slide section-slide" data-slide="38">
             <span class="section-number">10</span>
             <h2 style="font-size: 4rem;">Q &amp; A</h2>
             <p style="font-size: 1.5rem; color: var(--text-muted); max-width: 700px; margin-top: 15px;">Questions, Discussion &amp; Next Steps</p>
@@ -1526,7 +1692,7 @@
             <i class="fas fa-chevron-left"></i>
         </button>
         <div class="slide-counter">
-            <span id="currentSlide">1</span> / <span id="totalSlides">41</span>
+            <span id="currentSlide">1</span> / <span id="totalSlides">43</span>
         </div>
         <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)" aria-label="Next slide">
             <i class="fas fa-chevron-right"></i>

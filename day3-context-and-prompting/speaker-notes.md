@@ -10,7 +10,7 @@ Welcome everyone to Day 3. Today we shift from using Copilot as a code-completio
 
 ## Slide 2: Trainer Introduction
 
-Brief self-introduction. Mention relevant experience with GitHub Copilot and large-scale developer enablement. Keep it under one minute — attendees are eager to get into the technical content.
+Introduce **Lavanya Nooka** and **Bhaskar Jalagam** as the trainers for this session. Mention relevant experience with GitHub Copilot and large-scale developer enablement. Keep it under one minute — attendees are eager to get into the technical content.
 
 ---
 
@@ -132,9 +132,10 @@ Two columns here:
 - Show the tag examples: `*.ts`, `*.py`, `src/api/**`, `**/tests/**`.
 
 **Right — Agent Instructions:**
-- `.github/AGENTS.md` — Universal instructions for all AI agents (Copilot, Claude, etc.) working on the repo.
-- `CLAUDE.md` / `GEMINI.md` — Model-specific instructions. The nearest file in the directory tree wins (like `.gitignore` resolution).
-- **Auto-Generation** — Mention that GitHub now offers an agent at `github.com/copilot/agents` that can auto-generate these instruction files by analyzing your codebase.
+- `.github/AGENTS.md` — Walk through the code example showing universal project guidelines (package manager, testing, commits, protected directories). These apply to all AI agents working on the repo.
+- `CLAUDE.md` / `GEMINI.md` — Walk through the CLAUDE.md example showing model-specific instructions (step-by-step thinking, naming conventions, unit testing, async/await). The nearest file in the directory tree wins (like `.gitignore` resolution).
+
+**Tip Box** — Highlight the progressive adoption path: start with a single `copilot-instructions.md` for project-wide standards, add `.instructions.md` files when you need different rules for different file types, and use `AGENTS.md` if you work with multiple AI agents. This gives teams a clear starting point without overwhelming them.
 
 ---
 
@@ -298,13 +299,46 @@ This is the extensibility layer that makes agents truly powerful — they're not
 
 ---
 
-## Slide 27: Section — Agentic Coding in Practice
+## Slide 27: MCP — How It Works
+
+This slide digs into the architecture. Walk through the three-box flow diagram from left to right:
+
+1. **You (Prompt)** — The developer types a natural language request in Copilot Chat, like "create a GitHub issue for the login bug."
+2. **MCP Client (Agent)** — Copilot acts as the MCP client. It reads the configured MCP servers, understands their capabilities, and decides which tool to invoke based on the prompt.
+3. **MCP Server (Tool)** — The external tool (Playwright, GitHub, database, etc.) executes the action and returns structured results back to the agent.
+
+**Left column — Configuration:** Show the `settings.json` example. MCP servers are registered under `"mcp": { "servers": { ... } }`. Each server has a `command` (e.g., `npx`) and `args` pointing to the MCP package. This is how VS Code knows which tools are available.
+
+**Right column — 3-Step Flow:**
+1. **Discovery** — When VS Code starts, the agent reads the MCP config and learns what tools are available and what each can do.
+2. **Tool Selection** — When you prompt, the agent matches your intent to the right MCP tool automatically. You don't need to specify which tool — the agent figures it out.
+3. **Execute & Return** — The tool runs, returns structured data, and the agent incorporates the results into its response.
+
+Emphasize that developers don't need to learn MCP internals — they just configure servers and prompt naturally.
+
+---
+
+## Slide 28: MCP in Action — Real-World Examples
+
+This slide makes MCP concrete with three practical examples:
+
+1. **GitHub MCP** — "Create a GitHub issue for the login bug we just found." The agent creates the issue with title, labels, and repro steps pulled from the chat context. No need to switch to the browser.
+2. **Database MCP** — "Show me all users who signed up in the last 7 days." The agent queries the database directly and returns formatted results in chat. Great for quick data exploration.
+3. **Fetch/Web MCP** — "Read the API docs at this URL and generate a TypeScript client." The agent fetches the page, parses the endpoints, and generates typed client code. One prompt replaces manual reading and typing.
+
+**Left — Popular MCP Servers Table:** Walk through the five servers: Playwright (browser automation & E2E testing), GitHub (issues, PRs, repos, code search), PostgreSQL (query & manage databases), Filesystem (read/write files outside workspace), Fetch (HTTP requests & web scraping). Mention that the ecosystem is growing rapidly.
+
+**Right — Build Your Own:** Show the minimal TypeScript MCP server snippet. It's surprisingly simple — import the SDK, create a server, define a tool with a name, description, schema, and handler. This is for teams that want to connect their internal tools (deployment systems, monitoring, custom APIs) to Copilot.
+
+---
+
+## Slide 29: Section — Agentic Coding in Practice
 
 Transition. Theory is done — now let's see how agents work in real-world development workflows.
 
 ---
 
-## Slide 28: Three Agent Workflow Patterns
+## Slide 30: Three Agent Workflow Patterns
 
 Three cards:
 
@@ -316,7 +350,7 @@ Three cards:
 
 ---
 
-## Slide 29: Agent Tools & Self-Correction
+## Slide 31: Agent Tools & Self-Correction
 
 Two columns:
 
@@ -328,13 +362,13 @@ This is one of the most impressive agent capabilities. Walk through the flow: Ag
 
 ---
 
-## Slide 30: Section — @workspace Agent Deep-Dive
+## Slide 32: Section — @workspace Agent Deep-Dive
 
 Transition. `@workspace` is the gateway to codebase-wide intelligence. It's how you ask questions about your entire project, not just the file you're looking at.
 
 ---
 
-## Slide 31: @workspace — Your Codebase Assistant
+## Slide 33: @workspace — Your Codebase Assistant
 
 Walk through the four use-case cards:
 
@@ -350,7 +384,7 @@ The **tip box** about semantic vs. keyword search is important: @workspace finds
 
 ---
 
-## Slide 32: Demo — Agent Mode, @workspace & CLI
+## Slide 34: Demo — Agent Mode, @workspace & CLI
 
 **Demo Flow:**
 1. Agentic Workflow: give the agent a feature task and watch it plan, implement, and test.
@@ -362,13 +396,13 @@ Refer to `demos/demo_05_agent_workspace_cli.md`. This is the longest demo — al
 
 ---
 
-## Slide 33: Section — CLI & Cloud Agent
+## Slide 35: Section — CLI & Cloud Agent
 
 Transition. Copilot isn't only in VS Code anymore. With the standalone CLI and cloud agent, it extends to your terminal and your GitHub workflow.
 
 ---
 
-## Slide 34: Copilot CLI & Cloud Agent
+## Slide 36: Copilot CLI & Cloud Agent
 
 Two columns:
 
@@ -391,7 +425,7 @@ Highlight the warning note: the old `gh copilot suggest` / `gh copilot explain` 
 
 ---
 
-## Slide 35: Key Takeaways
+## Slide 37: Key Takeaways
 
 Summarize the six key messages:
 
@@ -404,7 +438,7 @@ Summarize the six key messages:
 
 ---
 
-## Slide 36: Q & A
+## Slide 38: Q & A
 
 Open the floor for questions. If there's a lull, have a few discussion starters ready:
 - "What's the most frustrating thing about Copilot suggestions in your current projects?"

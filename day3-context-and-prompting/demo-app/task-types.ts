@@ -41,3 +41,7 @@ export interface TaskFilter {
   assignee?: string;
   tag?: string;
 }
+
+export interface ArchivedTask extends Task {
+  archivedAt: Date;
+}
