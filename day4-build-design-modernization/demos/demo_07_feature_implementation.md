@@ -1,26 +1,26 @@
 # Demo 07 — New Feature Implementation
 
-> **Duration:** ~5 min | **Slide:** 17–18 | **Mode:** VS Code + Copilot Chat (Plan Mode → Agent Mode)
+> **Duration:** ~5 min | **Slide:** 17–18 | **Mode:** VS Code + Copilot Chat (Plan Mode → Agent Mode → Ask Mode)
 
 | Setting | Recommendation |
 |---------|----------------|
-| **Chat Mode** | **Plan** mode (Step 1: feature strategy & trade-off analysis) → **Agent** mode (Step 2: multi-file implementation with build verification) |
-| **Model** | **Claude Sonnet 4** — best for multi-step planning and cross-file implementation; auto-corrects build errors effectively |
-| **Fallback Model** | GPT-4.1 — faster code generation; prefer if the feature scope is smaller |
+| **Chat Mode** | **Plan** mode (Step 1: feature strategy) → **Agent** mode (Step 2: implementation) → **Ask** mode (Step 3: verify) |
+| **Model** | **Claude Sonnet 4** — best for multi-step planning and cross-file implementation |
+| **Fallback Model** | GPT-4.1 — faster code generation for smaller features |
 
 ---
 
 ## Objective
 
-Demonstrate the end-to-end feature implementation workflow — starting with Plan mode for strategy, then handing off to Agent mode for execution across multiple files, with automatic build verification.
+Demonstrate the end-to-end feature workflow: Plan mode for strategy, Agent mode for execution, and Ask mode for verification.
 
 ---
 
 ## Pre-Requisites
 
-- VS Code with GitHub Copilot Chat (Plan + Agent modes)
-- A working project that builds and has existing tests (e.g., Express API or Spring Boot app)
-- Terminal accessible for agent to run commands
+- VS Code with GitHub Copilot Chat
+- The sample-app project open (`day4-build-design-modernization/sample-app/`)
+- Terminal accessible for the agent to run commands
 
 ---
 
@@ -28,94 +28,66 @@ Demonstrate the end-to-end feature implementation workflow — starting with Pla
 
 **Goal:** Show Plan mode breaking down a feature request into an actionable plan.
 
-1. Switch to **Plan mode** in Copilot Chat
-2. Describe a realistic feature:
+1. Switch to **Plan mode** and type:
    ```
-   I need to add a product search feature to this e-commerce API:
-   - Full-text search across product name and description
-   - Filter by category, price range, and availability
-   - Sort by relevance, price, or newest
-   - Paginated results (default 20 per page)
-   - Search suggestions/autocomplete endpoint
-   
-   Analyze #codebase and create an implementation plan.
+   I need to add a product search feature to this e-commerce API. 
+   Users should be able to search by name, filter by category and 
+   price range, and get paginated results. Analyze the project and 
+   create an implementation plan.
    ```
 
-3. **Show the generated plan** — typically includes:
-   - Summary of what needs to change
-   - Step-by-step implementation tasks:
-     1. Add search query builder in service layer
-     2. Create search route with query parameters
-     3. Add database indexes for full-text search
-     4. Implement pagination utility
-     5. Add autocomplete endpoint
-     6. Write integration tests
-   - Verification steps (build, test, manual check)
+2. **Show the generated plan** — Copilot produces step-by-step tasks with file names and verification steps
 
-4. **Iterate on the plan** — ask a follow-up:
-   ```
-   Should we use database full-text search or Elasticsearch? 
-   This project uses PostgreSQL. What are the trade-offs?
-   ```
-   → Copilot updates the plan with a recommendation
+> **👀 What to watch for:** The plan references your actual project files (productRoutes.ts, productService.ts) — not generic placeholders. It proposes changes that fit your existing architecture. You can ask follow-up questions to refine the plan before any code is written.
 
-**Talking Point:** _"Plan mode doesn't write code yet — it thinks first. You can review and adjust the strategy before committing to implementation."_
+**Talking Point:** _"Plan mode doesn't write code yet — it thinks first. Review and adjust the strategy before committing to implementation."_
 
 ---
 
 ## Step 2 — Agent Mode: Execute the Plan (2 min)
 
-**Goal:** Hand the plan off to Agent mode and watch it implement across files.
+**Goal:** Hand the plan to Agent mode and watch it implement across files.
 
-1. **Hand off to Agent mode** — click the "implement" action or switch modes:
+1. Switch to **Agent mode** and type:
    ```
-   Implement the search feature plan. Start with steps 1-3:
-   - Create the search service with query builder
-   - Create the search route with all filter parameters
-   - Add the necessary database index migration
-   
-   Run the build and tests after each file change.
+   Implement the search feature plan. Create the search service, 
+   add the search route, and run the build to verify.
    ```
 
-2. **Watch the agent work** — narrate what's happening:
-   - _"It's creating searchService.ts with the query builder…"_
-   - _"Now it's adding the search route in routes/productRoutes.ts…"_
-   - _"It's running npm run build — checking for compile errors…"_
-   - _"Build error — a type mismatch. It's auto-fixing…"_
-   - _"Running tests… all passing."_
+2. **Watch the agent** create/modify files and run build commands
 
-3. **Show the diff view** — review changes across created/modified files
+> **👀 What to watch for:** The agent creates new files *and* modifies existing ones to wire things together. If it hits a build error, notice how it reads the error and auto-fixes — that's the self-correction loop. It doesn't stop at the first failure.
 
-4. Point out the **self-correction**: _"Notice it hit a build error and fixed it automatically. That's the agent loop — it doesn't stop at the first error."_
-
-**Talking Point:** _"You described what you wanted. The agent figured out which files to create, which to modify, and verified the build passes. That's the power of agentic development."_
+**Talking Point:** _"You described what you wanted. The agent figured out which files to create, which to modify, and verified the build passes."_
 
 ---
 
 ## Step 3 — Ask Mode: Verify Understanding (1 min)
 
-**Goal:** Quick comparison showing all three modes on one workflow.
+**Goal:** Close the loop — show all three modes on one workflow.
 
-1. Switch to **Ask mode** and ask:
+1. Switch to **Ask mode** and type:
    ```
    Explain how the new search feature works. 
    What query parameters does it accept?
    ```
-   → Copilot explains the feature without changing anything
 
-2. **Summarize the three-mode workflow:**
-   - **Plan** → _"Here's how I'd build it"_ (strategy)
-   - **Agent** → _"I'll build it now"_ (execution)
-   - **Ask** → _"Here's how it works"_ (documentation)
+2. **Show the response** — Copilot explains without changing anything
 
-**Talking Point:** _"Plan to strategize, Agent to execute, Ask to verify. This three-step workflow keeps you in control while Copilot does the heavy lifting."_
+> **👀 What to watch for:** Ask mode reads the code you just created and gives an accurate summary. This is useful for onboarding teammates or generating internal docs from freshly written code.
+
+**Summary of the three-mode workflow:**
+- **Plan** → _"Here's how I'd build it"_ (strategy)
+- **Agent** → _"I'll build it now"_ (execution)
+- **Ask** → _"Here's how it works"_ (verification)
+
+**Talking Point:** _"Plan to strategize, Agent to execute, Ask to verify. Three modes, one complete workflow."_
 
 ---
 
-## Key Takeaways to Reinforce
+## Key Takeaways
 
 - **Plan first, then implement** — review the strategy before writing code
-- **Agent mode handles multi-file changes** — services, routes, tests, migrations
-- **Self-correction loop** — Agent fixes build/test failures automatically
-- **Iterate on plans** — ask follow-up questions to refine before execution
+- **Agent mode handles multi-file changes** and self-corrects on build errors
+- **Ask mode** verifies the result without modifying anything
 - **Review every change** — Agent opens diffs for you to accept or reject

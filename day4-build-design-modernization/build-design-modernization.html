@@ -146,12 +146,12 @@
             background: var(--surface-light);
         }
         .cap-text h4 {
-            font-size: 1.05rem;
+            font-size: 1.2rem;
             color: #fff;
             margin-bottom: 3px;
         }
         .cap-text p {
-            font-size: 0.85rem;
+            font-size: 1rem;
             color: var(--text-muted);
             line-height: 1.4;
         }
@@ -280,19 +280,19 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.25);
         }
         .agenda-num {
-            width: 36px;
-            min-width: 36px;
-            height: 36px;
+            width: 40px;
+            min-width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 1.1rem;
             color: #fff;
         }
         .agenda-label {
-            font-size: 0.95rem;
+            font-size: 1.15rem;
             color: var(--text);
             line-height: 1.3;
         }
@@ -496,8 +496,8 @@
             <div class="intro-content">
                 <img src="../shared/images/copilot-avatar.png" alt="GitHub Copilot" class="trainer-photo animate">
                 <div class="trainer-info">
-                    <h2 class="animate">GitHub Trainer Name</h2>
-                    <p class="title animate">GitHub Certified Trainer</p>
+                    <h2 class="animate">Lavanya Nooka &amp; Bhaskar Jalagam</h2>
+                    <p class="title animate">GitHub Certified Trainers</p>
                     <div class="company animate">
                         <i class="fab fa-github"></i>
                         <span><span style="color: #8b949e;">Info</span><span style="color: #58a6ff;">Magnus</span></span>
@@ -566,96 +566,93 @@
         </div>
 
         <!-- ============================================================
-             SLIDE 4: Section — Prompt Engineering
+             SLIDE 4: Section — Prompting for Real Workflows
              ============================================================ -->
         <div class="slide section-slide" data-slide="4">
             <div class="section-number">01</div>
-            <h2>Prompt Engineering &amp;<br>Practical Use Cases</h2>
-            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">Crafting effective prompts, context-setting strategies, and iterative refinement techniques</p>
+            <h2>Prompting for<br>Real Workflows</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">Three practical techniques to scale Copilot prompting across your team and projects</p>
         </div>
 
         <!-- ============================================================
-             SLIDE 5: Prompt Engineering Strategies
+             SLIDE 5: Three Practical Prompt Techniques
              ============================================================ -->
         <div class="slide content-slide" data-slide="5">
-            <h2><i class="fas fa-bullseye" style="color: var(--secondary); margin-right: 12px;"></i>Prompt Engineering Strategies</h2>
+            <h2><i class="fas fa-rocket" style="color: var(--secondary); margin-right: 12px;"></i>Three Techniques You'll Use All Day</h2>
             <div class="content" style="flex-direction: column; gap: 20px;">
-                <div class="cap-grid">
+                <div class="cap-grid" style="grid-template-columns: repeat(3, 1fr);">
                     <div class="cap-item">
-                        <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-layer-group"></i></div>
+                        <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-file-lines"></i></div>
                         <div class="cap-text">
-                            <h4>Start General → Get Specific</h4>
-                            <p>Begin with the broad goal, then layer in requirements and constraints</p>
+                            <h4>Reusable Prompt Files</h4>
+                            <p><code>.prompt.md</code> templates with <code>{{variables}}</code> — shared via Git, selectable from Chat dropdown. Write once, use across the team.</p>
                         </div>
                     </div>
                     <div class="cap-item">
-                        <div class="cap-icon" style="color: var(--primary);"><i class="fas fa-code"></i></div>
+                        <div class="cap-icon" style="color: var(--purple);"><i class="fas fa-link"></i></div>
                         <div class="cap-text">
-                            <h4>Provide Examples</h4>
-                            <p>Show sample inputs/outputs; unit tests serve as executable examples</p>
+                            <h4>Prompt Chaining</h4>
+                            <p>Sequential prompts where each output feeds the next: requirements → stories → tests → code. This is how we'll work through today's topics.</p>
                         </div>
                     </div>
                     <div class="cap-item">
-                        <div class="cap-icon" style="color: var(--purple);"><i class="fas fa-puzzle-piece"></i></div>
+                        <div class="cap-icon" style="color: var(--primary);"><i class="fas fa-shield-halved"></i></div>
                         <div class="cap-text">
-                            <h4>Decompose Complex Tasks</h4>
-                            <p>Break large requests into sequential smaller prompts for better accuracy</p>
+                            <h4>Constraints &amp; Guardrails</h4>
+                            <p>Embed what Copilot <strong>must</strong> do (NFRs, security policies) and what it <strong>must not</strong> do (no <code>any</code> type, no extra dependencies) — in the same prompt.</p>
                         </div>
                     </div>
-                    <div class="cap-item">
-                        <div class="cap-icon" style="color: var(--accent);"><i class="fas fa-crosshairs"></i></div>
-                        <div class="cap-text">
-                            <h4>Eliminate Ambiguity</h4>
-                            <p>Name functions explicitly, specify libraries, avoid vague references like "this"</p>
-                        </div>
-                    </div>
-                    <div class="cap-item">
-                        <div class="cap-icon" style="color: #f778ba;"><i class="fas fa-file-code"></i></div>
-                        <div class="cap-text">
-                            <h4>Reference Relevant Code</h4>
-                            <p>Use <code>#file</code>, <code>#codebase</code>, open relevant files as context</p>
-                        </div>
-                    </div>
-                    <div class="cap-item">
-                        <div class="cap-icon" style="color: #79c0ff;"><i class="fas fa-rotate"></i></div>
-                        <div class="cap-text">
-                            <h4>Iterate &amp; Refine</h4>
-                            <p>Reference previous responses, delete failed attempts, use threads for new tasks</p>
-                        </div>
-                    </div>
+                </div>
+                <div class="tip-box">
+                    <h4><i class="fas fa-bullseye"></i> Building on the Fundamentals</h4>
+                    <p>Prompting fundamentals (zero-shot, few-shot, chain-of-thought) are the foundation. Today we apply those skills to <strong>real engineering workflows</strong> — and add team-scalable techniques like prompt files and structured guardrails.</p>
                 </div>
             </div>
         </div>
 
         <!-- ============================================================
-             SLIDE 6: Practical Use Cases
+             SLIDE 6: Techniques in Practice
              ============================================================ -->
         <div class="slide content-slide" data-slide="6">
-            <h2><i class="fas fa-lightbulb" style="color: var(--accent); margin-right: 12px;"></i>Practical Prompt Patterns</h2>
-            <div class="content" style="flex-direction: column; gap: 24px;">
-                <div class="compare-grid">
-                    <div class="compare-col bad">
-                        <h3 style="color: var(--accent);"><i class="fas fa-times-circle"></i> Weak Prompts</h3>
-                        <ul>
-                            <li>"Fix this code"</li>
-                            <li>"Add a function to handle data"</li>
-                            <li>"Make this better"</li>
-                            <li>"Write tests"</li>
-                        </ul>
+            <h2><i class="fas fa-compass-drafting" style="color: var(--purple); margin-right: 12px;"></i>Techniques in Practice</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="dual-panel">
+                    <div>
+                        <h3 style="font-size: 1.05rem; color: var(--secondary); margin-bottom: 10px;"><i class="fas fa-file-lines"></i> Reusable Prompt File</h3>
+                        <div class="code-inline" style="font-size: 0.78rem;">
+                            <span class="comment"># .github/prompts/gen-api-endpoint.prompt.md</span><br>
+                            <span class="keyword">---</span><br>
+                            <span class="variable">mode:</span> <span class="string">agent</span><br>
+                            <span class="variable">description:</span> <span class="string">Generate a REST endpoint</span><br>
+                            <span class="keyword">---</span><br>
+                            <span class="string">Create a new REST endpoint for</span><br>
+                            <span class="string">{{resource}} in #file:src/routes/</span><br>
+                            <span class="string">Include: Zod validation, error</span><br>
+                            <span class="string">handling (RFC 7807), unit tests,</span><br>
+                            <span class="string">and OpenAPI doc comments.</span>
+                        </div>
                     </div>
-                    <div class="compare-col good">
-                        <h3 style="color: var(--primary);"><i class="fas fa-check-circle"></i> Effective Prompts</h3>
-                        <ul>
-                            <li>"Fix the null pointer in <code>parseUser()</code> when email is missing"</li>
-                            <li>"Add a <code>validateOrder()</code> function using Zod schema for #file:types.ts"</li>
-                            <li>"Refactor to reduce cyclomatic complexity below 10 using early returns"</li>
-                            <li>"Write Jest tests for the edge cases in #file:auth.service.ts"</li>
-                        </ul>
+                    <div>
+                        <h3 style="font-size: 1.05rem; color: var(--primary); margin-bottom: 10px;"><i class="fas fa-shield-halved"></i> Constraints &amp; Guardrails</h3>
+                        <div class="code-inline" style="font-size: 0.78rem;">
+                            <span class="comment">/* Combined constraints + exclusions */</span><br>
+                            <span class="string">Build a user search API that:</span><br>
+                            <span class="string">✅ Must support pagination (limit/offset)</span><br>
+                            <span class="string">✅ Must sanitize input (prevent injection)</span><br>
+                            <span class="string">✅ Must follow error format in errorHandler.ts</span><br><br>
+                            <span class="string">❌ Do NOT use any type</span><br>
+                            <span class="string">❌ Do NOT add external dependencies</span><br>
+                            <span class="string">❌ Do NOT use console.log</span>
+                        </div>
                     </div>
                 </div>
                 <div class="tip-box">
-                    <h4><i class="fas fa-wand-magic-sparkles"></i> Pro Tip</h4>
-                    <p>Use <code>.github/copilot-instructions.md</code> to set project-wide conventions so Copilot follows your coding standards automatically in every prompt.</p>
+                    <h4><i class="fas fa-link"></i> Prompt Chaining — Today's Workflow</h4>
+                    <p><strong>Step 1:</strong> "Convert this requirement to user stories" → <strong>Step 2:</strong> "Generate acceptance criteria" → <strong>Step 3:</strong> "Write test scenarios" → <strong>Step 4:</strong> "Implement with tests". Each step feeds the next — this is exactly how we'll work through the remaining topics today.</p>
+                </div>
+                <div class="tip-box" style="border-left-color: var(--text-muted);">
+                    <h4><i class="fas fa-lightbulb"></i> Quick Tips</h4>
+                    <p>Specify output format when generating artifacts: "Mermaid not PlantUML", "YAML not JSON". You can also ask Copilot to write prompts for you — analyze existing patterns and bootstrap templates.</p>
                 </div>
             </div>
         </div>

@@ -4,199 +4,80 @@
 
 | Setting | Recommendation |
 |---------|----------------|
-| **Chat Mode** | **Agent** mode throughout — needs to analyze project structure and generate Dockerfile, .dockerignore, and Compose files |
-| **Model** | **GPT-4.1** — fastest and most accurate for Dockerfile/Compose generation; reliable multi-stage build patterns and security defaults |
-| **Fallback Model** | Claude Sonnet 4 — better at explaining optimization trade-offs; prefer for the review/discussion portion |
+| **Chat Mode** | **Agent** mode throughout — needs to analyze project and generate Dockerfile, .dockerignore, and Compose files |
+| **Model** | **GPT-4.1** — fastest and most accurate for Dockerfile/Compose generation |
+| **Fallback Model** | Claude Sonnet 4 — better at explaining optimization trade-offs |
 
 ---
 
 ## Objective
 
-Demonstrate generating optimized Dockerfiles, Docker Compose configurations, and container best practices — all tailored to the project's actual tech stack and dependencies.
+Demonstrate generating optimized Dockerfiles and Docker Compose configurations tailored to the project's actual tech stack.
 
 ---
 
 ## Pre-Requisites
 
 - VS Code with GitHub Copilot Chat
-- A project with a build system (Node.js, Java, Python, etc.)
-- Docker installed locally (for optional live build demo)
-- No existing Dockerfile (or willing to replace it)
+- The sample-app project open (`day4-build-design-modernization/sample-app/`)
+- Docker installed locally (optional — for live build)
 
 ---
 
 ## Step 1 — Generate Optimized Dockerfile (2 min)
 
-**Goal:** Create a production-grade, multi-stage Dockerfile from the project.
+**Goal:** Create a production-grade, multi-stage Dockerfile.
 
-1. In **Agent mode**, ask:
+1. In **Agent mode**, type:
    ```
-   Analyze #codebase and generate an optimized Dockerfile:
-   
-   Requirements:
-   - Multi-stage build (builder + runtime)
-   - Use Alpine base images for minimal size
-   - Install only production dependencies in runtime stage
-   - Run as non-root user (security)
-   - Include proper .dockerignore
-   - Add health check instruction
-   - Use BuildKit cache mounts for faster rebuilds
-   - Add labels (maintainer, version, description)
-   
-   Also generate a .dockerignore file.
-   Save Dockerfile and .dockerignore to the project root.
+   Analyze this project and generate an optimized multi-stage Dockerfile. 
+   Use Alpine base images, run as non-root user, include a health check, 
+   and add a .dockerignore. Save both files to the project root.
    ```
 
-2. **Show the generated Dockerfile:**
-   ```dockerfile
-   # ── Build stage ──
-   FROM node:20-alpine AS builder
-   WORKDIR /app
-   COPY package*.json ./
-   RUN --mount=type=cache,target=/root/.npm npm ci
-   COPY . .
-   RUN npm run build
-   
-   # ── Runtime stage ──
-   FROM node:20-alpine AS runtime
-   LABEL maintainer="team@example.com"
-   
-   RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-   WORKDIR /app
-   
-   COPY --from=builder /app/dist ./dist
-   COPY --from=builder /app/node_modules ./node_modules
-   COPY package*.json ./
-   
-   USER appuser
-   EXPOSE 3000
-   HEALTHCHECK --interval=30s --timeout=3s \
-     CMD wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1
-   
-   CMD ["node", "dist/main.js"]
-   ```
+2. **Open the generated Dockerfile** and walk through the stages
 
-3. **Show the .dockerignore:**
-   ```
-   node_modules
-   dist
-   .git
-   .env
-   *.md
-   .github
-   coverage
-   .vscode
-   ```
+> **👀 What to watch for:** The Dockerfile has two stages — a builder (installs everything, compiles TypeScript) and a runtime (copies only the built output). The runtime runs as a non-root user and includes a HEALTHCHECK. The .dockerignore excludes node_modules, .git, and .env — preventing secret leakage and context bloat.
 
-4. Point out security and optimization features:
-   - _"Non-root user — prevents container escape attacks"_
-   - _"Multi-stage — builder stage is 800MB, runtime is 120MB"_
-   - _"Cache mount — npm install is cached between builds"_
-   - _"Health check — orchestrators can detect unhealthy containers"_
-
-**Talking Point:** _"This isn't a tutorial Dockerfile — it follows production best practices. Non-root user, minimal base image, BuildKit caching, health checks. All generated from your actual project."_
+**Talking Point:** _"This isn't a tutorial Dockerfile — it follows production best practices. Non-root user, minimal base image, health checks. All generated from your actual project."_
 
 ---
 
-## Step 2 — Docker Compose for Local Development (1.5 min)
+## Step 2 — Docker Compose for Local Dev (1.5 min)
 
-**Goal:** Generate a multi-service Docker Compose for local development.
+**Goal:** Generate a multi-service Compose file from code analysis.
 
-1. Ask Copilot:
+1. Type:
    ```
-   Analyze #codebase — detect all external service dependencies 
-   (database, cache, message queue, etc.) and generate a docker-compose.yml:
-   
-   - App service building from the Dockerfile we just created
-   - Database service matching what the code connects to
-   - Redis cache if the code uses caching
-   - Volume mounts for data persistence
-   - Environment variables from .env.example or config files
-   - Dev overrides (source mount, hot reload, debug port)
-   - Network isolation between services
-   
-   Save as docker-compose.yml
+   Analyze this project for external service dependencies (database, cache, 
+   etc.) and generate a docker-compose.yml with the app, all detected 
+   services, health checks, and volume persistence.
    ```
 
-2. **Show the generated compose file:**
-   ```yaml
-   services:
-     app:
-       build: .
-       ports:
-         - "3000:3000"
-         - "9229:9229"  # Debug port
-       volumes:
-         - ./src:/app/src  # Hot reload
-       environment:
-         - NODE_ENV=development
-         - DATABASE_URL=postgresql://user:pass@db:5432/myapp
-         - REDIS_URL=redis://cache:6379
-       depends_on:
-         db:
-           condition: service_healthy
-         cache:
-           condition: service_started
-     
-     db:
-       image: postgres:16-alpine
-       environment:
-         POSTGRES_DB: myapp
-         POSTGRES_USER: user
-         POSTGRES_PASSWORD: pass
-       volumes:
-         - pgdata:/var/lib/postgresql/data
-       healthcheck:
-         test: ["CMD-SHELL", "pg_isready -U user"]
-         interval: 10s
-         timeout: 5s
-         retries: 5
-     
-     cache:
-       image: redis:7-alpine
-   
-   volumes:
-     pgdata:
-   ```
+2. **Open the generated compose file** and show the services
 
-3. Point out: _"Copilot detected PostgreSQL from the connection string in the code and Redis from the cache import. The health check ensures the app doesn't start before the database is ready."_
+> **👀 What to watch for:** Copilot detected the database and cache from your connection strings and config files — not from you telling it. The app service has `depends_on` with health check conditions so it doesn't start before the database is ready. Dev conveniences like source volume mounts and debug ports are included.
+
+**Talking Point:** _"Copilot detected PostgreSQL from the connection string and Redis from the cache import. The health check ensures proper startup order."_
 
 ---
 
-## Step 3 — Build & Verify (1.5 min)
+## Step 3 (Bonus) — Build & Verify
 
-**Goal:** Quick live build to show it works (optional — show commands if Docker isn't available).
+If Docker is available:
+```
+Build the Docker image and show the image size. 
+Then run docker-compose up and verify the health check passes.
+```
 
-1. Ask Copilot to build:
-   ```
-   Build the Docker image and show me the image size. 
-   Then run docker-compose up and verify the health check passes.
-   ```
-
-2. **If Docker is available**, show the agent running:
-   ```bash
-   docker build -t myapp . 
-   # → Shows multi-stage build progress
-   # → Final image size: ~120MB (vs 800MB+ without multi-stage)
-   
-   docker compose up -d
-   # → All services start
-   
-   curl http://localhost:3000/health
-   # → {"status":"ok","timestamp":"...","uptime":5}
-   ```
-
-3. **If Docker isn't available**, show the commands and explain what would happen
-
-**Talking Point:** _"From zero Docker setup to a running multi-service environment in under 3 minutes. The image is 120MB because multi-stage builds exclude all build tools from the runtime."_
+> **👀 What to watch for:** The final image is dramatically smaller than a single-stage build (typically ~120MB vs 800MB+) because the builder stage with all dev dependencies is discarded. The health check endpoint responds within seconds of container start.
 
 ---
 
-## Key Takeaways to Reinforce
+## Key Takeaways
 
-- **Multi-stage builds** dramatically reduce image size (800MB → 120MB)
+- **Multi-stage builds** dramatically reduce image size
 - **Non-root user** is a security requirement, not optional
-- **Docker Compose** from code analysis — detects actual dependencies
-- **Health checks** enable proper orchestration (Kubernetes, ECS, Docker Swarm)
-- **BuildKit cache mounts** speed up rebuilds significantly
-- Always include a **.dockerignore** — prevents leaking secrets and bloating context
+- **Docker Compose from code** — Copilot detects actual service dependencies
+- **Health checks** enable proper orchestration (Kubernetes, ECS, Swarm)
+- Always include a **.dockerignore** — prevents secret leakage and bloated images

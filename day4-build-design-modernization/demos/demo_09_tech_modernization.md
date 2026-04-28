@@ -1,166 +1,97 @@
-# Demo 09 — Tech Modernization (Angular → React)
+# Demo 09 — Tech Modernization
 
 > **Duration:** ~5 min | **Slide:** 22 | **Mode:** VS Code + Copilot Chat (Plan Mode → Agent Mode)
 
 | Setting | Recommendation |
 |---------|----------------|
-| **Chat Mode** | **Plan** mode (Step 1: dependency analysis & migration ordering) → **Agent** mode (Step 2: component-by-component translation) |
-| **Model** | **Claude Sonnet 4** — excels at cross-framework translation; understands Angular DI, RxJS patterns, and their React equivalents |
-| **Fallback Model** | GPT-4.1 — faster for individual component translations; slightly less nuanced on architectural decisions |
+| **Chat Mode** | **Plan** mode (Step 1: migration analysis) → **Agent** mode (Step 2: execute migration) |
+| **Model** | **Claude Sonnet 4** — excels at cross-framework translation and understanding architectural patterns |
+| **Fallback Model** | GPT-4.1 — faster for individual component translations |
 
 ---
 
 ## Objective
 
-Demonstrate using Copilot to plan and execute a frontend framework migration — mapping Angular concepts to React equivalents, translating components one by one, migrating tests, and verifying the build at each step.
+Demonstrate using Copilot to plan and execute a technology modernization — mapping old patterns to modern equivalents, migrating component by component, and verifying the build.
 
 ---
 
 ## Pre-Requisites
 
 - VS Code with GitHub Copilot Chat
-- An **Angular project** (even a small 3–5 component app) — or any similar migration scenario
-- Node.js with npm/yarn installed
-- If no Angular project available, show the pattern with a simulated migration
+- The sample-app project open (`day4-build-design-modernization/sample-app/`)
+- Terminal accessible for the agent to run build/test commands
 
 ---
 
-## Step 1 — Migration Analysis & Strategy (1.5 min)
+## Step 1 — Migration Analysis & Strategy (2 min)
 
-**Goal:** Use Plan mode to create a component-by-component migration strategy.
+**Goal:** Use Plan mode to analyze the codebase and create a migration strategy.
 
-1. Switch to **Plan mode** and ask:
+1. Switch to **Plan mode** and type:
    ```
-   Analyze #codebase — this is an Angular application. Create a 
-   migration plan to convert it to React with TypeScript.
-   
-   Map each Angular concept to its React equivalent:
-   - Components (templates + decorators → JSX + hooks)
-   - Services (DI → Context API or Zustand)
-   - Observables (RxJS → React Query or SWR)
-   - NgModules (→ removed; use lazy routes)
-   - Routing (Angular Router → React Router v6)
-   - Forms (Reactive Forms → React Hook Form)
-   - Pipes (→ utility functions)
-   
-   List each component in migration order (leaf components first, 
-   then parent components, then routing).
+   Analyze this project and identify modernization opportunities — 
+   outdated patterns, callback-style code, raw SQL, or tightly coupled 
+   modules. Create a migration plan with changes ordered from safest 
+   (leaf modules) to riskiest (core modules).
    ```
 
-2. **Show the migration plan** — ordered list with dependency analysis:
-   ```
-   Migration Order:
-   1. Shared pipes/utilities (no Angular deps) → utility functions
-   2. ProductCard component (leaf, no children)
-   3. ProductList component (uses ProductCard)
-   4. ProductService (API calls) → React Query hooks
-   5. AppModule routing → React Router setup
-   6. App component (root)
-   ```
+2. **Show the plan** — Copilot produces an ordered list with dependency analysis
 
-3. Point out the ordering logic: _"Copilot analyzed component dependencies and gave us a bottom-up order — leaf nodes first, so each migrated component can be tested independently."_
+> **👀 What to watch for:** Copilot analyzes actual component dependencies and gives a bottom-up migration order — leaf nodes first so each migrated piece can be tested independently. It identifies *specific* patterns in your code, not generic advice.
 
 **Talking Point:** _"A migration plan based on actual dependency analysis, not guesswork. This prevents the 'everything breaks at once' problem."_
 
 ---
 
-## Step 2 — Component Translation (2 min)
+## Step 2 — Execute the Migration (2.5 min)
 
-**Goal:** Live-translate an Angular component to React.
+**Goal:** Agent mode migrates one module as a live example.
 
-1. Switch to **Agent mode** and ask for a specific component:
+1. Switch to **Agent mode** and pick the first item from the plan:
    ```
-   Migrate the ProductCard component from Angular to React:
-   
-   Source: #file:src/app/components/product-card/product-card.component.ts
-   Template: #file:src/app/components/product-card/product-card.component.html
-   Styles: #file:src/app/components/product-card/product-card.component.scss
-   
-   Create a React functional component with:
-   - TypeScript props interface
-   - CSS Modules for styles (convert SCSS to CSS Module)
-   - Hooks for any lifecycle logic (@OnInit → useEffect)
-   - Event handlers replacing Angular event bindings
-   
-   Save as src/components/ProductCard/ProductCard.tsx and ProductCard.module.css
+   Execute the first migration step from the plan. Modernize the 
+   code, preserve all existing behavior, and run the build to verify 
+   nothing broke.
    ```
 
-2. **Show the side-by-side** — Angular original vs React output:
+2. **Watch the agent** refactor, create/modify files, and run verification
 
-   **Angular:**
-   ```typescript
-   @Component({ selector: 'app-product-card', ... })
-   export class ProductCardComponent implements OnInit {
-     @Input() product: Product;
-     @Output() addToCart = new EventEmitter<Product>();
-     
-     ngOnInit() { this.trackView(); }
-   }
-   ```
+> **👀 What to watch for:** The business logic stays the same — only the framework plumbing changes. Copilot maps old patterns to modern equivalents (e.g., callbacks → async/await, manual SQL → ORM, class components → functions). If the build breaks, the agent auto-fixes.
 
-   **React:**
-   ```tsx
-   interface ProductCardProps {
-     product: Product;
-     onAddToCart: (product: Product) => void;
-   }
-   
-   export function ProductCard({ product, onAddToCart }: ProductCardProps) {
-     useEffect(() => { trackView(); }, []);
-     return ( /* JSX */ );
-   }
-   ```
-
-3. Point out the mapping: _"@Input → props, @Output → callback props, ngOnInit → useEffect, templates → JSX. The business logic is preserved."_
-
-**Talking Point:** _"The component's behavior is identical — only the framework syntax changed. Copilot preserved all the business logic while converting the plumbing."_
+**Talking Point:** _"The behavior is identical — only the implementation pattern changed. Copilot preserved all business logic while modernizing the plumbing."_
 
 ---
 
-## Step 3 — Test Migration (1.5 min)
+## Step 3 (Bonus) — Migrate Tests
 
-**Goal:** Show migrating Angular tests to React Testing Library.
+If time allows:
+```
+Migrate the corresponding tests to match the modernized code. 
+Update assertions and run the test suite to verify.
+```
 
-1. Ask Copilot:
-   ```
-   Migrate the tests from #file:src/app/components/product-card/product-card.component.spec.ts 
-   to React Testing Library + Jest.
-   
-   Convert:
-   - TestBed setup → render() from @testing-library/react
-   - fixture.detectChanges → automatic re-render
-   - By.css queries → screen.getByRole / getByText
-   - triggerEventHandler → fireEvent / userEvent
-   - Jasmine assertions → Jest expect
-   
-   Save as src/components/ProductCard/ProductCard.test.tsx
-   ```
-
-2. **Show the test file** — highlight the mapping:
-   ```typescript
-   // Angular (before)
-   const fixture = TestBed.createComponent(ProductCardComponent);
-   fixture.componentInstance.product = mockProduct;
-   fixture.detectChanges();
-   expect(fixture.nativeElement.querySelector('.name').textContent)
-     .toContain('Widget');
-   
-   // React (after)
-   render(<ProductCard product={mockProduct} onAddToCart={jest.fn()} />);
-   expect(screen.getByText('Widget')).toBeInTheDocument();
-   ```
-
-3. **Run the tests** to verify they pass
-
-**Talking Point:** _"Test migration is the most tedious part of any framework switch. Copilot handles the mechanical translation — you just verify the assertions still make sense."_
+> **👀 What to watch for:** Test migration is often the most tedious part. Copilot handles the mechanical translation — you just verify the assertions still make sense.
 
 ---
 
-## Key Takeaways to Reinforce
+## This Pattern Works for Any Migration
+
+| Scenario | Key Changes |
+|----------|-------------|
+| Angular → React | Decorators → hooks, templates → JSX, DI → Context |
+| Express → Fastify | Middleware → plugins, route registration |
+| jQuery → Vue/React | DOM manipulation → reactive state |
+| Callbacks → async/await | Error handling, flow control |
+| Raw SQL → ORM | Query builders, model definitions |
+
+The workflow is identical: **Plan** (analyze & order) → **Agent** (migrate & verify) → **Test** (validate behavior)
+
+---
+
+## Key Takeaways
 
 - **Analyze dependencies first** — migration order matters (leaf → root)
-- **One component at a time** — incremental migration reduces risk
-- **Concept mapping** — Angular and React have clear 1:1 equivalents for most patterns
-- **Test migration alongside code** — don't defer tests to "later"
-- **Agent mode verifies builds** — catches translation errors immediately
-- This pattern works for **any framework migration**: Vue→React, jQuery→Vue, etc.
+- **One module at a time** — incremental migration reduces risk
+- **Behavior stays the same** — only the framework plumbing changes
+- **Agent verifies builds** — catches translation errors immediately

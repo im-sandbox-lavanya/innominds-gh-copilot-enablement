@@ -4,51 +4,40 @@
 
 | Setting | Recommendation |
 |---------|----------------|
-| **Chat Mode** | **Ask** mode (Steps 1–2: codebase Q&A, anti-pattern detection) → **Agent** mode (Step 3: README file generation) |
-| **Model** | **Claude Sonnet 4** — superior at deep codebase reasoning, tracing call chains, and identifying subtle anti-patterns |
-| **Fallback Model** | GPT-4.1 — good for README generation; slightly less thorough on anti-pattern analysis |
+| **Chat Mode** | **Ask** mode (Steps 1–2: codebase Q&A, anti-pattern detection) → **Agent** mode (Step 3: README generation) |
+| **Model** | **Claude Sonnet 4** — superior at deep codebase reasoning and tracing call chains |
+| **Fallback Model** | GPT-4.1 — good for README generation; slightly less thorough on analysis |
 
 ---
 
 ## Objective
 
-Demonstrate Copilot's ability to deeply analyze a codebase — answering architectural questions, mapping dependencies, detecting anti-patterns, and generating documentation that stays in sync with code.
+Demonstrate Copilot's ability to analyze a codebase, detect quality issues, and generate documentation — all from within the IDE.
 
 ---
 
 ## Pre-Requisites
 
 - VS Code with GitHub Copilot Chat
-- A multi-file project (10+ files with services, controllers, models, routes)
-- At least one file with known code smells or complexity issues
+- The sample-app project open (`day4-build-design-modernization/sample-app/`)
 
 ---
 
 ## Step 1 — Codebase Architecture Analysis (2 min)
 
-**Goal:** Show #codebase semantic search answering deep architectural questions.
+**Goal:** Show `#codebase` answering deep architectural questions by tracing across files.
 
 1. Open Copilot Chat in **Ask mode** and type:
    ```
    #codebase Where is authentication handled in this project? 
-   Trace the full flow from the incoming request to the token validation.
+   Trace the full flow from the incoming request to token validation.
    ```
 
-2. **Show the response** — Copilot finds and traces across multiple files:
-   - Route middleware registration
-   - JWT verification logic
-   - Token extraction from headers
-   - User context attachment to request
+2. **Show the response** — Copilot finds and traces across multiple files: middleware registration, JWT verification, token extraction, user context
 
-3. Follow up with a dependency question:
-   ```
-   #codebase What would break if I removed the express-validator 
-   package? List all files and functions that depend on it.
-   ```
+> **👀 What to watch for:** Copilot doesn't just find the auth file — it traces the *flow* across files (route → middleware → verification → user context). This is smarter than grep or Find All References because it understands what the code *does*, not just where strings appear.
 
-4. **Show the impact analysis** — Copilot identifies every import, every validation call, and the downstream effects
-
-**Talking Point:** _"This is faster than grep and smarter than Find All References — Copilot understands what the code does, not just where strings appear."_
+**Talking Point:** _"One prompt, and Copilot traced the auth flow across 3–4 files. Try doing that with text search."_
 
 ---
 
@@ -56,66 +45,41 @@ Demonstrate Copilot's ability to deeply analyze a codebase — answering archite
 
 **Goal:** Show Copilot finding code quality issues across the project.
 
-1. Ask Copilot:
+1. In the same chat, type:
    ```
-   #codebase Analyze this project for code quality issues:
-   - Functions with cyclomatic complexity > 10
-   - Catch blocks that swallow errors without logging
-   - API endpoints missing input validation
-   - Hardcoded strings that should be environment variables
-   - Duplicate logic that should be extracted into shared utilities
-   
-   For each issue, show the file, line context, and severity.
+   #codebase Review this project for code quality issues and 
+   anti-patterns. Show the file and describe each issue found.
    ```
 
-2. **Show the results** — a structured list of real issues found in the project
+2. **Show the results** — Copilot flags real issues it found in the codebase
 
-3. Point out specific findings:
-   - _"Look — there's an empty catch block in orderService.ts hiding a critical error"_
-   - _"These three files all have the same date formatting logic — perfect DRY candidate"_
+> **👀 What to watch for:** See what Copilot independently identifies — common findings include swallowed errors in catch blocks, missing input validation, hardcoded values, or duplicated logic. You didn't have to tell it what to look for — it applied general best practices to your specific code.
 
-**Talking Point:** _"This analysis would take a senior developer hours of code review. Copilot surfaces these issues in seconds — run it before every sprint starts."_
+**Talking Point:** _"This is like an automated code review. Run it before a sprint to surface tech debt you didn't know about."_
 
 ---
 
-## Step 3 — README Generation with Agent (1.5 min)
+## Step 3 — README Generation (1.5 min)
 
-**Goal:** Auto-generate a comprehensive README from codebase analysis.
+**Goal:** Auto-generate a README from codebase analysis.
 
-1. Switch to **Agent mode** and ask:
+1. Switch to **Agent mode** and type:
    ```
-   Analyze #codebase and generate a comprehensive README.md. Include:
-   - Project overview and purpose
-   - Tech stack and dependencies
-   - Getting started (prerequisites, install, run, test)
-   - Project structure (folder tree with descriptions)
-   - API endpoints summary table
-   - Environment variables reference
-   - Contributing guidelines
-   
-   Save as README.md
+   Analyze this project and generate a README.md with project overview, 
+   setup instructions, and API endpoints summary. Save as README.md
    ```
 
-2. Watch the agent:
-   - Scan `package.json` / `pom.xml` for dependencies
-   - Analyze folder structure
-   - Inspect route files for API endpoints
-   - Check `.env.example` or config files for env vars
-   - Create and save the README
+2. **Open the generated README** and scroll through it
 
-3. **Open the generated README** — show the quality:
-   - API table with methods, paths, descriptions
-   - Correct install commands from the project's actual package manager
-   - Accurate folder structure tree
+> **👀 What to watch for:** The README should have accurate install commands (from package.json), correct folder structure, and an API table derived from your actual routes — not generic placeholder text. This is documentation generated from code, not a template.
 
-**Talking Point:** _"This README is based on your actual code — not a template. The API table, setup commands, and folder structure are all accurate. Keep it in sync by re-running after major changes."_
+**Talking Point:** _"This README is based on your actual code. Re-run it after major changes to keep documentation in sync."_
 
 ---
 
-## Key Takeaways to Reinforce
+## Key Takeaways
 
-- **#codebase** triggers semantic search — it understands meaning, not just text
-- **Dependency analysis** prevents unexpected breakage during refactors
-- **Anti-pattern detection** acts as an automated code review pass
+- **#codebase** in Ask mode triggers workspace-wide semantic search — Agent/Plan modes don't need it
+- **Anti-pattern detection** acts as an automated code review in seconds
 - **README generation** from code ensures documentation stays accurate
-- Run analysis **before sprints** to prioritize tech debt
+- Always **review generated output** — it's a strong first draft, not final

@@ -1,114 +1,100 @@
-# Demo 01 — Prompt Engineering & Practical Use Cases
+# Demo 01 — Prompting for Real Workflows
 
 > **Duration:** ~5 min | **Slide:** 5–6 | **Mode:** VS Code + Copilot Chat
 
 | Setting | Recommendation |
 |---------|----------------|
-| **Chat Mode** | **Ask** mode (Steps 1–2: prompt comparison) → **Agent** mode (Step 3: custom instructions file creation) |
-| **Model** | **Claude Sonnet 4** — best reasoning for showing prompt quality contrast; strong structured output |
+| **Chat Mode** | **Agent** mode (Step 1: prompt files) → **Ask** mode (Step 2: constraints comparison) |
+| **Model** | **Claude Sonnet 4** — best reasoning for showing prompt quality contrast |
 | **Fallback Model** | GPT-4.1 — faster responses if demo pacing is tight |
 
 ---
 
 ## Objective
 
-Show how prompt quality directly impacts Copilot output — demonstrate the six core strategies (general→specific, examples, decomposition, eliminating ambiguity, referencing code, iterating) with live before/after comparisons.
+Demonstrate two practical prompting techniques that participants will use throughout the rest of Day 4: reusable prompt files and constraint-driven prompting with guardrails.
+
+> **Note:** Prompt chaining is demonstrated naturally across topics 2–12 (each topic chains from the previous). No need to demo it separately here.
 
 ---
 
 ## Pre-Requisites
 
 - VS Code with GitHub Copilot Chat (Agent mode available)
-- A sample project with at least 3–4 related files (e.g., a Node.js/Express or Spring Boot API)
-- A file with a function that has a known bug or improvement opportunity
+- The sample-app project open (`day4-build-design-modernization/sample-app/`)
+- Familiarity with Copilot Chat, `#file` references, and Agent mode (covered in Day 3)
 
 ---
 
-## Step 1 — Weak vs Strong Prompts (1.5 min)
+## Step 1 — Reusable Prompt Files (2.5 min)
 
-**Goal:** Side-by-side comparison of vague vs precise prompts.
+**Goal:** Show `.prompt.md` files as team-shareable, parameterized prompt templates.
 
-1. Open Copilot Chat and type a **weak prompt**:
-   ```
-   Fix this code
-   ```
-   → Note: Copilot asks for clarification or gives generic advice
-
-2. Now type a **strong prompt** referencing a specific file:
-   ```
-   Fix the null pointer exception in #file:src/services/userService.ts 
-   in the parseUser() function — it crashes when the email field is 
-   missing from the API response
-   ```
-   → Note: Copilot immediately identifies the issue and provides a targeted fix
-
-3. **Show the difference** — specific context, function name, root cause description
-
-**Talking Point:** _"The more context you give, the better the output. A 10-second investment in prompt quality saves minutes of back-and-forth."_
-
----
-
-## Step 2 — Decomposition Pattern (1.5 min)
-
-**Goal:** Show breaking a complex task into sequential prompts.
-
-1. Start with an overly ambitious prompt:
-   ```
-   Build a complete user authentication system with JWT, refresh tokens,
-   password reset, email verification, rate limiting, and audit logging
-   ```
-   → Note: Output is sprawling, incomplete, or makes assumptions
-
-2. Now **decompose** into focused steps:
-   ```
-   Step 1: Create a JWT token generation utility in #file:src/utils/
-   that issues access tokens (15min expiry) and refresh tokens (7d expiry) 
-   using the jsonwebtoken library. Include TypeScript types for the payload.
-   ```
-   → Note: Output is focused, complete, and high quality
-
-3. Show how you'd continue with Step 2 (middleware), Step 3 (refresh flow), etc.
-
-**Talking Point:** _"Don't ask Copilot to build Rome in one prompt. Break it down — each piece will be much better."_
-
----
-
-## Step 3 — Custom Instructions Demo (2 min)
-
-**Goal:** Show how project-level instructions shape every response.
-
-1. Open or create `.github/copilot-instructions.md`:
+1. Create `.github/prompts/gen-api-endpoint.prompt.md`:
    ```markdown
-   ## Coding Standards
-   - Use TypeScript strict mode
-   - Use Zod for all input validation
-   - Use date-fns instead of moment.js (smaller bundle)
+   ---
+   mode: agent
+   description: Generate a REST endpoint with validation and tests
+   ---
+   Create a new REST endpoint for {{resource}} in #file:src/routes/
+
+   Requirements:
+   - Use Zod for request body validation
    - Error responses must follow RFC 7807 (Problem Details)
-   - All service functions must be async and return Result<T, Error> types
-   - Use pino for structured logging, never console.log
+   - Include unit tests using Jest
+   - Add JSDoc/OpenAPI doc comments on the route handler
+   - Follow patterns in existing routes: #file:src/routes/userRoutes.ts
    ```
 
-2. Ask Copilot to generate a service function:
-   ```
-   Create a function to validate and process a new order 
-   in #file:src/services/orderService.ts
-   ```
+2. Open the Copilot Chat dropdown (the mode picker) — show that the prompt file now appears as a selectable option
 
-3. **Show** that the generated code:
-   - Uses Zod schemas (not manual validation)
-   - Returns `Result<T, Error>` types
-   - Uses `pino` logger
-   - Follows RFC 7807 for errors
+3. Run the prompt with `{{resource}}` = "payments" — watch Agent scaffold the full endpoint
 
-4. **Remove** the instructions file temporarily and re-run the same prompt — show the difference
+4. **Key point:** Anyone on the team can use this prompt without learning the details. It encodes your conventions.
 
-**Talking Point:** _"Set your conventions once in copilot-instructions.md, and every developer on the team gets consistent suggestions — no copy-pasting prompts."_
+> **👀 What to watch for:** The participant only typed "payments" — Copilot did the rest using the saved template. That's the power of prompt files: the complexity lives in the file, not in your head.
+
+**Talking Point:** _"Prompt files are like reusable functions for AI — write once, use across the team. Committed to your repo, shared via Git."_
 
 ---
 
-## Key Takeaways to Reinforce
+## Step 2 — Constraints & Guardrails (2.5 min)
 
-- **Specific beats vague** — name the function, file, library, and expected behavior
-- **Decompose complex tasks** — sequential smaller prompts produce better results than one mega-prompt
-- **Custom instructions** are your team's secret weapon — set once, benefit everywhere
-- **Iterate, don't start over** — reference previous responses and refine
+**Goal:** Show how adding constraints (what to do) and exclusions (what not to do) in the same prompt dramatically improves output.
+
+1. Start with an **unconstrained prompt**:
+   ```
+   Create a user search API endpoint in #file:src/routes/userRoutes.ts
+   ```
+   → Note: Output is functional but generic — may use `any` types, no error handling strategy, no pagination
+
+2. Now use **constraints + guardrails**:
+   ```
+   Create a user search API endpoint in #file:src/routes/userRoutes.ts
+
+   Constraints (MUST):
+   ✅ Must support pagination (limit/offset) with max 100 per page
+   ✅ Must sanitize search input to prevent SQL injection
+   ✅ Must follow error format in #file:src/middleware/errorHandler.ts
+
+   Guardrails (MUST NOT):
+   ❌ Do NOT use `any` type anywhere
+   ❌ Do NOT add new npm dependencies
+   ❌ Do NOT use synchronous operations
+   ```
+
+3. **Compare the outputs** — the constrained version handles pagination, has proper types, and avoids excluded patterns
+
+> **👀 What to watch for:** Compare the two outputs side by side. Look for: Does the first one use `any`? Does it add pagination? Does it handle errors consistently? The constrained version should be visibly better on all counts.
+
+**Talking Point:** _"Telling Copilot what NOT to do is just as powerful as telling it what to do. This simple pattern prevents the most common AI code issues."_
+
+---
+
+## Key Takeaways
+
+| Technique | When to Use |
+|---|---|
+| **Prompt Files** | Repeatable team workflows — encode conventions once, share via Git |
+| **Constraints & Guardrails** | Any production prompt — embed what to do AND what not to do |
+| **Prompt Chaining** | Multi-step workflows — we'll practice this across topics 2–12 today |

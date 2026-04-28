@@ -1,10 +1,10 @@
 # Demo 02 — Requirements → User Stories
 
-> **Duration:** ~5 min | **Slide:** 8 | **Mode:** VS Code + Copilot Chat (Plan Mode → Agent Mode)
+> **Duration:** ~5 min | **Slide:** 8 | **Mode:** VS Code + Copilot Chat (Plan Mode)
 
 | Setting | Recommendation |
 |---------|----------------|
-| **Chat Mode** | **Plan** mode (Step 1: requirement breakdown) → **Agent** mode (Step 3: prompt file creation) |
+| **Chat Mode** | **Plan** mode throughout — this is an analysis task, not code generation |
 | **Model** | **Claude Sonnet 4** — excels at structured reasoning; produces well-organized stories with consistent Given/When/Then format |
 | **Fallback Model** | GPT-4.1 — good alternative with faster response times |
 
@@ -12,107 +12,67 @@
 
 ## Objective
 
-Demonstrate how Copilot can take a raw business requirement and systematically generate user stories with acceptance criteria, test scenarios, and a traceability matrix — all within the IDE.
+Demonstrate how Copilot can take a raw business requirement and generate structured user stories with acceptance criteria — then chain that output into test scenarios.
 
 ---
 
 ## Pre-Requisites
 
 - VS Code with GitHub Copilot Chat
-- A blank or existing project workspace
-- Optionally: a `.github/prompts/` folder for reusable prompt files
+- The sample-app project open (`day4-build-design-modernization/sample-app/`)
 
 ---
 
-## Step 1 — Raw Requirement → User Stories (2 min)
+## Step 1 — Requirement → User Stories (2.5 min)
 
-**Goal:** Transform a business requirement into structured user stories.
+**Goal:** Transform a business requirement into structured user stories in a single prompt.
 
 1. Switch to **Plan mode** in Copilot Chat
-2. Paste a realistic business requirement:
+2. Paste this combined prompt:
    ```
-   Business Requirement: Our e-commerce platform needs a discount code 
-   system. Customers should be able to enter discount codes at checkout. 
-   Codes can be percentage-based or fixed-amount. Codes have expiry dates 
-   and usage limits. Admin users need to create, edit, and deactivate codes.
+   Break this business requirement into user stories:
+
+   "Our e-commerce platform needs a discount code system. Customers can 
+   enter codes at checkout. Codes can be percentage-based or fixed-amount. 
+   Codes have expiry dates and usage limits. Admins can create, edit, 
+   and deactivate codes."
+
+   For each story use: As a [role], I want [capability], so that [benefit]
+   Include acceptance criteria in Given/When/Then format.
    ```
-3. Ask Copilot to break this down:
-   ```
-   Break this business requirement into user stories using the format:
-   - As a [role], I want [capability], so that [benefit]
-   - Include acceptance criteria in Given/When/Then format
-   - Include edge cases and error scenarios
-   - Prioritize as Must Have, Should Have, or Nice to Have
-   ```
-4. **Show the output** — typically 5–8 user stories with:
+3. **Show the output** — typically 5–8 user stories covering:
    - Customer-facing stories (apply code, see discount, error messages)
-   - Admin stories (CRUD operations on codes)
+   - Admin stories (create/edit/deactivate codes)
    - System stories (expiry enforcement, usage tracking)
 
-**Talking Point:** _"In 30 seconds, Copilot produced what would typically take a BA 30 minutes — and it caught edge cases like concurrent usage limits."_
+> **👀 What to watch for:** Notice how Copilot inferred edge cases you didn't mention — like what happens when a code is used beyond its limit, or an expired code is entered. It extracts more stories from a requirement than most people would on a first pass.
+
+**Talking Point:** _"One prompt, 30 seconds — Copilot produced what typically takes a BA 30 minutes, and it caught edge cases like usage limits and expiry."_
 
 ---
 
-## Step 2 — Generate Test Scenarios (1.5 min)
+## Step 2 — Chain into Test Scenarios (2.5 min)
 
-**Goal:** Auto-generate test scenarios from acceptance criteria.
+**Goal:** Use prompt chaining — feed the stories from Step 1 into a test scenario prompt.
 
-1. Reference the stories just generated:
+1. In the same chat thread, type:
    ```
-   From the user stories above, generate test scenarios for each 
-   acceptance criterion. Include:
-   - Happy path tests
-   - Boundary value tests (codes at exactly limit, expired at midnight)
-   - Error handling tests (invalid code, expired code, exceeded usage)
-   - Security tests (SQL injection in code field, brute-force attempts)
-   Format as a test plan table with: Test ID | Scenario | Steps | Expected Result
+   From the user stories above, generate test scenarios for each story.
+   Cover happy paths, edge cases, and error conditions.
+   Use Given/When/Then format.
    ```
-2. **Show the structured output** — Copilot generates a comprehensive test matrix
-3. Point out how it identified edge cases you might have missed:
-   - Timezone handling for expiry
-   - Race condition on usage count
-   - Case sensitivity of codes
+2. **Show the output** — Copilot generates test scenarios that trace back to each story
+3. Point out interesting edge cases Copilot identified (these vary per run but often include timezone handling for expiry, case sensitivity of codes, or concurrent usage)
 
-**Talking Point:** _"Notice it found the race condition on concurrent code usage — that's a bug that would cost days to debug in production."_
+> **👀 What to watch for:** This is **prompt chaining in action** — Step 2 builds directly on Step 1's output. You didn't re-explain the requirement; Copilot carried the context forward. This is how we'll work through the rest of today's topics.
+
+**Talking Point:** _"Each prompt builds on the last. Requirements → stories → test scenarios — three artifacts from two simple prompts."_
 
 ---
 
-## Step 3 — Reusable Prompt File (1.5 min)
+## Key Takeaways
 
-**Goal:** Save this workflow as a reusable prompt file for the team.
-
-1. Create `.github/prompts/requirement-to-stories.prompt.md`:
-   ```markdown
-   ---
-   agent: plan
-   description: Convert a business requirement into user stories
-   ---
-   
-   Analyze the following business requirement and produce:
-   
-   1. **User Stories** — As a [role], I want [feature], so that [benefit]
-      - Tag each as Must Have / Should Have / Nice to Have
-   2. **Acceptance Criteria** — Given/When/Then for each story
-   3. **Test Scenarios** — Happy path, boundary, error, security
-   4. **Technical Notes** — Database changes, API endpoints, dependencies
-   
-   Business Requirement:
-   {{input}}
-   ```
-
-2. Show how any team member can now type:
-   ```
-   /requirement-to-stories Our platform needs a loyalty points system...
-   ```
-   And get the same structured output
-
-**Talking Point:** _"Prompt files turn tribal knowledge into team standards. Write once, everyone benefits."_
-
----
-
-## Key Takeaways to Reinforce
-
-- **Plan mode** is ideal for analysis and breakdown tasks
-- Copilot catches **edge cases** humans often miss (timezone, concurrency, security)
-- **Prompt files** standardize workflows across your team
+- **Plan mode** is ideal for analysis and breakdown tasks — no code changes needed
+- Copilot catches **edge cases** humans often miss on the first pass
+- **Prompt chaining** means each step's output feeds the next — keep it in the same chat thread
 - Always **review AI-generated stories** — they're a strong starting point, not a final product
