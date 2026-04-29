@@ -53,18 +53,10 @@ Demonstrate how Copilot generates realistic, schema-aware test data — includin
 
 1. Switch to **Agent** mode, prompt:
    ```
-   Generate test fixture files for the sample-app:
+   Generate test fixture files for the sample-app using the edge cases from the analysis above:
    
-   1. tests/fixtures/orderFixtures.ts — test data for Order model:
-      - Valid orders for each status (pending, shipped, delivered, cancelled)
-      - Each shipping method (standard, express, overnight)
-      - Discount codes: valid (SAVE10, SAVE20), invalid, null
-      - Boundary: max total, zero total, empty line items
-   
-   2. tests/fixtures/productFixtures.ts — test data for Product model:
-      - Standard products in each category
-      - Boundary: price at 0, price at 99999.99, negative stock
-      - Edge: very long name (255 chars), empty description
+   1. tests/fixtures/orderFixtures.ts — cover all order statuses, shipping methods, and discount codes
+   2. tests/fixtures/productFixtures.ts — cover all product categories and boundary values
    
    Use TypeScript interfaces from #file:src/models/Order.ts and #file:src/models/Product.ts.
    ```

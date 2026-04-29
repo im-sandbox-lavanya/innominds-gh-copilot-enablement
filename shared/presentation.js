@@ -164,8 +164,9 @@
             }
         });
 
-        // ── Always start from slide 1 ─────────────────────────────
-        currentSlide = 1;
+        // ── Restore saved position (or default to slide 1) ───────
+        var saved = parseInt(localStorage.getItem(storageKey), 10);
+        currentSlide = (saved >= 1 && saved <= totalSlides) ? saved : 1;
 
         document.getElementById('totalSlides').textContent = totalSlides;
         updateSlide();

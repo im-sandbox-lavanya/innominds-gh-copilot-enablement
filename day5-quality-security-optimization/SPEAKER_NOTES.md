@@ -194,15 +194,26 @@
 ## Slide 15 — GitHub Advanced Security
 
 **Talking Points:**
-- **Four pillar cards:**
-  1. **Code Scanning (CodeQL)** — Static analysis that traces data flows. Finds SQL injection, XSS, path traversal, and 200+ vulnerability types. Runs on every push and PR.
-  2. **Secret Scanning** — Detects 200+ secret types from 100+ partners. API keys, tokens, passwords. With push protection, blocks secrets before they enter the repo.
-  3. **Dependabot** — Monitors `package.json`, `requirements.txt`, `pom.xml` etc. for CVEs. Auto-generates PRs to update to safe versions.
-  4. **Security Overview** — Organization-wide dashboard. Filter by repo, severity, type. See risk posture at a glance.
 
-- **Flow diagram:** Push Code → Auto-Scan → Alerts → Triage & Fix. Emphasize: this is automatic. No manual trigger required.
+**Set the stage:** "GHAS is GitHub's enterprise security platform — four integrated tools that work together automatically. You don't run a scan manually. You push code and GitHub scans it."
 
-- **Key insight:** GHAS is "shift-left" security — vulnerabilities are caught in the developer's workflow, not in a quarterly audit.
+- **Four pillar cards — go deeper on each:**
+
+  1. **Code Scanning (CodeQL)** — CodeQL is not a linter. It builds a semantic graph of your entire codebase and traces data flows. If user input from an HTTP request can reach an `eval()` or a raw SQL string without sanitization, CodeQL finds it — even across multiple function calls and files. It ships with 200+ built-in queries covering OWASP Top 10. The analysis runs as a GitHub Actions workflow on every push and PR. Alerts appear inline in the PR diff so developers see the finding in context, not in a separate security portal. You can also write custom CodeQL queries for org-specific patterns.
+
+  2. **Secret Scanning** — Detects 200+ secret types from 100+ technology partners (AWS, GCP, Azure, GitHub itself, Stripe, Twilio, etc.). Partners supply regex patterns and validation endpoints — GitHub can verify whether a detected token is still active. **Push protection** is the critical feature: it intercepts the `git push` before the secret reaches GitHub and blocks it with a human-readable error. This means a developer can't accidentally commit an AWS key even if they forget to check. Bypass is audited, so security teams see every override.
+
+  3. **Dependabot** — Continuously monitors your dependency manifests (`package.json`, `requirements.txt`, `pom.xml`, `go.mod`, etc.) against the GitHub Advisory Database and the NVD. When a CVE is published that affects one of your dependencies, Dependabot opens a PR with the patched version. Two modes: **Dependabot Alerts** (notify only) and **Dependabot Security Updates** (automatic PRs). For the sample-app, this means if `express` or `sequelize` ships a critical patch, you get a PR automatically — you review it, CI passes, you merge. No manual version hunting.
+
+  4. **Security Overview** — The org-wide risk dashboard. Aggregates findings across all repositories filtered by severity (critical, high, medium, low), alert type (code scanning, secret scanning, Dependabot), and repository. Shows trends over time — is the org's security posture improving? This is what enterprise security teams use to evidence compliance, prioritize remediation sprints, and demonstrate progress to leadership.
+
+- **Flow diagram walkthrough:** Push Code → Auto-Scan (CodeQL + Secret Scanning triggers) → Alerts Generated (inline on PR, email, Security tab) → Triage & Fix (Copilot assists with both steps). Emphasize: this entire pipeline requires **zero manual trigger**. The scan is part of CI, not a separate quarterly process.
+
+- **Licensing note:** GHAS is included for all public repositories. For private/internal repos it requires GitHub Advanced Security seats. Worth mentioning if the audience is evaluating enterprise plans.
+
+- **Key insight:** "Shift-left" is the right framing, but be specific: GHAS doesn't just move security earlier — it moves it into the developer's existing workflow. The PR review, the push, the CI run — these are touchpoints developers already interact with every day. GHAS adds security signal at those exact moments, rather than routing findings through a separate tool that developers have to check separately.
+
+**Transition to Demo:** "Let's look at what this actually surfaces in our sample-app. We've seeded real vulnerabilities — SQL injection, XSS, path traversal, and a hardcoded secret. Let's let CodeQL find them."
 
 **Demo Reference:** `demos/demo_06_security_scanning_ghas.md`
 
