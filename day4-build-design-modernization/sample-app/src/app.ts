@@ -1,3 +1,4 @@
+import path from "path";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -30,6 +31,9 @@ const limiter = rateLimit({
   },
 });
 app.use(limiter);
+
+// ── Static files (order dashboard UI) ─────────────────────────
+app.use(express.static(path.join(__dirname, "public")));
 
 // ── Body parsing ─────────────────────────────────────────────
 app.use(express.json({ limit: "10kb" }));

@@ -27,26 +27,47 @@ Demonstrate Copilot Agent generating a full Playwright E2E test suite — includ
 
 ## Step 1 — Scaffold Playwright Project (~2 min)
 
-**Goal:** Show Agent setting up Playwright from scratch.
+**Goal:** Show Agent setting up Playwright from scratch — and model how to refine prompts iteratively.
 
-1. In **Agent** mode, prompt:
+### Start simple
+1. In **Agent** mode, open a new chat and type just:
    ```
-   Set up Playwright for E2E testing in the sample-app project:
-   - Install @playwright/test as a dev dependency
-   - Create playwright.config.ts with Chrome, Firefox, and WebKit projects
-   - Set baseURL to http://localhost:3000
-   - Create a tests/e2e/ directory
+   Set up Playwright for E2E testing in this project.
    ```
 
-2. Watch Agent:
-   - Run `npm install -D @playwright/test`
-   - Generate `playwright.config.ts`
-   - Create the directory structure
-   - Optionally run `npx playwright install` for browsers
+2. Observe what Agent produces — it will likely:
+   - Install `@playwright/test`
+   - Generate a default `playwright.config.ts`
+   - Ask a clarifying question, or make assumptions about browsers and baseURL
 
-> **👀 What to watch for:** Agent reads your existing `package.json` and `tsconfig.json` to ensure Playwright config doesn't conflict with Jest settings.
+**Talking Point:** _"This is a perfectly valid starting point. You don't need to pre-craft a detailed prompt. Start broad — see what Copilot does, then steer it."_
 
-**Talking Point:** _"From zero to Playwright in one prompt. Agent handles the package install, config, and directory structure."_
+---
+
+### Refine based on what's missing
+3. After reviewing Agent's output, follow up with only what needs correcting:
+   ```
+   Good. Also:
+   - Keep baseURL as http://localhost:3000
+   - Include Chrome, Firefox, and WebKit browser projects
+   - Put tests under tests/e2e/
+   ```
+
+4. Watch Agent apply targeted changes without re-doing everything.
+
+> **👀 What to watch for:** Agent reads your existing `package.json` and `tsconfig.json` to ensure Playwright config doesn't conflict with Jest settings — it does this automatically, even from the simple prompt.
+
+---
+
+### Prompt crafting principle (share with participants)
+> Prompts don't need to be exhaustive upfront. A good prompt:
+> - States the **goal** clearly (`Set up Playwright for E2E testing`)
+> - Adds **constraints** only when defaults won't work (`baseURL`, browser list)
+> - Uses **follow-up turns** to correct or extend — not one giant prompt
+
+The detailed multi-bullet prompt you might see in docs is the *result* of iteration, not the *starting point*.
+
+**Talking Point:** _"From zero to Playwright in two turns. The first prompt told Copilot what to do; the second told it what we specifically needed. That's the pattern."_
 
 ---
 

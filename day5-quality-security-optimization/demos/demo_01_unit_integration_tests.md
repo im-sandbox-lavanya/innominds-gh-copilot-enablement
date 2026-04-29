@@ -29,23 +29,27 @@ Demonstrate how Copilot generates unit and integration tests for the sample-app 
 
 **Goal:** Show the starting point — low test coverage and missing test files.
 
-1. Run in terminal:
+1. **Ask Copilot first** — in **Ask** mode, prompt:
+   ```
+   Analyze the test coverage of the sample-app project using #codebase — what is the current coverage like and what gaps exist across the services?
+   ```
+
+   > Copilot will identify untested functions without you reading through the code manually.
+
+2. **Verify with the real coverage report** — run in terminal:
    ```bash
    cd day4-build-design-modernization/sample-app
    npx jest --coverage 2>&1 | head -40
    ```
 
-2. Point out:
+3. Point out how Copilot's analysis matches the actual report:
    - `orderService.test.ts` has only 1 test (formatOrderDate)
    - `productService.ts` has 3 completely untested functions: `calculateDiscount`, `checkInventory`, `getCategorySummary`
    - No tests for routes, middleware, or auth
 
-3. Ask Copilot in **Ask** mode:
-   ```
-   Analyze #file:tests/services/orderService.test.ts and #file:src/services/orderService.ts — what test coverage is missing?
-   ```
+> **👀 What to watch for:** Copilot identifies all untested functions (createOrder, getOrdersByUser, updateOrderStatus, cancelOrder) **before you even run the coverage tool** — showing it can do static coverage analysis by comparing source vs. tests.
 
-> **👀 What to watch for:** Copilot identifies all untested functions (createOrder, getOrdersByUser, updateOrderStatus, cancelOrder) without you reading through the code.
+**Talking Point:** _"Before we even run Jest, Copilot can tell us where the gaps are just by reading the source and test files. Let's confirm with the actual coverage report."_
 
 ---
 

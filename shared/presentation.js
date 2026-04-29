@@ -164,9 +164,8 @@
             }
         });
 
-        // ── Restore saved position & initialise ───────────────────
-        var saved = localStorage.getItem(storageKey);
-        if (saved) { currentSlide = parseInt(saved, 10); }
+        // ── Always start from slide 1 ─────────────────────────────
+        currentSlide = 1;
 
         document.getElementById('totalSlides').textContent = totalSlides;
         updateSlide();

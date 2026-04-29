@@ -405,6 +405,14 @@
         .keyboard-hints { display: none; }
         .content-slide, .demo-slide { padding-bottom: 110px !important; }
         .nav-controls { bottom: 16px; padding: 10px 24px; }
+
+        /* Increase overall font for slides from agenda onward */
+        .slide.active:not(.title-slide):not(.intro-slide) {
+            transform: scale(0.92);
+        }
+        .slide.prev:not(.title-slide):not(.intro-slide) {
+            transform: scale(0.88);
+        }
     </style>
 </head>
 
