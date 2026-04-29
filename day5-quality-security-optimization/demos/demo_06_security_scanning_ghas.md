@@ -1,10 +1,10 @@
-# Demo 06 — Security Scanning with GHAS
+# Demo 06 — Security Scanning: IDE + GHAS
 
-> **Duration:** ~10 min | **Slide:** 14–17 | **Mode:** GitHub.com + VS Code
+> **Duration:** ~12 min | **Slide:** 14–17 | **Mode:** VS Code → GitHub.com
 
 | Setting | Recommendation |
 |---------|----------------|
-| **Chat Mode** | **Ask** mode (alert analysis) |
+| **Chat Mode** | **Ask** mode (IDE audit) → GitHub.com (GHAS dashboard) |
 | **Model** | **Claude Sonnet 4** — best for security reasoning |
 | **Fallback Model** | GPT-4.1 — adequate for alert queries |
 
@@ -12,28 +12,80 @@
 
 ## Objective
 
-Demonstrate GitHub Advanced Security (GHAS) in action — show CodeQL code scanning, secret scanning, and Dependabot alerts on the sample-app repository. Walk through the Security Overview dashboard and triage workflow.
+Show **two complementary security scanning paths**:
+
+1. **IDE-first** — use Copilot Chat in VS Code to audit the codebase for vulnerabilities right now, without any CI setup
+2. **GHAS** — show how CodeQL, secret scanning, and Dependabot provide continuous, automated detection at the repo/org level
+
+**Repo:** [https://github.com/im-sandbox-lavanya/travel-planner](https://github.com/im-sandbox-lavanya/travel-planner)
 
 ---
 
 ## Pre-Requisites
 
-- A GitHub repository with GHAS enabled (requires GitHub Enterprise or public repo)
-- The sample-app pushed with the seeded vulnerabilities:
-  - SQL injection in `orderRoutes.ts`
-  - XSS in `searchRoutes.ts`
-  - Path traversal in `fileRoutes.ts`
-  - Hardcoded secrets in `database.ts`
+- travel-planner cloned locally with the seeded vulnerabilities:
+  - SQL injection in `app/storage.py` — raw SQLite query with f-string interpolation
+  - XSS in `app/templates/detail.html` — `| safe` filter bypassing Jinja2 auto-escaping
+  - Path traversal in `app/main.py` — unsanitized filename in an export endpoint
+  - Hardcoded secrets in `app/main.py` — API key hardcoded in source
 - CodeQL workflow (`.github/workflows/codeql.yml`) committed and run at least once
 - Dependabot config (`.github/dependabot.yml`) committed
 
 ---
 
-## Step 1 — Security Overview Dashboard (~2 min)
+## PART A — Vulnerability Scanning in the IDE (~5 min)
 
-**Goal:** Show the org/repo-level Security tab and its capabilities.
+**Goal:** Show how developers can find vulnerabilities _right now_ using Copilot Chat — no CI pipeline, no GHAS setup required.
 
-1. Navigate to the repository on GitHub.com
+### Step 1 — Full Codebase Security Audit (~3 min)
+
+1. Open the travel-planner project in VS Code
+
+2. In **Ask** mode, run a broad audit:
+   ```
+   @workspace Perform a security audit of this Python/FastAPI application.
+   Identify any OWASP Top 10 vulnerabilities — SQL injection, XSS, path traversal, 
+   hardcoded secrets, insecure direct object references, or injection flaws.
+   List each finding with: file, line, vulnerability type, severity, and a brief explanation.
+   ```
+
+3. Copilot responds with a prioritized list:
+   - 🔴 **Critical** — SQL injection in `app/storage.py` (f-string in `cursor.execute`)
+   - 🔴 **High** — Hardcoded API key in `app/main.py`
+   - 🟡 **High** — XSS in `app/templates/detail.html` (`| safe` filter)
+   - 🟡 **Medium** — Path traversal in `app/main.py` (unsanitized filename)
+
+4. **Key point:** _"This is instant. No workflow files, no waiting for CI. Every developer can run a security audit before pushing."_
+
+> **👀 What to watch for:** Copilot cross-references across files — it spots that user input in `main.py` flows through `storage.py` without sanitization.
+
+### Step 2 — Targeted Deep-Dive (~2 min)
+
+1. Ask about the most critical finding:
+   ```
+   Look at #file:app/storage.py — is the search function vulnerable to SQL injection?
+   Show me exactly how an attacker could exploit it and what data they could access.
+   ```
+
+2. Copilot explains the exploit path and impact in plain language
+
+3. Ask for a dependency check:
+   ```
+   @workspace Are any of the dependencies in requirements.txt known to have CVEs?
+   Which versions should be updated?
+   ```
+
+**Talking Point:** _"The developer never left VS Code. They found all four vulnerability types before the code was even pushed."_
+
+---
+
+## PART B — GHAS: Continuous Automated Scanning (~7 min)
+
+**Goal:** Show how GHAS provides the same findings automatically on every push, at org scale — the industrialized version of what Copilot just did.
+
+### Step 3 — Security Overview Dashboard (~2 min)
+
+1. Navigate to [https://github.com/im-sandbox-lavanya/travel-planner](https://github.com/im-sandbox-lavanya/travel-planner)
 
 2. Click the **Security** tab
 
@@ -47,115 +99,53 @@ Demonstrate GitHub Advanced Security (GHAS) in action — show CodeQL code scann
    - 🟡 Medium — path traversal
    - ⚪ Low / Informational
 
-5. **Key point:** _"This is your single pane of glass for security posture. Every push, every PR is automatically scanned."_
+5. **Key point:** _"This is your single pane of glass for security posture across every repo in the org. Every push, every PR is automatically scanned."_
 
-> **👀 What to watch for:** The alerts were created automatically — no manual configuration beyond the workflow file.
+> **👀 What to watch for:** The same vulnerabilities Copilot found in the IDE now appear here — detected automatically with zero developer effort.
 
----
-
-## Step 2 — CodeQL Code Scanning Alerts (~3 min)
-
-**Goal:** Deep-dive into CodeQL findings for the seeded vulnerabilities.
+### Step 4 — CodeQL Code Scanning Alerts (~3 min)
 
 1. Click into **Code scanning alerts**
 
 2. Walk through each alert:
 
    **a) SQL Injection (Critical)**
-   - Click the alert for `orderRoutes.ts`
-   - Show the data flow visualization — user input (`req.query.keyword`) → raw SQL query
-   - Show CodeQL path: request parameter → string concatenation → `sequelize.query()`
-   - Point out the severity rating and CWE reference (CWE-89)
+   - Click the alert for `app/storage.py`
+   - Show the **data flow visualization** — user input (`keyword`) → raw SQLite query string
+   - Show CodeQL path: form parameter → f-string interpolation → `cursor.execute()`
+   - Point out CWE reference (CWE-89)
 
    **b) Cross-Site Scripting (High)**
-   - Click the alert for `searchRoutes.ts`
-   - Show data flow: `req.query.q` → HTML response without encoding
+   - Click the alert for `app/templates/detail.html`
+   - Show: `{{ plan.notes | safe }}` bypasses Jinja2 auto-escaping
    - CWE-79 reference
 
    **c) Path Traversal (Medium)**
-   - Click the alert for `fileRoutes.ts`
-   - Show: `req.params.filename` → `path.join()` → `fs.readFile()` without validation
+   - Click the alert for `app/main.py`
+   - Show: unsanitized path parameter → `open()` without base-directory validation
 
-3. **Key point:** _"CodeQL doesn't just pattern-match — it traces data flows. It proves the vulnerability is reachable."_
+3. **Key point:** _"CodeQL doesn't just pattern-match — it traces data flows end to end. This is proof, not guesswork."_
 
-> **👀 What to watch for:** The data flow visualization is powerful — it shows exactly how user input reaches the dangerous operation. This is proof, not guesswork.
+### Step 5 — Secret Scanning & Dependabot (~2 min)
 
----
-
-## Step 3 — Secret Scanning Alerts (~2 min)
-
-**Goal:** Show hardcoded secrets detected in the codebase.
-
+**Secret scanning:**
 1. Click into **Secret scanning** alerts
+2. Show the detected API key — file location, commit, type
+3. Mention **push protection**: _"With push protection on, this commit would have been blocked before it entered the repo."_
 
-2. Show the detected secrets:
-   - `STRIPE_API_KEY` — Stripe live key detected in `database.ts`
-   - `INTERNAL_API_SECRET` — GitHub PAT pattern detected
-
-3. Walk through the alert details:
-   - Secret type and provider
-   - File location and commit
-   - Remediation steps: rotate the credential, remove from code, use environment variables
-
-4. **Mention push protection:**
-   ```
-   "With push protection enabled, this secret would have been BLOCKED 
-   before it entered the repo. Push protection prevents the commit."
-   ```
-
-> **👀 What to watch for:** Secret scanning identifies the _type_ of secret (Stripe key, GitHub token) — it knows the vendor patterns.
-
----
-
-## Step 4 — Dependabot Alerts (~1 min)
-
-**Goal:** Show vulnerable dependency detection.
-
+**Dependabot:**
 1. Click into **Dependabot alerts**
-
-2. Show any flagged dependencies (if available)
-
-3. Explain the workflow:
-   - Dependabot detects CVE in a dependency
-   - Automatically creates a PR to update to a safe version
-   - CI runs on the PR to validate compatibility
-
-4. Show the `dependabot.yml` config:
-   - Weekly npm updates
-   - Scoped to the sample-app directory
-
----
-
-## Step 5 — Triage in VS Code with Copilot (~2 min)
-
-**Goal:** Show using Copilot Chat to assess alert severity.
-
-1. Open VS Code with the sample-app
-
-2. In **Ask** mode, prompt:
-   ```
-   I have a CodeQL alert for SQL injection in #file:src/routes/orderRoutes.ts on line 28.
-   The raw query concatenates req.query.keyword into a SQL string.
-   
-   Is this exploitable? How severe is it? What's the recommended fix?
-   ```
-
-3. Copilot explains:
-   - Yes, it's exploitable (user-controlled input reaches raw SQL)
-   - Severity: Critical (data exfiltration, deletion possible)
-   - Fix: Use parameterized queries (replacements)
-
-**Talking Point:** _"Copilot is your security co-pilot — it explains the risk in plain language and provides the exact fix pattern."_
+2. Explain the flow: CVE detected → Dependabot auto-creates a PR to a safe version → CI runs to validate
+3. Show the `dependabot.yml` config (pip, weekly schedule)
 
 ---
 
 ## Key Takeaways
 
-| What | Why It Matters |
-|------|---------------|
-| Security Overview dashboard | Single view of all security alerts |
-| CodeQL data flow analysis | Proves vulnerabilities are reachable |
-| Secret scanning | Auto-detects 200+ secret types |
-| Push protection | Blocks secrets before they enter the repo |
-| Dependabot auto-PRs | Automated dependency updates |
-| Copilot for triage | Natural language risk assessment |
+| Approach | Best For | Copilot Feature |
+|----------|----------|-----------------|
+| IDE audit (`@workspace`) | Developer self-service, pre-push | Chat Ask mode |
+| CodeQL | Automated, every push, data-flow proof | GHAS Code Scanning |
+| Secret scanning | Hardcoded credentials, 200+ patterns | GHAS + Push protection |
+| Dependabot | Vulnerable dependencies, auto-PRs | GHAS Dependabot |
+| Copilot triage | Risk explanation in plain language | Chat Ask mode |

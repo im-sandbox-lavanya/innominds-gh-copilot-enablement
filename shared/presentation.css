@@ -8,6 +8,7 @@
 
 /* ---------- Design tokens ---------- */
 :root {
+    font-size: 18px;
     --primary: #238636;
     --primary-dark: #1a7f37;
     --secondary: #58a6ff;

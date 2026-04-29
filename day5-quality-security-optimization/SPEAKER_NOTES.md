@@ -30,10 +30,10 @@
 
 **Talking Points:**
 - Walk through the 10-block agenda — this mirrors the production-readiness lifecycle
-- Highlight the flow: **Test** (unit, E2E, data) → **Review** (code review, bug fixing) → **Secure** (GHAS scanning, triage, fix) → **Operate** (DB migration, monitoring)
+- Highlight the flow: **Test** (unit, E2E, data) → **Review** (code review, bug fixing) → **Secure** (IDE scan + GHAS, triage, fix) → **Operate** (DB migration, monitoring)
 - Each section has a corresponding demo in the `demos/` folder
-- The sample-app now has intentional vulnerabilities, test gaps, and new model fields — all planted as demo scenarios
-- Encourage participants to have their GHAS-enabled repo ready for the security sections
+- The travel-planner app has intentional vulnerabilities seeded — SQL injection, XSS, path traversal, hardcoded secrets
+- Security is covered in two passes: Copilot in the IDE first (no setup), then GHAS for automated continuous coverage
 
 ---
 
@@ -181,39 +181,37 @@
 
 ---
 
-## Slide 14 — Section: Security Scanning & GHAS
+## Slide 14 — Section: Security Scanning
 
 **Talking Points:**
-- Transition: "Code is tested and reviewed. Now let's make it secure."
-- This is where GitHub Advanced Security (GHAS) comes in — the enterprise security platform
-- Four pillars: Code Scanning (CodeQL), Secret Scanning, Dependabot, Security Overview
-- We've seeded real vulnerabilities in the sample-app — SQL injection, XSS, path traversal, hardcoded secrets
+- Transition: "Code is tested and reviewed. Now let's make it secure. We're going to cover two complementary approaches."
+- First: **Copilot in the IDE** — instant, no setup, every developer can run a security audit before they push
+- Second: **GHAS** — automated, continuous, scales across every repo in the org
+- We've seeded four real vulnerabilities in the travel-planner app — SQL injection, XSS, path traversal, hardcoded secret
 
 ---
 
-## Slide 15 — GitHub Advanced Security
+## Slide 15 — Two Paths to Security
 
 **Talking Points:**
 
-**Set the stage:** "GHAS is GitHub's enterprise security platform — four integrated tools that work together automatically. You don't run a scan manually. You push code and GitHub scans it."
+**Left panel — IDE with Copilot:**
+- The first path is zero-setup. Open VS Code, ask `@workspace` to audit the code. Copilot reads the entire codebase and returns a prioritized list of OWASP Top 10 findings with file, line, and severity — before the code is even pushed.
+- It cross-references across files: it spots that user input in `main.py` flows through `storage.py` without sanitization — that's the SQL injection data flow, identified in seconds.
+- Developers can also drill into specific files: "Is this function vulnerable?" — Copilot explains the exploit path in plain language, not security jargon.
+- It can also check `requirements.txt` for known CVEs — giving dependency visibility without Dependabot.
+- **Key message:** Every developer can do this right now, on any project, with no workflow setup.
 
-- **Four pillar cards — go deeper on each:**
+**Right panel — GHAS:**
+- GHAS is the industrialized version. The same findings appear automatically on every push, with no developer action required.
+- **CodeQL** is not a linter — it builds a semantic graph and traces data flows across multiple files and function calls. It proves a vulnerability is reachable, not just that a pattern matched.
+- **Secret Scanning** knows 200+ secret types from 100+ vendors. **Push protection** blocks secrets _before they reach the repo_ — interception at git push.
+- **Dependabot** opens automatic PRs when a CVE hits any dependency — your team just reviews and merges.
+- **Licensing note:** GHAS is free for all public repos. For private/internal repos it requires GitHub Advanced Security seats.
 
-  1. **Code Scanning (CodeQL)** — CodeQL is not a linter. It builds a semantic graph of your entire codebase and traces data flows. If user input from an HTTP request can reach an `eval()` or a raw SQL string without sanitization, CodeQL finds it — even across multiple function calls and files. It ships with 200+ built-in queries covering OWASP Top 10. The analysis runs as a GitHub Actions workflow on every push and PR. Alerts appear inline in the PR diff so developers see the finding in context, not in a separate security portal. You can also write custom CodeQL queries for org-specific patterns.
+**The tip box — nail this message:** "Developers use Copilot before pushing. GHAS catches anything that slips through. Together they cover the full lifecycle — not just one checkpoint."
 
-  2. **Secret Scanning** — Detects 200+ secret types from 100+ technology partners (AWS, GCP, Azure, GitHub itself, Stripe, Twilio, etc.). Partners supply regex patterns and validation endpoints — GitHub can verify whether a detected token is still active. **Push protection** is the critical feature: it intercepts the `git push` before the secret reaches GitHub and blocks it with a human-readable error. This means a developer can't accidentally commit an AWS key even if they forget to check. Bypass is audited, so security teams see every override.
-
-  3. **Dependabot** — Continuously monitors your dependency manifests (`package.json`, `requirements.txt`, `pom.xml`, `go.mod`, etc.) against the GitHub Advisory Database and the NVD. When a CVE is published that affects one of your dependencies, Dependabot opens a PR with the patched version. Two modes: **Dependabot Alerts** (notify only) and **Dependabot Security Updates** (automatic PRs). For the sample-app, this means if `express` or `sequelize` ships a critical patch, you get a PR automatically — you review it, CI passes, you merge. No manual version hunting.
-
-  4. **Security Overview** — The org-wide risk dashboard. Aggregates findings across all repositories filtered by severity (critical, high, medium, low), alert type (code scanning, secret scanning, Dependabot), and repository. Shows trends over time — is the org's security posture improving? This is what enterprise security teams use to evidence compliance, prioritize remediation sprints, and demonstrate progress to leadership.
-
-- **Flow diagram walkthrough:** Push Code → Auto-Scan (CodeQL + Secret Scanning triggers) → Alerts Generated (inline on PR, email, Security tab) → Triage & Fix (Copilot assists with both steps). Emphasize: this entire pipeline requires **zero manual trigger**. The scan is part of CI, not a separate quarterly process.
-
-- **Licensing note:** GHAS is included for all public repositories. For private/internal repos it requires GitHub Advanced Security seats. Worth mentioning if the audience is evaluating enterprise plans.
-
-- **Key insight:** "Shift-left" is the right framing, but be specific: GHAS doesn't just move security earlier — it moves it into the developer's existing workflow. The PR review, the push, the CI run — these are touchpoints developers already interact with every day. GHAS adds security signal at those exact moments, rather than routing findings through a separate tool that developers have to check separately.
-
-**Transition to Demo:** "Let's look at what this actually surfaces in our sample-app. We've seeded real vulnerabilities — SQL injection, XSS, path traversal, and a hardcoded secret. Let's let CodeQL find them."
+**Transition to Demo:** "Let's run this live. We'll start in VS Code with a Copilot audit, then switch to GitHub.com to see the same findings in GHAS."
 
 **Demo Reference:** `demos/demo_06_security_scanning_ghas.md`
 
@@ -248,26 +246,25 @@
 ## Slide 18 — Section: Fixing Security Issues
 
 **Talking Points:**
-- Transition: "Alerts are triaged. Now let's fix them."
-- Three remediation paths: Copilot Autofix, /fix with security context, Agent for complex multi-file fixes
-- The sample-app has all four vulnerability types ready to fix live
+- Transition: "We've found the vulnerabilities — two ways. Now let's fix them — also two ways."
+- Three remediation tools, across both IDE and GHAS: `/fix` inline, Agent mode, and Copilot Autofix
+- The travel-planner has all four vulnerability types ready to fix live
 
 ---
 
-## Slide 19 — Copilot Autofix
+## Slide 19 — Three Remediation Paths
 
 **Talking Points:**
-- **Before/After comparison:**
-  - Left: Vulnerable code — SQL injection with string concatenation, XSS with reflected input
-  - Right: Fixed code — parameterized queries, HTML escaping
-  - Walk through line by line — show exactly what changed and why
 
-- **Three capability cards:**
-  1. **Copilot Autofix** — one-click from GHAS alert. Generates a PR with the correct remediation. Handles 90% of common vulnerability types.
-  2. **/fix with Context** — "Fix the security vulnerability in #file" — targeted fix with OWASP-aware patterns.
-  3. **Agent for Complex Fixes** — multi-file remediation: fix the route, add input validation, update tests, all in one conversation.
+**Walk through each of the three cards:**
 
-- **Key insight:** Autofix is the 80/20 solution. For the 20% of complex cases, Agent mode handles multi-file fixes.
+1. **`/fix` Inline (IDE)** — The fastest path for a known single location. You're already in the file, you select the line, Ctrl+I, type `/fix` with the vulnerability type. Copilot applies a surgical OWASP-aware fix and stays in your editor flow — no context switch. Example: select `{{ plan.notes | safe }}`, `/fix XSS`, Copilot removes `| safe` and explains why. Takes under 30 seconds.
+
+2. **Agent Mode (IDE)** — For bulk remediation across multiple files in one conversation. Give Agent a list of all four vulnerabilities with file references. It fixes SQL injection with parameterized queries, path traversal with `Path.resolve()`, hardcoded secrets with `os.environ.get()` — each with the correct Python secure pattern. Then it runs `pytest -v` to confirm nothing broke. This is what replaces a 30-minute manual fix session.
+
+3. **Copilot Autofix (GHAS)** — The org-scale path. From any CodeQL alert on GitHub.com, click "Generate fix" — Copilot creates a PR with a minimal correct diff, an explanation of the fix rationale, and CI runs automatically. A security engineer triaging 50 alerts can generate fix PRs for all of them in minutes. Autofix handles 90% of common vulnerability types.
+
+**The tip box — drive this point home:** The three aren't alternatives — they're suited to different moments. `/fix` when you're in the IDE and spot it yourself. Agent when you need to clean up many issues at once. Autofix when you're working the GHAS alert queue at org scale.
 
 **Demo Reference:** `demos/demo_07_fixing_security_issues.md`
 
@@ -326,17 +323,39 @@
 ## Slide 24 — Observability with Copilot
 
 **Talking Points:**
-- **Four capability cards:**
-  1. **Structured Logging** — Winston or Pino with JSON format, request IDs, timestamps. Agent adds logging across all files consistently.
-  2. **Health Endpoints** — `/health` (liveness) and `/ready` (readiness) with DB and Redis checks. Kubernetes-compatible.
-  3. **Metrics & Prometheus** — Request duration, error rates, active connections exposed at `/metrics`. Drop-in Grafana compatibility.
-  4. **Alert Rules** — Generate Grafana/PagerDuty configs: error rate > 5%, p99 latency > 500ms, disk usage > 80%.
 
-- **Flow diagram:** Instrument → Collect → Alert → Visualize. This is the standard observability stack.
+### The Observability Stack — What Each Tool Does
 
-- **Tags:** Winston, Pino, Prometheus, Grafana, OpenTelemetry, Datadog. These are the ecosystem tools Copilot can generate configs for.
+The tags on this slide reference a specific part of the observability stack. Here's how to explain them concisely to the audience:
 
-- **Key insight:** Observability code is tedious but critical. It's the perfect Copilot use case — generate the boilerplate, then customize thresholds and alert channels.
+**Structured Logging (replacing `console.log`)**
+- **Winston** — the most popular Node.js logging library. Writes logs as structured JSON with timestamps, log levels (`info`, `warn`, `error`), and custom fields like request IDs. Highly configurable — can write to console, files, or external services simultaneously.
+- **Pino** — an extremely fast, lightweight alternative to Winston. Preferred in high-throughput services where logging overhead matters. Same concept, lower footprint.
+- *Why it matters:* Raw `console.log` output is hard to search or alert on. JSON logs can be indexed, filtered, and queried in tools like Kibana or Datadog.
+
+**Metrics Collection**
+- **Prometheus** — open-source, widely adopted metrics database. Your app exposes a `/metrics` endpoint; Prometheus scrapes it on a schedule and stores data like request counts, durations, and error rates.
+
+**Dashboards & Visualization**
+- **Grafana** — connects to Prometheus (and other sources) to display live dashboards. This is where you see graphs of p99 latency, error rates, active connections. The standard pairing is Prometheus + Grafana.
+
+**Distributed Tracing**
+- **OpenTelemetry** — the current industry standard, backed by CNCF (Cloud Native Computing Foundation). A single vendor-neutral SDK that instruments your code for logs, metrics, *and* traces in one go. Exports to Prometheus, Datadog, Jaeger, Zipkin, etc. Teams adopt it so they can swap backends without rewriting instrumentation.
+
+**All-in-One APM (Application Performance Monitoring)**
+- **Datadog** — commercial, cloud-hosted platform that combines logs, metrics, traces, and alerting in a single UI. Common in enterprises that want managed infrastructure rather than running Prometheus/Grafana themselves. New Relic and Dynatrace are equivalent alternatives.
+
+---
+
+**Four capability cards (how Copilot helps with each):**
+  1. **Structured Logging** — Ask Copilot in Agent mode to add Winston/Pino across all service files at once — consistent JSON format, request IDs, timing, and error context without manually editing every file.
+  2. **Health Endpoints** — Copilot generates `/health` (liveness) and `/ready` (readiness) endpoints with DB and Redis checks. These are required by Kubernetes to know whether to restart or route traffic to a pod.
+  3. **Metrics & Prometheus** — Copilot adds a `/metrics` endpoint exposing request duration, error rates, and active connections in Prometheus format. Drop it into Grafana immediately.
+  4. **Alert Rules** — Copilot generates Grafana/PagerDuty alert configs: error rate > 5%, p99 latency > 500ms, disk usage > 80%. You describe the thresholds; Copilot writes the YAML.
+
+- **Flow diagram:** Instrument → Collect → Alert → Visualize. This is the standard observability loop.
+
+- **Key insight:** Observability code is tedious, repetitive boilerplate — the perfect Copilot use case. You define the *what* (what to measure, what thresholds matter); Copilot writes the *how* across every file in one agent run.
 
 **Demo Reference:** `demos/demo_08_db_migration_monitoring.md` (Part B)
 

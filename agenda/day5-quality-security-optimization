@@ -7,9 +7,9 @@ Day 5 – Quality, Security & Optimization
 | 3 | Test Data Generation | Generating realistic test data, fixtures, edge cases, boundary values | Chat, Inline Suggestions |
 | 4 | Automated Code Review (PR Comments) | AI-powered PR reviews, Copilot code review, review suggestions, addressing feedback | Copilot Code Review, `@github` |
 | 5 | Bug Fixing | Debugging with Copilot, `/fix` command, error analysis, root cause identification | `/fix`, Agent Mode, Chat |
-| 6 | Security Scanning (Vulnerabilities) | CodeQL integration, GHAS alerts, dependency vulnerabilities, Copilot Autofix | GHAS, Copilot Autofix, `@github` |
+| 6 | Security Scanning (Vulnerabilities) | IDE-first scanning with Copilot (`@workspace` audit), then CodeQL/GHAS alerts, secret scanning, Dependabot | Chat, `@workspace`, GHAS, Copilot Autofix, `@github` |
 | 7 | Security Report & Prioritization | Security overview dashboard, triaging alerts, risk assessment, remediation planning | Chat, `@workspace`, Copilot Spaces |
-| 8 | Fixing Security Issues | Applying Copilot Autofix, manual remediation, secure coding patterns | Copilot Autofix, `/fix`, Agent Mode |
+| 8 | Fixing Security Issues | IDE: `/fix` inline + Agent mode bulk fix; GHAS: Copilot Autofix one-click PR | `/fix`, Agent Mode, Copilot Autofix |
 | 9 | DB Migration Scripts Generation | Schema migrations, rollback scripts, data migrations, version control | Agent Mode, Chat, Inline Suggestions |
 | 10 | Monitoring & Observability | Logging instrumentation, metrics, alerting configs, dashboard generation | Chat, Agent Mode, `@terminal` |
 | 11 | Q & A | Open discussion, key takeaways, and course wrap-up | — |

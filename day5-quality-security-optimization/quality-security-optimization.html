@@ -497,7 +497,7 @@
                     </div>
                     <div class="agenda-item">
                         <div class="agenda-num" style="background: #79c0ff;">6</div>
-                        <span class="agenda-label">Security Scanning (GHAS)</span>
+                        <span class="agenda-label">Security Scanning (IDE + GHAS)</span>
                     </div>
                     <div class="agenda-item">
                         <div class="agenda-num" style="background: var(--secondary);">7</div>
@@ -888,62 +888,83 @@
              ============================================================ -->
         <div class="slide section-slide" data-slide="14">
             <div class="section-number">06</div>
-            <h2>Security Scanning<br>&amp; GHAS</h2>
-            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">CodeQL, Dependabot, Secret Scanning, and the Security Overview dashboard</p>
+            <h2>Security Scanning</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">Find vulnerabilities in the IDE with Copilot — and at scale with GHAS</p>
         </div>
 
         <!-- ============================================================
-             SLIDE 15: GHAS Four Pillars
+             SLIDE 15: Two Paths — IDE + GHAS
              ============================================================ -->
         <div class="slide content-slide" data-slide="15">
-            <h2><i class="fas fa-shield-halved" style="color: #f778ba; margin-right: 12px;"></i>GitHub Advanced Security <span class="mode-badge ghas">GHAS</span></h2>
+            <h2><i class="fas fa-shield-halved" style="color: #f778ba; margin-right: 12px;"></i>Two Paths to Security</h2>
             <div class="content" style="flex-direction: column; gap: 20px;">
-                <div class="pillar-grid">
-                    <div class="pillar-card" style="border-top: 3px solid var(--secondary);">
-                        <div class="pillar-icon" style="color: var(--secondary);">🔍</div>
-                        <h4>Code Scanning</h4>
-                        <p>CodeQL analysis finds vulnerabilities in your source code on every push and PR</p>
+                <div class="dual-panel">
+                    <div style="border: 1px solid var(--secondary); border-radius: 12px; padding: 20px;">
+                        <h3 style="color: var(--secondary); margin-bottom: 14px;"><i class="fas fa-laptop-code"></i> IDE — Copilot in VS Code</h3>
+                        <div class="cap-grid" style="grid-template-columns: 1fr; gap: 10px;">
+                            <div class="cap-item">
+                                <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-magnifying-glass"></i></div>
+                                <div class="cap-text">
+                                    <h4>@workspace Security Audit</h4>
+                                    <p>Ask Copilot to scan the entire codebase for OWASP Top 10 — instant, no CI needed</p>
+                                </div>
+                            </div>
+                            <div class="cap-item">
+                                <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-code"></i></div>
+                                <div class="cap-text">
+                                    <h4>File-Level Deep Dive</h4>
+                                    <p>Point Copilot at a specific file — it explains the exploit path and impact in plain language</p>
+                                </div>
+                            </div>
+                            <div class="cap-item">
+                                <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-box"></i></div>
+                                <div class="cap-text">
+                                    <h4>Dependency CVE Check</h4>
+                                    <p>Ask Copilot if any packages in requirements.txt have known vulnerabilities</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tag-row" style="margin-top: 12px;">
+                            <span class="tag">Pre-push</span>
+                            <span class="tag">No setup</span>
+                            <span class="tag">Developer self-service</span>
+                        </div>
                     </div>
-                    <div class="pillar-card" style="border-top: 3px solid var(--accent);">
-                        <div class="pillar-icon" style="color: var(--accent);">🔑</div>
-                        <h4>Secret Scanning</h4>
-                        <p>Detects API keys, tokens, and credentials committed to the repository</p>
-                    </div>
-                    <div class="pillar-card" style="border-top: 3px solid var(--purple);">
-                        <div class="pillar-icon" style="color: var(--purple);">📦</div>
-                        <h4>Dependabot</h4>
-                        <p>Identifies vulnerable dependencies and auto-generates update PRs</p>
-                    </div>
-                    <div class="pillar-card" style="border-top: 3px solid #3fb950;">
-                        <div class="pillar-icon" style="color: #3fb950;">📊</div>
-                        <h4>Security Overview</h4>
-                        <p>Organization-wide dashboard showing risk posture across all repositories</p>
+                    <div style="border: 1px solid #f778ba; border-radius: 12px; padding: 20px;">
+                        <h3 style="color: #f778ba; margin-bottom: 14px;"><i class="fas fa-shield-halved"></i> GHAS — GitHub Advanced Security</h3>
+                        <div class="cap-grid" style="grid-template-columns: 1fr; gap: 10px;">
+                            <div class="cap-item">
+                                <div class="cap-icon" style="color: #f778ba;"><i class="fas fa-search"></i></div>
+                                <div class="cap-text">
+                                    <h4>CodeQL Code Scanning</h4>
+                                    <p>Semantic data-flow analysis on every push and PR — proves vulnerabilities are reachable</p>
+                                </div>
+                            </div>
+                            <div class="cap-item">
+                                <div class="cap-icon" style="color: #f778ba;"><i class="fas fa-key"></i></div>
+                                <div class="cap-text">
+                                    <h4>Secret Scanning + Push Protection</h4>
+                                    <p>Detects 200+ secret types — blocks commits before secrets enter the repo</p>
+                                </div>
+                            </div>
+                            <div class="cap-item">
+                                <div class="cap-icon" style="color: #f778ba;"><i class="fas fa-box-open"></i></div>
+                                <div class="cap-text">
+                                    <h4>Dependabot</h4>
+                                    <p>CVE alerts + automatic update PRs for vulnerable dependencies</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tag-row" style="margin-top: 12px;">
+                            <span class="tag">Every push</span>
+                            <span class="tag">Org-scale</span>
+                            <span class="tag">Automated</span>
+                        </div>
                     </div>
                 </div>
-                <div class="flow-diagram">
-                    <div class="flow-step" style="border-color: var(--secondary);">
-                        <div class="step-icon">⬆️</div>
-                        <h4>Push Code</h4>
-                        <p>git push / PR</p>
-                    </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-step" style="border-color: var(--purple);">
-                        <div class="step-icon">🔬</div>
-                        <h4>Auto-Scan</h4>
-                        <p>CodeQL + secrets</p>
-                    </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-step" style="border-color: var(--accent);">
-                        <div class="step-icon">⚠️</div>
-                        <h4>Alerts</h4>
-                        <p>Severity rated</p>
-                    </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-step" style="border-color: #3fb950;">
-                        <div class="step-icon">🔧</div>
-                        <h4>Triage &amp; Fix</h4>
-                        <p>Autofix or manual</p>
-                    </div>
+                <div class="tip-box">
+                    <h4><i class="fas fa-lightbulb"></i> Shift Left — At Every Stage</h4>
+                    <p>Developers use Copilot in the IDE <strong>before pushing</strong>. GHAS provides the automated safety net <strong>on every push</strong>. Together they cover the full developer lifecycle.</p>
                 </div>
             </div>
         </div>
@@ -1011,66 +1032,62 @@
         <div class="slide section-slide" data-slide="18">
             <div class="section-number">08</div>
             <h2>Fixing Security<br>Issues</h2>
-            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">Copilot Autofix, manual remediation, and secure coding patterns</p>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;"><code>/fix</code> &amp; Agent in the IDE — Copilot Autofix from GHAS alerts</p>
         </div>
 
         <!-- ============================================================
-             SLIDE 19: Security Fix Patterns — Before / After
+             SLIDE 19: Three Remediation Paths
              ============================================================ -->
         <div class="slide content-slide" data-slide="19">
-            <h2><i class="fas fa-wand-magic-sparkles" style="color: #3fb950; margin-right: 12px;"></i>Copilot Autofix <span class="mode-badge autofix">AUTOFIX</span></h2>
-            <div class="content" style="flex-direction: column; gap: 20px;">
-                <div class="compare-grid">
-                    <div class="compare-col bad">
-                        <h3 style="color: var(--accent);"><i class="fas fa-bug"></i> Vulnerable Code</h3>
-                        <div class="code-inline" style="font-size: 0.78rem;">
-                            <span class="comment">// SQL Injection — raw concatenation</span><br>
-                            <span class="keyword">const</span> [results] = <span class="keyword">await</span> sequelize.query(<br>
-                            &nbsp;&nbsp;<span class="danger">`SELECT * FROM orders WHERE</span><br>
-                            &nbsp;&nbsp;<span class="danger">&nbsp;notes LIKE '%${keyword}%'`</span><br>
-                            );<br><br>
-                            <span class="comment">// XSS — reflected user input</span><br>
-                            <span class="keyword">const</span> html = <span class="danger">`&lt;h1&gt;Results for: ${keyword}&lt;/h1&gt;`</span>;<br>
-                            res.send(html);
+            <h2><i class="fas fa-wand-magic-sparkles" style="color: #3fb950; margin-right: 12px;"></i>Three Remediation Paths</h2>
+            <div class="content" style="flex-direction: column; gap: 18px;">
+                <div class="cap-grid" style="grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                    <div style="border: 1px solid var(--secondary); border-radius: 12px; padding: 18px;">
+                        <div style="text-align: center; margin-bottom: 12px;">
+                            <span style="font-size: 2rem;"><i class="fas fa-terminal" style="color: var(--secondary);"></i></span>
+                            <h3 style="color: var(--secondary); margin-top: 8px;"><code>/fix</code> Inline</h3>
+                            <span class="mode-badge" style="background: rgba(88,166,255,0.15); color: var(--secondary);">IDE</span>
+                        </div>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">Select the vulnerable line, press <strong>Ctrl+I</strong>, type <code>/fix</code> with the vulnerability type. Copilot applies a targeted OWASP-aware fix without leaving the file.</p>
+                        <div class="code-inline" style="font-size: 0.75rem; margin-top: 10px;">
+                            <span class="comment"># XSS — remove | safe filter</span><br>
+                            <span class="danger">{{ plan.notes | safe }}</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓ /fix<br>
+                            <span class="safe">{{ plan.notes }}</span>
                         </div>
                     </div>
-                    <div class="compare-col good">
-                        <h3 style="color: #3fb950;"><i class="fas fa-shield-halved"></i> Fixed Code</h3>
-                        <div class="code-inline" style="font-size: 0.78rem;">
-                            <span class="comment">// Parameterized query</span><br>
-                            <span class="keyword">const</span> [results] = <span class="keyword">await</span> sequelize.query(<br>
-                            &nbsp;&nbsp;<span class="safe">`SELECT * FROM orders WHERE</span><br>
-                            &nbsp;&nbsp;<span class="safe">&nbsp;notes LIKE :keyword`</span>,<br>
-                            &nbsp;&nbsp;{ replacements: { keyword: <span class="safe">`%${keyword}%`</span> } }<br>
-                            );<br><br>
-                            <span class="comment">// Sanitized output</span><br>
-                            <span class="keyword">const</span> safe = <span class="safe">escapeHtml(keyword)</span>;<br>
-                            res.send(<span class="safe">`&lt;h1&gt;Results for: ${safe}&lt;/h1&gt;`</span>);
+                    <div style="border: 1px solid var(--purple); border-radius: 12px; padding: 18px;">
+                        <div style="text-align: center; margin-bottom: 12px;">
+                            <span style="font-size: 2rem;"><i class="fas fa-robot" style="color: var(--purple);"></i></span>
+                            <h3 style="color: var(--purple); margin-top: 8px;">Agent Mode</h3>
+                            <span class="mode-badge agent">IDE</span>
+                        </div>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">Describe all vulnerabilities in one prompt — Agent fixes SQL injection, path traversal, and hardcoded secrets across multiple files, then runs tests to confirm.</p>
+                        <div class="code-inline" style="font-size: 0.75rem; margin-top: 10px;">
+                            <span class="comment"># SQL injection fix</span><br>
+                            <span class="danger">f"...LIKE '%{keyword}%'"</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;↓ Agent<br>
+                            <span class="safe">"...LIKE ?", ("%"+keyword+"%",)</span>
+                        </div>
+                    </div>
+                    <div style="border: 1px solid #f778ba; border-radius: 12px; padding: 18px;">
+                        <div style="text-align: center; margin-bottom: 12px;">
+                            <span style="font-size: 2rem;"><i class="fas fa-magic" style="color: #f778ba;"></i></span>
+                            <h3 style="color: #f778ba; margin-top: 8px;">Copilot Autofix</h3>
+                            <span class="mode-badge ghas">GHAS</span>
+                        </div>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">From any CodeQL alert on GitHub.com, click <strong>"Generate fix"</strong> — Copilot creates a PR with a minimal, correct diff. One click per alert, at org scale.</p>
+                        <div class="code-inline" style="font-size: 0.75rem; margin-top: 10px;">
+                            <span class="comment"># GHAS alert → Generate fix</span><br>
+                            <span class="safe">✓ PR created automatically</span><br>
+                            <span class="safe">✓ Diff preview shown</span><br>
+                            <span class="safe">✓ CI runs on the PR</span>
                         </div>
                     </div>
                 </div>
-                <div class="cap-grid" style="grid-template-columns: repeat(3, 1fr);">
-                    <div class="cap-item">
-                        <div class="cap-icon" style="color: #3fb950;"><i class="fas fa-magic"></i></div>
-                        <div class="cap-text">
-                            <h4>Copilot Autofix</h4>
-                            <p>One-click fix from GHAS alert — generates a PR with the remediation</p>
-                        </div>
-                    </div>
-                    <div class="cap-item">
-                        <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-terminal"></i></div>
-                        <div class="cap-text">
-                            <h4><code>/fix</code> with Context</h4>
-                            <p>"Fix the security vulnerability in <code>#file</code>" — targets specific issues</p>
-                        </div>
-                    </div>
-                    <div class="cap-item">
-                        <div class="cap-icon" style="color: var(--purple);"><i class="fas fa-robot"></i></div>
-                        <div class="cap-text">
-                            <h4>Agent for Complex Fixes</h4>
-                            <p>Multi-file remediation: update route, add validation, update tests</p>
-                        </div>
-                    </div>
+                <div class="tip-box">
+                    <h4><i class="fas fa-lightbulb"></i> When to Use Each</h4>
+                    <p><strong>/fix</strong> — single known location, developer in flow &nbsp;|&nbsp; <strong>Agent</strong> — bulk multi-file fix, one conversation &nbsp;|&nbsp; <strong>Autofix</strong> — triaging many GHAS alerts, org-scale remediation</p>
                 </div>
             </div>
         </div>
