@@ -3,6 +3,7 @@ import { body, param, query } from "express-validator";
 import * as orderService from "../services/orderService";
 import { authenticate } from "../middleware/auth";
 import { validateRequest } from "../middleware/validate";
+import { sequelize } from "../config/database";
 
 const router = Router();
 
@@ -114,6 +115,27 @@ router.patch(
         });
       }
       res.json(order);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+/**
+ * GET /api/orders/search?keyword=
+ * Search orders by keyword — DEMO: intentionally vulnerable to SQL injection (CWE-89)
+ */
+router.get(
+  "/search",
+  authenticate,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const keyword = req.query.keyword as string;
+      // VULNERABLE: user-controlled input concatenated directly into raw SQL
+      const results = await sequelize.query(
+        `SELECT * FROM orders WHERE shipping_address LIKE '%${keyword}%'`
+      );
+      res.json(results[0]);
     } catch (error) {
       next(error);
     }
