@@ -1,10 +1,10 @@
-# Demo 09 — Tech Modernization
+# Demo 09 — Tech Modernization: Angular → React Migration
 
-> **Duration:** ~5 min | **Slide:** 22 | **Mode:** VS Code + Copilot Chat (Plan Mode → Agent Mode)
+> **Duration:** ~8 min | **Slide:** 22 | **Mode:** VS Code + Copilot Chat (Plan Mode → Agent Mode)
 
 | Setting | Recommendation |
 |---------|----------------|
-| **Chat Mode** | **Plan** mode (Step 1: migration analysis) → **Agent** mode (Step 2: execute migration) |
+| **Chat Mode** | **Plan** mode (Step 1–2: analysis & strategy) → **Agent** mode (Step 3–5: execute migration) |
 | **Model** | **Claude Sonnet 4** — excels at cross-framework translation and understanding architectural patterns |
 | **Fallback Model** | GPT-4.1 — faster for individual component translations |
 
@@ -12,86 +12,215 @@
 
 ## Objective
 
-Demonstrate using Copilot to plan and execute a technology modernization — mapping old patterns to modern equivalents, migrating component by component, and verifying the build.
+Demonstrate using Copilot to migrate a real **Angular 18 application** to **React** — analyzing Angular-specific patterns, mapping them to React equivalents, and executing the migration component by component with build verification.
+
+---
+
+## Source Application — Product Catalog (Angular 18)
+
+The starting point is a fully working Angular 18 product catalog app located at:
+
+```
+C:\Users\Lavanya N\product-catalog
+```
+
+### Application Structure
+
+```
+src/app/
+├── app-routing.module.ts          # Root routing (4 routes)
+├── app.component.ts/html/scss     # Shell — header, router-outlet, footer
+├── app.module.ts                  # Root NgModule
+├── home/
+│   └── home.component.*           # Landing page with hero + feature cards
+├── models/
+│   └── product.model.ts           # Product interface (id, name, category, price, etc.)
+├── products/
+│   ├── products.module.ts         # Feature module (lazy-loadable)
+│   └── components/
+│       ├── product-card/          # Presentational — @Input/@Output, star rating
+│       ├── product-list/          # Smart — search, category filter, RxJS observables
+│       └── product-detail/        # Route-param driven detail view
+└── services/
+    └── product.service.ts         # BehaviorSubject + mock data, singleton via providedIn:'root'
+```
+
+### Angular Patterns to Migrate
+
+| Angular Pattern | React Equivalent |
+|----------------|-----------------|
+| `@NgModule` (AppModule, ProductsModule) | No equivalent — React uses imports directly |
+| `@Component` decorators | Function components |
+| `@Input()` / `@Output()` | Props / callback props |
+| `@Injectable` + constructor DI | Context API or custom hooks |
+| `BehaviorSubject` + `Observable` | `useState` + `useEffect` or Zustand/Redux |
+| `| async` pipe in templates | Direct state rendering in JSX |
+| `[(ngModel)]` two-way binding | `value` + `onChange` controlled inputs |
+| `*ngFor`, `*ngIf`, `[class.x]` | `.map()`, ternary/`&&`, `className` |
+| `ActivatedRoute` + `paramMap` | `useParams()` from React Router |
+| `Router.navigate()` | `useNavigate()` from React Router |
+| `routerLink` / `routerLinkActive` | `<Link>` / `<NavLink>` from React Router |
+| Angular Pipes (`currency`, `titlecase`, `slice`) | Template literals, `Intl.NumberFormat`, `.slice()` |
 
 ---
 
 ## Pre-Requisites
 
 - VS Code with GitHub Copilot Chat
-- The sample-app project open (`day4-build-design-modernization/sample-app/`)
-- Terminal accessible for the agent to run build/test commands
+- The **product-catalog** project open (`C:\Users\Lavanya N\product-catalog`)
+- Node.js 18+ installed
+- Terminal accessible for the agent to run build commands
 
 ---
 
-## Step 1 — Migration Analysis & Strategy (2 min)
+## Step 1 — Migration Analysis (2 min)
 
-**Goal:** Use Plan mode to analyze the codebase and create a migration strategy.
+**Goal:** Use Plan mode to analyze the Angular codebase and create a React migration strategy.
 
-1. Switch to **Plan mode** and type:
+1. Open the `product-catalog` folder in VS Code
+2. Switch to **Plan mode** and type:
+
    ```
-   Analyze this project and identify modernization opportunities — 
-   outdated patterns, callback-style code, raw SQL, or tightly coupled 
-   modules. Create a migration plan with changes ordered from safest 
-   (leaf modules) to riskiest (core modules).
+   Analyze this Angular app and create a migration plan to React 
+   with TypeScript and Vite. Order from leaf components to root.
    ```
 
-2. **Show the plan** — Copilot produces an ordered list with dependency analysis
+3. **Show the plan** — Copilot produces a bottom-up migration order
 
-> **👀 What to watch for:** Copilot analyzes actual component dependencies and gives a bottom-up migration order — leaf nodes first so each migrated piece can be tested independently. It identifies *specific* patterns in your code, not generic advice.
+> **👀 What to watch for:** Copilot identifies the actual dependency graph — `ProductCard` (leaf/presentational) → `ProductList` (smart/container) → `ProductDetail` (route-driven) → `App` shell. It maps *specific* Angular patterns in your code to React equivalents, not generic advice.
 
-**Talking Point:** _"A migration plan based on actual dependency analysis, not guesswork. This prevents the 'everything breaks at once' problem."_
+**Talking Point:** _"Copilot analyzed the component hierarchy and Angular patterns — NgModules, DI, Observables, template directives — and produced a migration order based on actual dependencies."_
 
 ---
 
-## Step 2 — Execute the Migration (2.5 min)
+## Step 2 — Scaffold the React Project (1 min)
 
-**Goal:** Agent mode migrates one module as a live example.
+**Goal:** Agent creates the React project structure alongside the Angular code.
 
-1. Switch to **Agent mode** and pick the first item from the plan:
+1. Switch to **Agent mode** and type:
+
    ```
-   Execute the first migration step from the plan. Modernize the 
-   code, preserve all existing behavior, and run the build to verify 
-   nothing broke.
+   Scaffold a React + Vite + TypeScript project called 
+   "product-catalog-react". Set up React Router v6, copy the 
+   Product interface and mock data, and verify the build.
    ```
 
-2. **Watch the agent** refactor, create/modify files, and run verification
+2. **Watch the agent** scaffold, install, and verify the build
 
-> **👀 What to watch for:** The business logic stays the same — only the framework plumbing changes. Copilot maps old patterns to modern equivalents (e.g., callbacks → async/await, manual SQL → ORM, class components → functions). If the build breaks, the agent auto-fixes.
+> **👀 What to watch for:** Copilot reuses the existing TypeScript interface and mock data verbatim — the data layer transfers with zero changes. Only the framework plumbing is new.
 
-**Talking Point:** _"The behavior is identical — only the implementation pattern changed. Copilot preserved all business logic while modernizing the plumbing."_
+**Talking Point:** _"TypeScript interfaces and data are framework-agnostic — they transfer directly. The migration is about translating Angular plumbing to React patterns."_
 
 ---
 
-## Step 3 (Bonus) — Migrate Tests
+## Step 3 — Migrate Leaf Component: ProductCard (2 min)
+
+**Goal:** Migrate the simplest component first — the presentational `ProductCard`.
+
+```
+Migrate ProductCardComponent to a React function component. 
+Preserve the exact same visual output and behavior.
+```
+
+**Watch for these translations:**
+
+| Angular (product-card.component.ts) | React (ProductCard.tsx) |
+|--------------------------------------|------------------------|
+| `@Input() product!: Product;` | `interface Props { product: Product; onSelect: (p: Product) => void; }` |
+| `@Output() selected = new EventEmitter<Product>();` | Callback prop: `onSelect(product)` |
+| `get stars(): boolean[]` | `const stars = useMemo(...)` or inline computation |
+| `(click)="selected.emit(product)"` | `onClick={() => onSelect(product)}` |
+| `*ngFor="let filled of stars"` | `{stars.map((filled, i) => ...)}` |
+| `{{ product.price \| currency }}` | `{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(product.price)}` |
+
+> **👀 What to watch for:** The business logic (star calculation, stock check) is identical. Only Angular decorators and template syntax became React props and JSX.
+
+**Talking Point:** _"Same component, same behavior — the @Input became a prop, the @Output became a callback, the template became JSX. No business logic changed."_
+
+---
+
+## Step 4 — Migrate Smart Component: ProductList (2 min)
+
+**Goal:** Migrate the stateful `ProductList` with search, filtering, and Observable subscription.
+
+```
+Migrate ProductListComponent to React. Wire it up with the 
+ProductCard we just migrated. Run the dev server and verify 
+the product listing page works.
+```
+
+**Watch for these translations:**
+
+| Angular Pattern | React Equivalent |
+|----------------|-----------------|
+| `products$: Observable<Product[]>` | `const [products, setProducts] = useState<Product[]>([])` |
+| `filteredProducts$ \| async` | `const filteredProducts = useMemo(...)` |
+| `[(ngModel)]="searchQuery"` | `value={search} onChange={e => setSearch(e.target.value)}` |
+| `[class.category-btn--active]="cat === selectedCategory"` | `className={cat === selected ? 'active' : ''}` |
+| `*ngIf="(filteredProducts$ \| async) as products"` | `{filteredProducts.length > 0 ? ... : <EmptyState />}` |
+| `[trackBy]="trackById"` | `key={product.id}` on the mapped element |
+
+> **👀 What to watch for:** The RxJS Observable + async pipe pattern collapses into simple `useState` + `useMemo`. The filtering logic is identical — only the reactivity mechanism changed.
+
+**Talking Point:** _"The BehaviorSubject + async pipe became useState + useMemo. The filtering algorithm didn't change at all — Copilot just re-wired the reactivity."_
+
+---
+
+## Step 5 — Migrate Routing & App Shell (1 min)
+
+```
+Migrate the routing, App shell, Home page, and ProductDetail 
+component. Run the dev server and verify all routes work.
+```
+
+> **👀 What to watch for:** Angular's `routerLink` becomes React Router's `<NavLink>`, `router-outlet` becomes `<Outlet>`, and `ActivatedRoute.snapshot.paramMap.get('id')` becomes `useParams()`. The route structure is identical.
+
+**Talking Point:** _"The route table is the same — only the syntax changed. Angular's module-based routing became React Router's component-based routing."_
+
+---
+
+## Step 6 (Bonus) — Side-by-Side Comparison
 
 If time allows:
+
 ```
-Migrate the corresponding tests to match the modernized code. 
-Update assertions and run the test suite to verify.
+Run both apps side by side (Angular on 4200, React on 5173) 
+and compare file count, bundle size, and lines of code.
 ```
 
-> **👀 What to watch for:** Test migration is often the most tedious part. Copilot handles the mechanical translation — you just verify the assertions still make sense.
+> **👀 What to watch for:** Identical functionality, different framework plumbing. The React version typically has fewer files (no NgModule boilerplate) and a simpler mental model for state management.
 
 ---
 
-## This Pattern Works for Any Migration
+## Pattern Translation Quick Reference
 
-| Scenario | Key Changes |
-|----------|-------------|
-| Angular → React | Decorators → hooks, templates → JSX, DI → Context |
-| Express → Fastify | Middleware → plugins, route registration |
-| jQuery → Vue/React | DOM manipulation → reactive state |
-| Callbacks → async/await | Error handling, flow control |
-| Raw SQL → ORM | Query builders, model definitions |
-
-The workflow is identical: **Plan** (analyze & order) → **Agent** (migrate & verify) → **Test** (validate behavior)
+| Angular | React |
+|---------|-------|
+| `@NgModule({ declarations, imports })` | Direct imports, no registration |
+| `@Component({ selector, template })` | `function MyComponent() { return <JSX> }` |
+| `@Injectable({ providedIn: 'root' })` | Custom hook or Context provider |
+| `@Input()` property | Props interface |
+| `@Output()` EventEmitter | Callback prop |
+| `constructor(private svc: Service)` | `const data = useMyHook()` |
+| `ngOnInit()` | `useEffect(() => {}, [])` |
+| `BehaviorSubject` + `| async` | `useState` + direct rendering |
+| `[(ngModel)]` | `value` + `onChange` |
+| `*ngFor="let x of items"` | `{items.map(x => <X key={x.id} />)}` |
+| `*ngIf="condition"` | `{condition && <Component />}` |
+| `[class.active]="isActive"` | `className={isActive ? 'active' : ''}` |
+| `{{ value \| currency }}` | `{formatCurrency(value)}` |
+| `routerLink="/path"` | `<Link to="/path">` |
+| `routerLinkActive="active"` | `<NavLink className={({isActive}) => ...}>` |
+| `ActivatedRoute` + `paramMap` | `useParams()` |
+| `Router.navigate(['/path'])` | `navigate('/path')` |
 
 ---
 
 ## Key Takeaways
 
-- **Analyze dependencies first** — migration order matters (leaf → root)
-- **One module at a time** — incremental migration reduces risk
-- **Behavior stays the same** — only the framework plumbing changes
-- **Agent verifies builds** — catches translation errors immediately
+- **Real app, real migration** — not a toy example; a full-featured catalog with routing, state, and filtering
+- **Leaf → root order** — migrate presentational components first, then smart components, then routing shell
+- **Data layer transfers directly** — TypeScript interfaces and mock data are framework-agnostic
+- **Business logic is unchanged** — filtering, searching, star ratings — all identical
+- **Only plumbing changes** — decorators → hooks, templates → JSX, DI → imports, Observables → state
+- **Agent verifies builds** — catches translation errors immediately and auto-fixes
