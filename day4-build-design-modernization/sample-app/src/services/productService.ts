@@ -165,6 +165,95 @@ export async function deleteProduct(id: number) {
 }
 
 // ──────────────────────────────────────────────────────────────
+// Discount, Inventory, and Category helpers
+// ──────────────────────────────────────────────────────────────
+
+export function calculateDiscount(
+  price: number,
+  quantity: number,
+  discountCode: string
+): { discountAmount: number; finalPrice: number } {
+  if (price < 0) {
+    throw new Error("Price cannot be negative");
+  }
+  if (quantity < 0) {
+    throw new Error("Quantity cannot be negative");
+  }
+
+  let discountAmount = 0;
+
+  switch (discountCode) {
+    case "SAVE10":
+      discountAmount = price * quantity * 0.1;
+      break;
+    case "SAVE20":
+      discountAmount = price * quantity * 0.2;
+      break;
+    case "FLAT5":
+      discountAmount = Math.min(5, price * quantity);
+      break;
+    case "BOGO":
+      // Buy one get one free — every second unit is free
+      discountAmount = Math.floor(quantity / 2) * price;
+      break;
+    case "VIP":
+      discountAmount = price * quantity * 0.15;
+      break;
+    default:
+      discountAmount = 0;
+  }
+
+  const finalPrice = Math.max(0, price * quantity - discountAmount);
+  return { discountAmount, finalPrice };
+}
+
+export async function checkInventory(
+  productId: number
+): Promise<{ productId: number; stock: number; isAvailable: boolean } | null> {
+  const product = await Product.findByPk(productId, {
+    attributes: ["id", "stock", "isAvailable"],
+  });
+
+  if (!product) {
+    return null;
+  }
+
+  return {
+    productId: product.id,
+    stock: product.stock,
+    isAvailable: product.isAvailable,
+  };
+}
+
+export async function getCategorySummary(): Promise<
+  { category: string; count: number; averagePrice: number }[]
+> {
+  const { QueryTypes } = await import("sequelize");
+  const sequelize = Product.sequelize!;
+
+  const rows = await sequelize.query<{
+    category: string;
+    count: string;
+    averagePrice: string;
+  }>(
+    `SELECT category,
+            COUNT(*)::int          AS count,
+            AVG(price)             AS "averagePrice"
+     FROM   "Products"
+     WHERE  "isAvailable" = true
+     GROUP  BY category
+     ORDER  BY category`,
+    { type: QueryTypes.SELECT }
+  );
+
+  return rows.map((r) => ({
+    category: r.category,
+    count: Number(r.count),
+    averagePrice: parseFloat(Number(r.averagePrice).toFixed(2)),
+  }));
+}
+
+// ──────────────────────────────────────────────────────────────
 // CODE SMELL (intentional): Duplicate date formatting logic
 // Same pattern exists in userService.ts and orderService.ts
 // ──────────────────────────────────────────────────────────────

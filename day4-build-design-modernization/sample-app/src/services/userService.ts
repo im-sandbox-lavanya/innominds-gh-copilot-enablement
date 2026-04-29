@@ -16,7 +16,10 @@ interface ExternalUserPayload {
 }
 
 export function parseUser(payload: ExternalUserPayload) {
-  // BUG: payload.email_address can be undefined — this will crash
+  if (!payload.email_address) {
+    throw new Error("email_address is required");
+  }
+
   const emailParts = payload.email_address.split("@");
   const domain = emailParts[1].toLowerCase();
 

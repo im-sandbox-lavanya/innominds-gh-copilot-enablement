@@ -9,21 +9,25 @@ import logger from "./utils/logger";
 const PORT = process.env.PORT || 3000;
 
 async function bootstrap() {
+  // Connect to external services (non-fatal — server starts regardless)
   try {
-    // Connect to external services
     await connectDatabase();
-    await connectRedis();
-
-    // Start HTTP server
-    app.listen(PORT, () => {
-      logger.info(`Server running on port ${PORT}`, {
-        env: process.env.NODE_ENV || "development",
-      });
-    });
   } catch (error) {
-    logger.error("Failed to start server", { error });
-    process.exit(1);
+    logger.warn("Database unavailable — server will start without DB", { error });
   }
+
+  try {
+    await connectRedis();
+  } catch (error) {
+    logger.warn("Redis unavailable — server will start without cache", { error });
+  }
+
+  // Start HTTP server
+  app.listen(PORT, () => {
+    logger.info(`Server running on port ${PORT}`, {
+      env: process.env.NODE_ENV || "development",
+    });
+  });
 }
 
 bootstrap();
