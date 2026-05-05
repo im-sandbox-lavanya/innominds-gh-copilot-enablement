@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d1117">
+    <meta name="color-scheme" content="dark">
+    <title>Day 5 – Quality, Security &amp; Optimization</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../shared/presentation.css">
+    <style>
+        /* ── Day 5 course-specific styles ── */
+
+        /* Flow diagram */
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .flow-step {
+            background: var(--surface);
+            border: 2px solid var(--surface-light);
+            border-radius: 12px;
+            padding: 14px 20px;
+            text-align: center;
+            min-width: 120px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .flow-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+        .flow-step .step-icon {
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+        }
+        .flow-step h4 {
+            font-size: 0.95rem;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .flow-step p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+        .flow-arrow {
+            font-size: 1.4rem;
+            color: var(--text-muted);
+        }
+
+        /* Comparison layout */
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            width: 100%;
+        }
+        .compare-col h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--surface-light);
+        }
+        .compare-col ul { list-style: none; }
+        .compare-col li {
+            font-size: 1.05rem;
+            margin-bottom: 14px;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.5;
+            color: var(--text);
+        }
+        .compare-col li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .compare-col.good li::before { background: #3fb950; }
+        .compare-col.bad li::before  { background: var(--accent); }
+
+        /* Badge / Tag pills */
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .tag {
+            background: var(--surface);
+            border: 1px solid var(--surface-light);
+            color: var(--text);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Stat cards */
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        /* Capability grid */
+        .cap-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 100%;
+        }
+        .cap-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 18px 22px;
+            border: 1px solid var(--surface-light);
+            transition: transform 0.3s ease;
+        }
+        .cap-item:hover { transform: translateY(-2px); }
+        .cap-icon {
+            font-size: 1.5rem;
+            width: 44px;
+            min-width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: var(--surface-light);
+        }
+        .cap-text h4 {
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 3px;
+        }
+        .cap-text p {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Table styling */
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1rem;
+        }
+        .styled-table th {
+            background: var(--surface);
+            color: var(--secondary);
+            padding: 14px 18px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid var(--surface-light);
+        }
+        .styled-table td {
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--surface-light);
+            color: var(--text);
+            line-height: 1.5;
+        }
+        .styled-table tr:hover td {
+            background: rgba(88, 166, 255, 0.05);
+        }
+        .styled-table code {
+            background: var(--surface);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.88rem;
+            color: var(--secondary);
+        }
+
+        /* Agent mode badge */
+        .mode-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+        .mode-badge.agent   { background: rgba(88,166,255,0.2); color: var(--secondary); }
+        .mode-badge.plan    { background: rgba(163,113,247,0.2); color: var(--purple); }
+        .mode-badge.ask     { background: rgba(63,185,80,0.2); color: #3fb950; }
+        .mode-badge.fix     { background: rgba(247,129,102,0.2); color: var(--accent); }
+        .mode-badge.ghas    { background: rgba(247,120,186,0.2); color: #f778ba; }
+        .mode-badge.autofix { background: rgba(63,185,80,0.2); color: #3fb950; }
+
+        /* Wide flow for lifecycle diagrams */
+        .flow-diagram.wide .flow-step {
+            min-width: 100px;
+            padding: 10px 14px;
+        }
+        .flow-diagram.wide .flow-step h4 { font-size: 0.85rem; }
+        .flow-diagram.wide .flow-step p  { font-size: 0.72rem; }
+        .flow-diagram.wide .flow-arrow   { font-size: 1.1rem; }
+
+        /* Agenda grid */
+        .agenda-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            width: 100%;
+        }
+        .agenda-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--surface);
+            border: 1px solid var(--surface-light);
+            border-radius: 12px;
+            padding: 14px 18px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .agenda-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        }
+        .agenda-num {
+            width: 40px;
+            min-width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+        .agenda-label {
+            font-size: 1.15rem;
+            color: var(--text);
+            line-height: 1.3;
+        }
+
+        /* Mode comparison columns */
+        .mode-cols {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            width: 100%;
+        }
+        .mode-col {
+            background: var(--surface);
+            border-radius: 14px;
+            padding: 28px;
+            border: 1px solid var(--surface-light);
+            text-align: left;
+        }
+        .mode-col h3 { font-size: 1.3rem; margin-bottom: 6px; }
+        .mode-col .mode-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+        .mode-col ul { list-style: none; padding: 0; }
+        .mode-col li {
+            font-size: 0.95rem;
+            color: var(--text);
+            padding: 6px 0;
+            padding-left: 24px;
+            position: relative;
+            line-height: 1.4;
+        }
+        .mode-col li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #3fb950;
+            font-weight: 600;
+        }
+
+        /* Vertical pipeline flow */
+        .pipeline-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            width: 100%;
+        }
+        .pipeline-stage {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--surface);
+            border: 1px solid var(--surface-light);
+            border-radius: 12px;
+            padding: 14px 24px;
+            width: 80%;
+            max-width: 700px;
+            transition: transform 0.3s ease;
+        }
+        .pipeline-stage:hover { transform: translateX(5px); }
+        .pipeline-stage .stage-icon {
+            font-size: 1.4rem;
+            width: 44px;
+            min-width: 44px;
+            text-align: center;
+        }
+        .pipeline-stage h4 { font-size: 1.05rem; color: #fff; margin-bottom: 2px; }
+        .pipeline-stage p { font-size: 0.85rem; color: var(--text-muted); }
+        .pipeline-arrow {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            padding: 4px 0;
+        }
+
+        /* Dual panel - code + explanation */
+        .dual-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            width: 100%;
+            align-items: start;
+        }
+
+        /* Code example block */
+        .code-inline {
+            background: #0d1117;
+            border-radius: 10px;
+            padding: 18px 22px;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            border: 1px solid var(--surface-light);
+            text-align: left;
+            overflow-x: auto;
+            width: 100%;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        .code-inline .comment  { color: #8b949e; }
+        .code-inline .keyword  { color: #ff7b72; }
+        .code-inline .string   { color: #a5d6ff; }
+        .code-inline .function { color: #d2a8ff; }
+        .code-inline .variable { color: #ffa657; }
+        .code-inline .danger   { color: #f85149; }
+        .code-inline .safe     { color: #3fb950; }
+
+        /* Four-pillar grid for GHAS */
+        .pillar-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            width: 100%;
+        }
+        .pillar-card {
+            background: var(--surface);
+            border-radius: 14px;
+            padding: 22px;
+            border: 1px solid var(--surface-light);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .pillar-card:hover { transform: translateY(-3px); }
+        .pillar-card .pillar-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .pillar-card h4 { font-size: 1.05rem; color: #fff; margin-bottom: 6px; }
+        .pillar-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
+
+        /* Accessibility */
+        .nav-btn:focus-visible,
+        .back-home-btn:focus-visible {
+            outline: 2px solid var(--secondary);
+            outline-offset: 2px;
+        }
+        .card:focus-visible,
+        .cap-item:focus-visible,
+        .agenda-item:focus-visible {
+            outline: 2px solid var(--secondary);
+            outline-offset: 2px;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Green text contrast fix */
+        .tip-box h4 { color: #3fb950; }
+
+        /* Layout overrides */
+        .keyboard-hints { display: none; }
+        .content-slide, .demo-slide { padding-bottom: 110px !important; }
+        .nav-controls { bottom: 16px; padding: 10px 24px; }
+
+        /* Increase overall font for slides from agenda onward */
+        .slide.active:not(.title-slide):not(.intro-slide) {
+            transform: scale(0.92);
+        }
+        .slide.prev:not(.title-slide):not(.intro-slide) {
+            transform: scale(0.88);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Slide Header with Logo -->
+    <div class="slide-header" style="justify-content: space-between;">
+        <a href="../index.html" class="back-home-btn" title="Back to Courses"
+            style="padding: 6px 10px; font-size: 0; gap: 0; width: 32px; height: 32px; justify-content: center; opacity: 0.5;">
+            <i class="fas fa-arrow-left" style="font-size: 0.8rem;"></i>
+        </a>
+        <div class="logo logo-infomagnus">
+            <i class="fab fa-github github-icon"></i>
+            <span><span>Info</span><span class="magnus-text">Magnus</span></span>
+        </div>
+    </div>
+
+    <div class="presentation" id="presentation">
+
+        <!-- ============================================================
+             SLIDE 1: Title
+             ============================================================ -->
+        <div class="slide title-slide active" data-slide="1">
+            <div class="logo-container animate">
+                <div class="copilot-logo">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+            </div>
+            <h1 class="animate">Quality, Security &amp;<br>Optimization</h1>
+            <p class="subtitle animate">Day 5 — Testing, Security Scanning &amp; Production Readiness with GitHub Copilot</p>
+            <div class="meta animate">
+                <span><i class="fas fa-clock"></i> Duration: 2 hrs</span>
+                <span><i class="fas fa-chalkboard-teacher"></i> Slides + Live Demos</span>
+                <span><i class="fas fa-users"></i> Innominds Developer Enablement</span>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 2: Trainer Introduction
+             ============================================================ -->
+        <div class="slide intro-slide" data-slide="2">
+            <div class="intro-content">
+                <img src="../shared/images/copilot-avatar.png" alt="GitHub Copilot" class="trainer-photo animate">
+                <div class="trainer-info">
+                    <h2 class="animate">Lavanya Nooka &amp; Bhaskar Jalagam</h2>
+                    <p class="title animate">GitHub Certified Trainers</p>
+                    <div class="company animate">
+                        <i class="fab fa-github"></i>
+                        <span><span style="color: #8b949e;">Info</span><span style="color: #58a6ff;">Magnus</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 3: Agenda Overview
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="3">
+            <h2><i class="fas fa-list-check" style="color: var(--secondary); margin-right: 12px;"></i>Today's Agenda</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="agenda-grid">
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: var(--secondary);">1</div>
+                        <span class="agenda-label">Unit &amp; Integration Tests</span>
+                    </div>
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: var(--purple);">2</div>
+                        <span class="agenda-label">Test Automation (Playwright)</span>
+                    </div>
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: #3fb950;">3</div>
+                        <span class="agenda-label">Test Data Generation</span>
+                    </div>
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: var(--accent);">4</div>
+                        <span class="agenda-label">Automated Code Review</span>
+                    </div>
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: #f778ba;">5</div>
+                        <span class="agenda-label">Bug Fixing with Copilot</span>
+                    </div>
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: #79c0ff;">6</div>
+                        <span class="agenda-label">Security Scanning (IDE + GHAS)</span>
+                    </div>
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: var(--secondary);">7</div>
+                        <span class="agenda-label">Security Report &amp; Triage</span>
+                    </div>
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: var(--purple);">8</div>
+                        <span class="agenda-label">Fixing Security Issues</span>
+                    </div>
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: #3fb950;">9</div>
+                        <span class="agenda-label">DB Migration Scripts</span>
+                    </div>
+                    <div class="agenda-item">
+                        <div class="agenda-num" style="background: var(--accent);">10</div>
+                        <span class="agenda-label">Monitoring &amp; Observability</span>
+                    </div>
+                </div>
+                <div class="tip-box">
+                    <h4><i class="fas fa-bullseye"></i> Today's Focus</h4>
+                    <p>We take the app built in Day 4 and make it <strong>production-ready</strong>: comprehensive tests, security hardening, database migrations, and observability — all powered by GitHub Copilot.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 4: Section — Unit & Integration Test Generation
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="4">
+            <div class="section-number">01</div>
+            <h2>Unit &amp; Integration<br>Test Generation</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">Generating comprehensive test suites with <code>/tests</code>, Agent Mode, and Chat</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 5: Test Generation Workflow
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="5">
+            <h2><i class="fas fa-vial" style="color: var(--secondary); margin-right: 12px;"></i>Test Generation with Copilot</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="flow-diagram">
+                    <div class="flow-step" style="border-color: var(--secondary);">
+                        <div class="step-icon">🔍</div>
+                        <h4>Analyze Code</h4>
+                        <p>Understand logic</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--purple);">
+                        <div class="step-icon">📊</div>
+                        <h4>Identify Gaps</h4>
+                        <p>Untested paths</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: #3fb950;">
+                        <div class="step-icon">🧪</div>
+                        <h4>Generate Tests</h4>
+                        <p>/tests &amp; Agent</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--accent);">
+                        <div class="step-icon">▶️</div>
+                        <h4>Run &amp; Validate</h4>
+                        <p>Fix failures</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: #f778ba;">
+                        <div class="step-icon">📈</div>
+                        <h4>Improve Coverage</h4>
+                        <p>Edge cases</p>
+                    </div>
+                </div>
+                <div class="cap-grid">
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-terminal"></i></div>
+                        <div class="cap-text">
+                            <h4><code>/tests</code> Slash Command</h4>
+                            <p>Select code → <code>/tests</code> generates unit tests for the selected function with mocks and assertions</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--purple);"><i class="fas fa-robot"></i></div>
+                        <div class="cap-text">
+                            <h4>Agent Mode Bulk Generation</h4>
+                            <p>"Generate tests for all services in <code>#file:src/services/</code>" — creates entire test suites</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: #3fb950;"><i class="fas fa-masks-theater"></i></div>
+                        <div class="cap-text">
+                            <h4>Smart Mocking</h4>
+                            <p>Copilot infers database, Redis, and API mocks from your imports and usage patterns</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--accent);"><i class="fas fa-arrows-rotate"></i></div>
+                        <div class="cap-text">
+                            <h4>Iterative Coverage</h4>
+                            <p>Run tests → check coverage → ask Copilot to add tests for uncovered branches</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 6: Section — Test Automation with Playwright
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="6">
+            <div class="section-number">02</div>
+            <h2>Test Automation<br>with Playwright</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">End-to-end test generation, page object models, and cross-browser testing</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 7: Playwright E2E Workflow
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="7">
+            <h2><i class="fas fa-masks-theater" style="color: var(--purple); margin-right: 12px;"></i>E2E Testing with Playwright <span class="mode-badge agent">AGENT</span></h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="flow-diagram">
+                    <div class="flow-step" style="border-color: var(--secondary);">
+                        <div class="step-icon">🌐</div>
+                        <h4>Identify Flows</h4>
+                        <p>User journeys</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--purple);">
+                        <div class="step-icon">📄</div>
+                        <h4>Page Objects</h4>
+                        <p>Reusable selectors</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: #3fb950;">
+                        <div class="step-icon">🧪</div>
+                        <h4>Write Tests</h4>
+                        <p>Assertions &amp; flows</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--accent);">
+                        <div class="step-icon">🔧</div>
+                        <h4>Run &amp; Fix</h4>
+                        <p>Self-correction</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: #f778ba;">
+                        <div class="step-icon">🖥️</div>
+                        <h4>Cross-Browser</h4>
+                        <p>Chrome, FF, Safari</p>
+                    </div>
+                </div>
+                <div class="cap-grid">
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-globe"></i></div>
+                        <div class="cap-text">
+                            <h4><code>@workspace</code> Context</h4>
+                            <p>Copilot analyzes your HTML, routes, and API to generate accurate selectors and test flows</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--purple);"><i class="fas fa-layer-group"></i></div>
+                        <div class="cap-text">
+                            <h4>Page Object Model</h4>
+                            <p>Agent generates reusable page classes with typed selectors and action methods</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: #3fb950;"><i class="fas fa-check-double"></i></div>
+                        <div class="cap-text">
+                            <h4>Smart Assertions</h4>
+                            <p>Infers expected behavior from your code, generating meaningful expect() statements</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--accent);"><i class="fas fa-wrench"></i></div>
+                        <div class="cap-text">
+                            <h4>MCP Integration</h4>
+                            <p>Use the Playwright MCP server for browser control and test recording in Agent Mode</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 8: Section — Test Data Generation
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="8">
+            <div class="section-number">03</div>
+            <h2>Test Data<br>Generation</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">Generating realistic fixtures, edge cases, boundary values, and schema-aware datasets</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 9: Test Data Patterns
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="9">
+            <h2><i class="fas fa-database" style="color: #3fb950; margin-right: 12px;"></i>Test Data Generation Patterns</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="cap-grid" style="grid-template-columns: repeat(2, 1fr);">
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-bullseye"></i></div>
+                        <div class="cap-text">
+                            <h4>Edge Case Inference</h4>
+                            <p>Copilot reads your validation logic and generates data for boundary conditions, nulls, and overflow</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--purple);"><i class="fas fa-users"></i></div>
+                        <div class="cap-text">
+                            <h4>Realistic Fixtures</h4>
+                            <p>Schema-aware data that matches your model types, foreign keys, and constraints</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: #3fb950;"><i class="fas fa-arrows-left-right"></i></div>
+                        <div class="cap-text">
+                            <h4>Boundary Value Analysis</h4>
+                            <p>Min, max, min-1, max+1, empty string, zero, negative — systematically generated</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--accent);"><i class="fas fa-table"></i></div>
+                        <div class="cap-text">
+                            <h4>Seed Data Scripts</h4>
+                            <p>Generate database seed files with realistic, interconnected data for development and testing</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="dual-panel">
+                    <div>
+                        <h3 style="font-size: 1.05rem; color: var(--secondary); margin-bottom: 10px;"><i class="fas fa-terminal"></i> Prompt Example</h3>
+                        <div class="code-inline" style="font-size: 0.78rem;">
+                            <span class="comment">/* In Copilot Chat */</span><br>
+                            <span class="string">"Analyze #file:src/models/Order.ts</span><br>
+                            <span class="string">and generate test fixtures that cover:</span><br>
+                            <span class="string">- All valid status transitions</span><br>
+                            <span class="string">- Boundary values for total and quantity</span><br>
+                            <span class="string">- Edge cases: empty items, zero price,</span><br>
+                            <span class="string">&nbsp; max discount, null coupon code"</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.05rem; color: #3fb950; margin-bottom: 10px;"><i class="fas fa-wand-magic-sparkles"></i> What Copilot Generates</h3>
+                        <div class="code-inline" style="font-size: 0.78rem;">
+                            <span class="keyword">export const</span> <span class="variable">orderFixtures</span> = {<br>
+                            &nbsp;&nbsp;<span class="variable">validOrder:</span> { <span class="comment">/* happy path */</span> },<br>
+                            &nbsp;&nbsp;<span class="variable">maxTotal:</span> { total: <span class="string">99999.99</span> },<br>
+                            &nbsp;&nbsp;<span class="variable">zeroDiscount:</span> { discount: <span class="string">0</span> },<br>
+                            &nbsp;&nbsp;<span class="variable">emptyItems:</span> { items: [] },<br>
+                            &nbsp;&nbsp;<span class="variable">nullCoupon:</span> { couponCode: <span class="keyword">null</span> },<br>
+                            &nbsp;&nbsp;<span class="variable">cancelledOrder:</span> { status: <span class="string">"cancelled"</span> },<br>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 10: Section — Automated Code Review
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="10">
+            <div class="section-number">04</div>
+            <h2>Automated<br>Code Review</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">AI-powered PR reviews, Copilot Code Review, and addressing feedback</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 11: Code Review Flow
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="11">
+            <h2><i class="fas fa-code-pull-request" style="color: var(--accent); margin-right: 12px;"></i>Copilot Code Review</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="flow-diagram">
+                    <div class="flow-step" style="border-color: var(--secondary);">
+                        <div class="step-icon">📝</div>
+                        <h4>PR Created</h4>
+                        <p>Push changes</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--purple);">
+                        <div class="step-icon">🤖</div>
+                        <h4>Copilot Reviews</h4>
+                        <p>Automated analysis</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--accent);">
+                        <div class="step-icon">💬</div>
+                        <h4>Suggestions</h4>
+                        <p>Inline comments</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: #3fb950;">
+                        <div class="step-icon">✅</div>
+                        <h4>Address &amp; Merge</h4>
+                        <p>Fix &amp; resolve</p>
+                    </div>
+                </div>
+                <div class="cap-grid">
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-robot"></i></div>
+                        <div class="cap-text">
+                            <h4>Copilot as Reviewer</h4>
+                            <p>Add Copilot as a reviewer on any PR — it analyzes every changed file and leaves inline comments</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--purple);"><i class="fab fa-github"></i></div>
+                        <div class="cap-text">
+                            <h4><code>@github</code> for PR Context</h4>
+                            <p>Ask <code>@github</code> about PR status, review comments, and CI check results directly in Chat</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--accent);"><i class="fas fa-wand-magic-sparkles"></i></div>
+                        <div class="cap-text">
+                            <h4>Address Feedback</h4>
+                            <p>Use Agent Mode to automatically apply suggested changes from review comments</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: #3fb950;"><i class="fas fa-shield-halved"></i></div>
+                        <div class="cap-text">
+                            <h4>Review Quality</h4>
+                            <p>Copilot checks for bugs, security issues, performance problems, and coding standards</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 12: Section — Bug Fixing
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="12">
+            <div class="section-number">05</div>
+            <h2>Bug Fixing<br>with Copilot</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">Debugging with <code>/fix</code>, error analysis, root cause identification, and multi-file fixes</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 13: Bug Fixing Approaches
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="13">
+            <h2><i class="fas fa-bug" style="color: var(--accent); margin-right: 12px;"></i>Three Ways to Fix Bugs</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="mode-cols">
+                    <div class="mode-col" style="border-top: 3px solid var(--accent);">
+                        <h3 style="color: var(--accent);"><i class="fas fa-wrench"></i> /fix <span class="mode-badge fix">/FIX</span></h3>
+                        <p class="mode-desc">Quick inline fix for the selected code</p>
+                        <ul>
+                            <li>Select broken code → <code>/fix</code></li>
+                            <li>One-click apply suggestion</li>
+                            <li>Best for syntax/logic errors</li>
+                            <li>Handles single-file scope</li>
+                        </ul>
+                    </div>
+                    <div class="mode-col" style="border-top: 3px solid var(--secondary);">
+                        <h3 style="color: var(--secondary);"><i class="fas fa-comments"></i> Chat Analysis</h3>
+                        <p class="mode-desc">Explain the error + get root cause</p>
+                        <ul>
+                            <li>Paste stack trace into Chat</li>
+                            <li>"Explain this error and fix it"</li>
+                            <li>Root cause identification</li>
+                            <li>Suggests prevention strategies</li>
+                        </ul>
+                    </div>
+                    <div class="mode-col" style="border-top: 3px solid var(--purple);">
+                        <h3 style="color: var(--purple);"><i class="fas fa-robot"></i> Agent Mode <span class="mode-badge agent">AGENT</span></h3>
+                        <p class="mode-desc">Autonomous multi-file bug resolution</p>
+                        <ul>
+                            <li>Diagnoses across entire codebase</li>
+                            <li>Edits multiple files to fix root cause</li>
+                            <li>Runs tests to verify the fix</li>
+                            <li>Self-corrects if tests still fail</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tip-box">
+                    <h4><i class="fas fa-lightbulb"></i> Pro Tip: Paste the Error</h4>
+                    <p>Copy the full error message or stack trace and paste it directly into Chat. Copilot matches it against your codebase using <code>#codebase</code> to pinpoint the exact file and line.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 14: Section — Security Scanning
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="14">
+            <div class="section-number">06</div>
+            <h2>Security Scanning</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">Find vulnerabilities in the IDE with Copilot — and at scale with GHAS</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 15: Two Paths — IDE + GHAS
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="15">
+            <h2><i class="fas fa-shield-halved" style="color: #f778ba; margin-right: 12px;"></i>Two Paths to Security</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="dual-panel">
+                    <div style="border: 1px solid var(--secondary); border-radius: 12px; padding: 20px;">
+                        <h3 style="color: var(--secondary); margin-bottom: 14px;"><i class="fas fa-laptop-code"></i> IDE — Copilot in VS Code</h3>
+                        <div class="cap-grid" style="grid-template-columns: 1fr; gap: 10px;">
+                            <div class="cap-item">
+                                <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-magnifying-glass"></i></div>
+                                <div class="cap-text">
+                                    <h4>@workspace Security Audit</h4>
+                                    <p>Ask Copilot to scan the entire codebase for OWASP Top 10 — instant, no CI needed</p>
+                                </div>
+                            </div>
+                            <div class="cap-item">
+                                <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-code"></i></div>
+                                <div class="cap-text">
+                                    <h4>File-Level Deep Dive</h4>
+                                    <p>Point Copilot at a specific file — it explains the exploit path and impact in plain language</p>
+                                </div>
+                            </div>
+                            <div class="cap-item">
+                                <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-box"></i></div>
+                                <div class="cap-text">
+                                    <h4>Dependency CVE Check</h4>
+                                    <p>Ask Copilot if any packages in requirements.txt have known vulnerabilities</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tag-row" style="margin-top: 12px;">
+                            <span class="tag">Pre-push</span>
+                            <span class="tag">No setup</span>
+                            <span class="tag">Developer self-service</span>
+                        </div>
+                    </div>
+                    <div style="border: 1px solid #f778ba; border-radius: 12px; padding: 20px;">
+                        <h3 style="color: #f778ba; margin-bottom: 14px;"><i class="fas fa-shield-halved"></i> GHAS — GitHub Advanced Security</h3>
+                        <div class="cap-grid" style="grid-template-columns: 1fr; gap: 10px;">
+                            <div class="cap-item">
+                                <div class="cap-icon" style="color: #f778ba;"><i class="fas fa-search"></i></div>
+                                <div class="cap-text">
+                                    <h4>CodeQL Code Scanning</h4>
+                                    <p>Semantic data-flow analysis on every push and PR — proves vulnerabilities are reachable</p>
+                                </div>
+                            </div>
+                            <div class="cap-item">
+                                <div class="cap-icon" style="color: #f778ba;"><i class="fas fa-key"></i></div>
+                                <div class="cap-text">
+                                    <h4>Secret Scanning + Push Protection</h4>
+                                    <p>Detects 200+ secret types — blocks commits before secrets enter the repo</p>
+                                </div>
+                            </div>
+                            <div class="cap-item">
+                                <div class="cap-icon" style="color: #f778ba;"><i class="fas fa-box-open"></i></div>
+                                <div class="cap-text">
+                                    <h4>Dependabot</h4>
+                                    <p>CVE alerts + automatic update PRs for vulnerable dependencies</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tag-row" style="margin-top: 12px;">
+                            <span class="tag">Every push</span>
+                            <span class="tag">Org-scale</span>
+                            <span class="tag">Automated</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tip-box">
+                    <h4><i class="fas fa-lightbulb"></i> Shift Left — At Every Stage</h4>
+                    <p>Developers use Copilot in the IDE <strong>before pushing</strong>. GHAS provides the automated safety net <strong>on every push</strong>. Together they cover the full developer lifecycle.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 16: Section — Security Report & Prioritization
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="16">
+            <div class="section-number">07</div>
+            <h2>Security Report &amp;<br>Prioritization</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">Triaging alerts, risk assessment, and building a remediation plan</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 17: Triage Workflow
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="17">
+            <h2><i class="fas fa-chart-line" style="color: var(--secondary); margin-right: 12px;"></i>Security Triage Workflow</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="pipeline-flow">
+                    <div class="pipeline-stage" style="border-top: 2px solid var(--accent);">
+                        <div class="stage-icon" style="color: var(--accent);">📊</div>
+                        <div>
+                            <h4>1. Security Overview Dashboard</h4>
+                            <p>Start with the org-wide view: filter by repo, severity (critical/high/medium/low), and alert type</p>
+                        </div>
+                    </div>
+                    <div class="pipeline-arrow">↓</div>
+                    <div class="pipeline-stage" style="border-top: 2px solid var(--secondary);">
+                        <div class="stage-icon" style="color: var(--secondary);">🎯</div>
+                        <div>
+                            <h4>2. Assess Exploitability</h4>
+                            <p>Use Copilot Chat: "Is this SQL injection reachable from user input?" — Copilot traces the data flow</p>
+                        </div>
+                    </div>
+                    <div class="pipeline-arrow">↓</div>
+                    <div class="pipeline-stage" style="border-top: 2px solid var(--purple);">
+                        <div class="stage-icon" style="color: var(--purple);">📋</div>
+                        <div>
+                            <h4>3. Prioritize by Risk</h4>
+                            <p>Critical + reachable = fix immediately. Low + no user input = schedule for next sprint</p>
+                        </div>
+                    </div>
+                    <div class="pipeline-arrow">↓</div>
+                    <div class="pipeline-stage" style="border-top: 2px solid #3fb950;">
+                        <div class="stage-icon" style="color: #3fb950;">🔧</div>
+                        <div>
+                            <h4>4. Plan Remediation</h4>
+                            <p>Autofix for quick wins, Agent mode for complex multi-file fixes, manual for architecture changes</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tag-row" style="justify-content: center;">
+                    <span class="tag"><i class="fas fa-circle" style="color: #f85149;"></i> Critical</span>
+                    <span class="tag"><i class="fas fa-circle" style="color: var(--accent);"></i> High</span>
+                    <span class="tag"><i class="fas fa-circle" style="color: #d29922;"></i> Medium</span>
+                    <span class="tag"><i class="fas fa-circle" style="color: #8b949e;"></i> Low</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 18: Section — Fixing Security Issues
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="18">
+            <div class="section-number">08</div>
+            <h2>Fixing Security<br>Issues</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;"><code>/fix</code> &amp; Agent in the IDE — Copilot Autofix from GHAS alerts</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 19: Three Remediation Paths
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="19">
+            <h2><i class="fas fa-wand-magic-sparkles" style="color: #3fb950; margin-right: 12px;"></i>Three Remediation Paths</h2>
+            <div class="content" style="flex-direction: column; gap: 18px;">
+                <div class="cap-grid" style="grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                    <div style="border: 1px solid var(--secondary); border-radius: 12px; padding: 18px;">
+                        <div style="text-align: center; margin-bottom: 12px;">
+                            <span style="font-size: 2rem;"><i class="fas fa-terminal" style="color: var(--secondary);"></i></span>
+                            <h3 style="color: var(--secondary); margin-top: 8px;"><code>/fix</code> Inline</h3>
+                            <span class="mode-badge" style="background: rgba(88,166,255,0.15); color: var(--secondary);">IDE</span>
+                        </div>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">Select the vulnerable line, press <strong>Ctrl+I</strong>, type <code>/fix</code> with the vulnerability type. Copilot applies a targeted OWASP-aware fix without leaving the file.</p>
+                        <div class="code-inline" style="font-size: 0.75rem; margin-top: 10px;">
+                            <span class="comment"># XSS — remove | safe filter</span><br>
+                            <span class="danger">{{ plan.notes | safe }}</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓ /fix<br>
+                            <span class="safe">{{ plan.notes }}</span>
+                        </div>
+                    </div>
+                    <div style="border: 1px solid var(--purple); border-radius: 12px; padding: 18px;">
+                        <div style="text-align: center; margin-bottom: 12px;">
+                            <span style="font-size: 2rem;"><i class="fas fa-robot" style="color: var(--purple);"></i></span>
+                            <h3 style="color: var(--purple); margin-top: 8px;">Agent Mode</h3>
+                            <span class="mode-badge agent">IDE</span>
+                        </div>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">Describe all vulnerabilities in one prompt — Agent fixes SQL injection, path traversal, and hardcoded secrets across multiple files, then runs tests to confirm.</p>
+                        <div class="code-inline" style="font-size: 0.75rem; margin-top: 10px;">
+                            <span class="comment"># SQL injection fix</span><br>
+                            <span class="danger">f"...LIKE '%{keyword}%'"</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;↓ Agent<br>
+                            <span class="safe">"...LIKE ?", ("%"+keyword+"%",)</span>
+                        </div>
+                    </div>
+                    <div style="border: 1px solid #f778ba; border-radius: 12px; padding: 18px;">
+                        <div style="text-align: center; margin-bottom: 12px;">
+                            <span style="font-size: 2rem;"><i class="fas fa-magic" style="color: #f778ba;"></i></span>
+                            <h3 style="color: #f778ba; margin-top: 8px;">Copilot Autofix</h3>
+                            <span class="mode-badge ghas">GHAS</span>
+                        </div>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">From any CodeQL alert on GitHub.com, click <strong>"Generate fix"</strong> — Copilot creates a PR with a minimal, correct diff. One click per alert, at org scale.</p>
+                        <div class="code-inline" style="font-size: 0.75rem; margin-top: 10px;">
+                            <span class="comment"># GHAS alert → Generate fix</span><br>
+                            <span class="safe">✓ PR created automatically</span><br>
+                            <span class="safe">✓ Diff preview shown</span><br>
+                            <span class="safe">✓ CI runs on the PR</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tip-box">
+                    <h4><i class="fas fa-lightbulb"></i> When to Use Each</h4>
+                    <p><strong>/fix</strong> — single known location, developer in flow &nbsp;|&nbsp; <strong>Agent</strong> — bulk multi-file fix, one conversation &nbsp;|&nbsp; <strong>Autofix</strong> — triaging many GHAS alerts, org-scale remediation</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 20: Security Fix — Secrets & Dependencies
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="20">
+            <h2><i class="fas fa-key" style="color: var(--accent); margin-right: 12px;"></i>Secrets &amp; Dependency Fixes</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="dual-panel">
+                    <div>
+                        <h3 style="font-size: 1.1rem; color: var(--accent); margin-bottom: 12px;"><i class="fas fa-key"></i> Hardcoded Secrets</h3>
+                        <div class="code-inline" style="font-size: 0.78rem;">
+                            <span class="comment">// ❌ Before — secrets in source</span><br>
+                            <span class="keyword">const</span> <span class="variable">API_KEY</span> = <span class="danger">"sk_live_4eC39Hq..."</span>;<br><br>
+                            <span class="comment">// ✅ After — environment variables</span><br>
+                            <span class="keyword">const</span> <span class="variable">API_KEY</span> = <span class="safe">process.env.STRIPE_API_KEY</span>;<br>
+                            <span class="keyword">if</span> (!API_KEY) <span class="keyword">throw new</span> Error(<br>
+                            &nbsp;&nbsp;<span class="string">"Missing STRIPE_API_KEY"</span><br>
+                            );
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.1rem; color: var(--purple); margin-bottom: 12px;"><i class="fas fa-box-open"></i> Vulnerable Dependencies</h3>
+                        <div class="code-inline" style="font-size: 0.78rem;">
+                            <span class="comment">// Dependabot flags CVE-2024-XXXX</span><br>
+                            <span class="comment">// in jsonwebtoken &lt; 9.0.0</span><br><br>
+                            <span class="comment">// Dependabot auto-PR:</span><br>
+                            <span class="variable">"jsonwebtoken"</span>: <span class="danger">"^8.5.1"</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+                            <span class="variable">"jsonwebtoken"</span>: <span class="safe">"^9.0.2"</span><br><br>
+                            <span class="comment">// Review, merge, done ✓</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tip-box">
+                    <h4><i class="fas fa-circle-info"></i> Secret Scanning + Push Protection</h4>
+                    <p>With push protection enabled, secrets are <strong>blocked before they enter the repo</strong>. If a secret is already committed, Secret Scanning creates an alert — rotate the credential immediately, then remove from history.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 21: Section — DB Migration Scripts
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="21">
+            <div class="section-number">09</div>
+            <h2>Database Migration<br>Scripts</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">Schema migrations, rollback scripts, data migrations, and version control</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 22: Migration Workflow
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="22">
+            <h2><i class="fas fa-database" style="color: var(--purple); margin-right: 12px;"></i>Migration Generation <span class="mode-badge agent">AGENT</span></h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="flow-diagram">
+                    <div class="flow-step" style="border-color: var(--secondary);">
+                        <div class="step-icon">📝</div>
+                        <h4>Model Change</h4>
+                        <p>Add/modify fields</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--purple);">
+                        <div class="step-icon">🔄</div>
+                        <h4>Detect Diff</h4>
+                        <p>Schema comparison</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: #3fb950;">
+                        <div class="step-icon">📄</div>
+                        <h4>Generate SQL</h4>
+                        <p>ALTER TABLE + indexes</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--accent);">
+                        <div class="step-icon">⬇️</div>
+                        <h4>Rollback Script</h4>
+                        <p>Reverse changes</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: #f778ba;">
+                        <div class="step-icon">✅</div>
+                        <h4>Apply &amp; Verify</h4>
+                        <p>Run migration</p>
+                    </div>
+                </div>
+                <div class="dual-panel">
+                    <div>
+                        <h3 style="font-size: 1.05rem; color: var(--secondary); margin-bottom: 10px;"><i class="fas fa-terminal"></i> Prompt</h3>
+                        <div class="code-inline" style="font-size: 0.78rem;">
+                            <span class="string">"Compare #file:models/Order.ts with</span><br>
+                            <span class="string">#file:migrations/001_initial_schema.sql</span><br>
+                            <span class="string">and generate a migration script for the</span><br>
+                            <span class="string">new fields: discountCode, shippingMethod,</span><br>
+                            <span class="string">trackingNumber, estimatedDelivery.</span><br>
+                            <span class="string">Include a rollback (down) script."</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.05rem; color: #3fb950; margin-bottom: 10px;"><i class="fas fa-code"></i> Generated Output</h3>
+                        <div class="code-inline" style="font-size: 0.78rem;">
+                            <span class="comment">-- UP</span><br>
+                            <span class="keyword">ALTER TABLE</span> orders<br>
+                            &nbsp;&nbsp;<span class="keyword">ADD COLUMN</span> <span class="variable">discount_code</span> VARCHAR(50),<br>
+                            &nbsp;&nbsp;<span class="keyword">ADD COLUMN</span> <span class="variable">shipping_method</span> VARCHAR(20),<br>
+                            &nbsp;&nbsp;<span class="keyword">ADD COLUMN</span> <span class="variable">tracking_number</span> VARCHAR(100),<br>
+                            &nbsp;&nbsp;<span class="keyword">ADD COLUMN</span> <span class="variable">estimated_delivery</span> TIMESTAMP;<br><br>
+                            <span class="comment">-- DOWN</span><br>
+                            <span class="keyword">ALTER TABLE</span> orders<br>
+                            &nbsp;&nbsp;<span class="keyword">DROP COLUMN</span> discount_code, ...;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 23: Section — Monitoring & Observability
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="23">
+            <div class="section-number">10</div>
+            <h2>Monitoring &amp;<br>Observability</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">Logging instrumentation, metrics, alerting configs, and dashboard generation</p>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 24: Observability Stack
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="24">
+            <h2><i class="fas fa-chart-area" style="color: var(--secondary); margin-right: 12px;"></i>Observability with Copilot <span class="mode-badge agent">AGENT</span></h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="cap-grid">
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-scroll"></i></div>
+                        <div class="cap-text">
+                            <h4>Structured Logging</h4>
+                            <p>Instrument services with Winston/Pino — request IDs, timing, error context. Agent adds logging across files.</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--purple);"><i class="fas fa-heart-pulse"></i></div>
+                        <div class="cap-text">
+                            <h4>Health Endpoints</h4>
+                            <p>Generate <code>/health</code> and <code>/ready</code> endpoints with DB, Redis, and dependency checks</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: #3fb950;"><i class="fas fa-gauge-high"></i></div>
+                        <div class="cap-text">
+                            <h4>Metrics &amp; Prometheus</h4>
+                            <p>Expose request duration, error rates, and business metrics via <code>/metrics</code> endpoint</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--accent);"><i class="fas fa-bell"></i></div>
+                        <div class="cap-text">
+                            <h4>Alert Rules</h4>
+                            <p>Generate Grafana/PagerDuty alert configs: error rate spikes, latency thresholds, disk usage</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flow-diagram">
+                    <div class="flow-step" style="border-color: var(--secondary);">
+                        <div class="step-icon">📝</div>
+                        <h4>Instrument</h4>
+                        <p>Add logging</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--purple);">
+                        <div class="step-icon">📊</div>
+                        <h4>Collect</h4>
+                        <p>Metrics endpoint</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: #3fb950;">
+                        <div class="step-icon">🔔</div>
+                        <h4>Alert</h4>
+                        <p>Threshold rules</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--accent);">
+                        <div class="step-icon">📈</div>
+                        <h4>Visualize</h4>
+                        <p>Dashboards</p>
+                    </div>
+                </div>
+                <div class="tag-row" style="justify-content: center;">
+                    <span class="tag">Winston</span>
+                    <span class="tag">Pino</span>
+                    <span class="tag">Prometheus</span>
+                    <span class="tag">Grafana</span>
+                    <span class="tag">OpenTelemetry</span>
+                    <span class="tag">Datadog</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 25: Complete Quality Lifecycle
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="25">
+            <h2><i class="fas fa-infinity" style="color: var(--secondary); margin-right: 12px;"></i>Production Readiness Lifecycle</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="flow-diagram wide">
+                    <div class="flow-step" style="border-color: var(--secondary);">
+                        <div class="step-icon">🧪</div>
+                        <h4>Test</h4>
+                        <p>Unit + E2E</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--purple);">
+                        <div class="step-icon">🔍</div>
+                        <h4>Review</h4>
+                        <p>Copilot Code Review</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--accent);">
+                        <div class="step-icon">🔒</div>
+                        <h4>Secure</h4>
+                        <p>GHAS + Autofix</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: #3fb950;">
+                        <div class="step-icon">🗄️</div>
+                        <h4>Migrate</h4>
+                        <p>DB scripts</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: #f778ba;">
+                        <div class="step-icon">📈</div>
+                        <h4>Monitor</h4>
+                        <p>Logs &amp; alerts</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: #79c0ff;">
+                        <div class="step-icon">🚀</div>
+                        <h4>Ship</h4>
+                        <p>Production</p>
+                    </div>
+                </div>
+                <div class="card-grid" style="grid-template-columns: repeat(4, 1fr);">
+                    <div class="card" style="padding: 20px; text-align: center;">
+                        <div class="stat-value" style="color: var(--secondary);">3x</div>
+                        <p>Faster vulnerability fix</p>
+                    </div>
+                    <div class="card" style="padding: 20px; text-align: center;">
+                        <div class="stat-value" style="color: #3fb950;">7x</div>
+                        <p>Faster Autofix than manual</p>
+                    </div>
+                    <div class="card" style="padding: 20px; text-align: center;">
+                        <div class="stat-value" style="color: var(--purple);">90%</div>
+                        <p>Alerts fixed by Autofix</p>
+                    </div>
+                    <div class="card" style="padding: 20px; text-align: center;">
+                        <div class="stat-value" style="color: var(--accent);">60%</div>
+                        <p>Less time writing tests</p>
+                    </div>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center;">Sources: GitHub Security Research (2024), GitHub Copilot Impact Study (2024)</p>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 26: Key Takeaways
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="26">
+            <h2><i class="fas fa-trophy" style="color: var(--accent); margin-right: 12px;"></i>Key Takeaways</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="card" style="padding: 24px; border-top: 3px solid var(--secondary);">
+                        <h3 style="font-size: 1.1rem; color: var(--secondary);"><i class="fas fa-vial"></i> Test-First Quality</h3>
+                        <p><code>/tests</code> and Agent Mode generate comprehensive test suites — unit, integration, and E2E — from your existing code.</p>
+                    </div>
+                    <div class="card" style="padding: 24px; border-top: 3px solid var(--purple);">
+                        <h3 style="font-size: 1.1rem; color: var(--purple);"><i class="fas fa-code-pull-request"></i> Automated Reviews</h3>
+                        <p>Copilot Code Review catches bugs, security issues, and style problems before human reviewers see the PR.</p>
+                    </div>
+                    <div class="card" style="padding: 24px; border-top: 3px solid #3fb950;">
+                        <h3 style="font-size: 1.1rem; color: #3fb950;"><i class="fas fa-shield-halved"></i> Security Shift-Left</h3>
+                        <p>GHAS scans every push. Copilot Autofix generates remediation PRs — security becomes part of the workflow, not an afterthought.</p>
+                    </div>
+                    <div class="card" style="padding: 24px; border-top: 3px solid var(--accent);">
+                        <h3 style="font-size: 1.1rem; color: var(--accent);"><i class="fas fa-magic"></i> Autofix at Scale</h3>
+                        <p>90% of GHAS alerts can be fixed automatically. One-click remediation for SQL injection, XSS, secrets, and vulnerable dependencies.</p>
+                    </div>
+                    <div class="card" style="padding: 24px; border-top: 3px solid #f778ba;">
+                        <h3 style="font-size: 1.1rem; color: #f778ba;"><i class="fas fa-database"></i> Migration Confidence</h3>
+                        <p>Copilot generates migration scripts, rollback plans, and data transformations — reducing schema change risk.</p>
+                    </div>
+                    <div class="card" style="padding: 24px; border-top: 3px solid #79c0ff;">
+                        <h3 style="font-size: 1.1rem; color: #79c0ff;"><i class="fas fa-chart-area"></i> Observable Systems</h3>
+                        <p>Structured logging, health endpoints, Prometheus metrics, and alert rules — generated from natural language prompts.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 27: Copilot Quick Reference
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="27">
+            <h2><i class="fas fa-keyboard" style="color: var(--secondary); margin-right: 12px;"></i>Day 5 — Feature Quick Reference</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <table class="styled-table" style="font-size: 0.95rem;">
+                    <thead>
+                        <tr>
+                            <th>Feature / Command</th>
+                            <th>Purpose</th>
+                            <th>When to Use</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>/tests</code></td>
+                            <td>Generate unit tests for selected code</td>
+                            <td>Adding test coverage to existing functions</td>
+                        </tr>
+                        <tr>
+                            <td><code>/fix</code></td>
+                            <td>Fix selected code inline</td>
+                            <td>Quick bug fixes, syntax corrections</td>
+                        </tr>
+                        <tr>
+                            <td><code>Copilot Code Review</code></td>
+                            <td>Automated PR review by Copilot</td>
+                            <td>Every PR — add Copilot as reviewer</td>
+                        </tr>
+                        <tr>
+                            <td><code>Copilot Autofix</code></td>
+                            <td>One-click fix for GHAS alerts</td>
+                            <td>Remediating security vulnerabilities</td>
+                        </tr>
+                        <tr>
+                            <td><code>@github</code></td>
+                            <td>Ask about PR, issues, and repo context</td>
+                            <td>Understanding PR status, review comments</td>
+                        </tr>
+                        <tr>
+                            <td><code>Agent Mode</code></td>
+                            <td>Autonomous multi-file changes</td>
+                            <td>Complex bug fixes, test suite generation</td>
+                        </tr>
+                        <tr>
+                            <td><code>GHAS Dashboard</code></td>
+                            <td>Security Overview across repos</td>
+                            <td>Triaging and prioritizing security alerts</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 28: 5-Day Course Wrap-Up
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="28">
+            <h2><i class="fas fa-graduation-cap" style="color: var(--purple); margin-right: 12px;"></i>5-Day Journey Recap</h2>
+            <div class="content" style="flex-direction: column; gap: 20px;">
+                <div class="flow-diagram wide">
+                    <div class="flow-step" style="border-color: var(--secondary);">
+                        <div class="step-icon">📋</div>
+                        <h4>Day 1</h4>
+                        <p>GitHub Platform</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--purple);">
+                        <div class="step-icon">💻</div>
+                        <h4>Day 2</h4>
+                        <p>Copilot Basics</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: #3fb950;">
+                        <div class="step-icon">🧠</div>
+                        <h4>Day 3</h4>
+                        <p>Context &amp; Prompting</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: var(--accent);">
+                        <div class="step-icon">🏗️</div>
+                        <h4>Day 4</h4>
+                        <p>Build &amp; Modernize</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="border-color: #f778ba;">
+                        <div class="step-icon">🔒</div>
+                        <h4>Day 5</h4>
+                        <p>Quality &amp; Security</p>
+                    </div>
+                </div>
+                <div class="cap-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--secondary);"><i class="fas fa-certificate"></i></div>
+                        <div class="cap-text">
+                            <h4>GitHub Certifications</h4>
+                            <p>Take the GitHub Foundations, Copilot, and Advanced Security certification exams</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: var(--purple);"><i class="fas fa-book-open"></i></div>
+                        <div class="cap-text">
+                            <h4>Continue Learning</h4>
+                            <p>GitHub Skills, GitHub Docs, VS Code Copilot docs, and community blogs</p>
+                        </div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-icon" style="color: #3fb950;"><i class="fas fa-users"></i></div>
+                        <div class="cap-text">
+                            <h4>Share with Your Team</h4>
+                            <p>Create team prompt files, custom instructions, and shared agents for your projects</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tip-box">
+                    <h4><i class="fas fa-rocket"></i> What's Next?</h4>
+                    <p>Apply what you've learned to your daily workflow. Start with <code>copilot-instructions.md</code> in your repos, build team <code>.prompt.md</code> files, and enable GHAS across your organization.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 29: Q&A
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="29">
+            <div class="section-number" style="font-size: 6rem; color: var(--surface-light);">Q&amp;A</div>
+            <h2 style="color: #3fb950;">Questions &amp; Discussion</h2>
+            <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 700px; text-align: center; line-height: 1.5;">Open discussion, final demo requests, course wrap-up</p>
+            <div class="tag-row" style="margin-top: 30px;">
+                <span class="tag"><i class="fas fa-comments"></i> Open Discussion</span>
+                <span class="tag"><i class="fas fa-desktop"></i> Live Demos</span>
+                <span class="tag"><i class="fas fa-question-circle"></i> Any Topic</span>
+                <span class="tag"><i class="fas fa-graduation-cap"></i> Course Complete</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" aria-label="Previous slide">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <span class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">29</span></span>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)" aria-label="Next slide">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        <button class="nav-btn" onclick="toggleFullscreen()" aria-label="Toggle fullscreen">
+            <i class="fas fa-expand" id="fullscreenIcon"></i>
+        </button>
+    </div>
+
+    <div class="keyboard-hints">
+        <kbd>←</kbd> <kbd>→</kbd> Navigate &nbsp;|&nbsp;
+        <kbd>F</kbd> Fullscreen &nbsp;|&nbsp;
+        <kbd>P</kbd> Export PDF
+    </div>
+
+    <script src="../shared/presentation.js"></script>
+    <script>
+        initPresentation({
+            storageKey: 'copilotDay5Slide',
+            pdfFilename: 'Day5_Quality_Security_Optimization.pdf'
+        });
+    </script>
+</body>
+</html>

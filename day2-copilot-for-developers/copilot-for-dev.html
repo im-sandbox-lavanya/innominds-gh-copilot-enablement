@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Copilot for Developers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../shared/presentation.css">
+</head>
+
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Slide Header with Logo -->
+    <div class="slide-header" style="justify-content: space-between;">
+        <a href="../index.html" class="back-home-btn" title="Back to Courses"
+            style="padding: 6px 10px; font-size: 0; gap: 0; width: 32px; height: 32px; justify-content: center; opacity: 0.5;">
+            <i class="fas fa-arrow-left" style="font-size: 0.8rem;"></i>
+        </a>
+        <div class="logo logo-infomagnus">
+            <i class="fab fa-github github-icon"></i>
+            <span><span>Info</span><span class="magnus-text">Magnus</span></span>
+        </div>
+    </div>
+
+    <div class="presentation" id="presentation">
+
+        <!-- ============================================================
+             SLIDE 1: Title
+             ============================================================ -->
+        <div class="slide title-slide active" data-slide="1">
+            <div class="logo-container animate">
+                <div class="copilot-logo">
+                    <i class="fab fa-github"></i>
+                </div>
+            </div>
+            <h1 class="animate">GitHub Copilot<br>for Developers</h1>
+            <p class="subtitle animate">AI-Powered Coding — From First Suggestion to Team Adoption</p>
+            <div class="meta animate">
+                <span><i class="fas fa-clock"></i> Duration: 2 – 2.5 hrs</span>
+                <span><i class="fas fa-chalkboard-teacher"></i> Slides: 90 min | Demo: 30 min</span>
+                <span><i class="fas fa-users"></i> Participants: up to 30</span>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 2: Trainer Introduction
+             ============================================================ -->
+        <div class="slide intro-slide" data-slide="2">
+            <div class="intro-content">
+                <img src="../shared/images/copilot-avatar.png" alt="GitHub Copilot" class="trainer-photo animate">
+                <div class="trainer-info">
+                    <h2 class="animate">Bhaskar Jalagam & Lavanya Nooka</h2>
+                    <p class="title animate">GitHub Certified Trainers</p>
+                    <div class="company animate">
+                        <i class="fab fa-github"></i>
+                        <span><span style="color: #8b949e;">Info</span><span style="color: #58a6ff;">Magnus</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 3: Session Agenda
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="3">
+            <h2>Session Agenda <span style="font-size:1rem; font-weight:400; color:var(--text-muted); border-bottom:none; padding:0;">— 90 min slides · 30 min live demo</span></h2>
+            <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="card animate">
+                    <div class="card-icon"><i class="fas fa-rocket"></i></div>
+                    <h3>Getting Started</h3>
+                    <p>Installation, sign-in, first experience in VS Code</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-magic"></i></div>
+                    <h3>Code Completions</h3>
+                    <p>Ghost text, tab-completion, accepting & rejecting suggestions</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-comments"></i></div>
+                    <h3>Copilot Chat</h3>
+                    <p>Inline & Side Panel — questions, explanations, code generation</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-layer-group"></i></div>
+                    <h3>Copilot Edits</h3>
+                    <p>Multi-file changes in a single pass</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-terminal"></i></div>
+                    <h3>Slash Commands</h3>
+                    <p>/explain, /fix, /tests, /doc · @workspace, @terminal</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #3fb950, #238636);"><i class="fas fa-code-pull-request"></i></div>
+                    <h3>Copilot for PRs</h3>
+                    <p>PR summaries, review suggestions, generated descriptions</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 4: Architecture — What is GitHub Copilot?
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="4">
+            <h2>What is GitHub Copilot?</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-brain"></i></div>
+                            <div class="feature-content">
+                                <h4>AI Pair Programmer</h4>
+                                <p>GitHub Copilot is an AI-powered coding assistant trained on billions of lines of public code, integrated directly into your editor</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                            <div class="feature-content">
+                                <h4>Powered by Large Language Models</h4>
+                                <p>Built on OpenAI's Codex and GPT-4 class models — specialized for understanding and generating code across 30+ languages</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-plug"></i></div>
+                            <div class="feature-content">
+                                <h4>Deep Editor Integration</h4>
+                                <p>Works natively in VS Code, JetBrains, Neovim, and Visual Studio — no context switching required</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-building"></i></div>
+                            <div class="feature-content">
+                                <h4>Enterprise-Ready</h4>
+                                <p>Available as Individual, Business, and Enterprise plans with admin controls, policy management, and audit logs</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="tip-box" style="margin-top: 0;">
+                        <h4><i class="fas fa-lightbulb"></i> Not Just Autocomplete</h4>
+                        <p>GitHub Copilot goes far beyond traditional autocomplete. It understands <strong>intent</strong> from comments, function names, and surrounding code — then generates complete, contextually correct implementations.</p>
+                    </div>
+                    <div class="demo-box" style="margin-top: 20px;">
+                        <h4 style="color: var(--secondary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Impact by the Numbers</h4>
+                        <ul style="list-style: none; color: var(--text);">
+                            <li style="margin-bottom: 10px;"><span class="highlight-text">55%</span> faster task completion (GitHub research)</li>
+                            <li style="margin-bottom: 10px;"><span class="highlight-text">46%</span> of code written by Copilot in enabled repos</li>
+                            <li style="margin-bottom: 10px;"><span class="highlight-text">74%</span> of developers report staying in flow longer</li>
+                            <li><span class="highlight-text">1M+</span> active developers globally</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 5: Architecture — How Copilot Works
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="5">
+            <h2>How GitHub Copilot Works — The AI Engine</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="card animate" style="text-align: center; padding: 25px 20px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);">
+                        <i class="fas fa-file-code"></i>
+                    </div>
+                    <h3 style="font-size: 1rem;">1. Gather Context</h3>
+                    <p style="font-size: 0.85rem;">Current file, open tabs, cursor position, comments, and imports are assembled into a prompt</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 25px 20px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                    <h3 style="font-size: 1rem;">2. Send to Model</h3>
+                    <p style="font-size: 0.85rem;">The prompt is securely transmitted to GitHub's AI backend (OpenAI GPT-4 / Codex class models)</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 25px 20px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3 style="font-size: 1rem;">3. Generate Suggestions</h3>
+                    <p style="font-size: 0.85rem;">The model generates multiple candidate completions ranked by relevance, filtered for safety</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 25px 20px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3 style="font-size: 1rem;">4. Display in Editor</h3>
+                    <p style="font-size: 0.85rem;">Ghost text appears inline. You accept, reject, or cycle through alternatives — you stay in control</p>
+                </div>
+            </div>
+            <div class="tip-box animate" style="margin-top: 30px; width: 100%;">
+                <h4><i class="fas fa-shield-alt"></i> Privacy & Security by Design</h4>
+                <p>Your code prompts are transmitted over TLS. For <strong>Copilot Business/Enterprise</strong>, GitHub does not retain prompts or use your code to train models. All suggestions go through duplication detection to flag potential public-code matches.</p>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 6: Architecture — The Context Window
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="6">
+            <h2>The Context Window — What Copilot Sees</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-file-alt"></i></div>
+                            <div class="feature-content">
+                                <h4>Current File (Primary)</h4>
+                                <p>Code above and below the cursor — the most heavily weighted context signal</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-folder-open"></i></div>
+                            <div class="feature-content">
+                                <h4>Open Tabs (Neighboring Files)</h4>
+                                <p>Other open editor tabs provide imports, types, and patterns — open relevant files!</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-comment-alt"></i></div>
+                            <div class="feature-content">
+                                <h4>Comments & Docstrings</h4>
+                                <p>Natural language comments are the strongest intent signal — write them before code</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-sitemap"></i></div>
+                            <div class="feature-content">
+                                <h4>Project Structure (Chat/Agent)</h4>
+                                <p>In Chat mode with @workspace, Copilot indexes all project files for richer answers</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="warning-box" style="margin-top: 0;">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Context Quality = Suggestion Quality</h4>
+                        <p>Copilot can only suggest based on what it sees. Vague function names, no comments, and closed relevant files all reduce suggestion quality. <strong>Garbage in, garbage out.</strong></p>
+                    </div>
+                    <div class="demo-box" style="margin-top: 20px;">
+                        <h4 style="color: var(--secondary); margin-bottom: 12px;"><i class="fas fa-thumbs-up"></i> Good Context Pattern</h4>
+                        <div class="code-block" style="font-size: 0.85rem;">
+                            <span class="comment">// Parse a JWT token and return the claims</span><br>
+                            <span class="comment">// Returns null if the token is invalid or expired</span><br>
+                            <span class="keyword">function</span> <span class="function">parseJwtToken</span>(token) {<br>
+                            &nbsp;&nbsp;<span class="comment">// Copilot generates the full body here</span><br>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SLIDE 7: Architecture — Copilot in the Dev Workflow
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="7">
+            <h2>GitHub Copilot Across Your Dev Workflow</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="card animate">
+                    <div class="card-icon"><i class="fas fa-keyboard"></i></div>
+                    <h3>Inline Completions</h3>
+                    <p style="margin-bottom: 12px;">Ghost text as you type — zero friction, no prompt needed</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;"><strong>Best for:</strong> Boilerplate, loops, common patterns, repetitive code</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-comments"></i></div>
+                    <h3>Copilot Chat</h3>
+                    <p style="margin-bottom: 12px;">Ask questions, explain code, generate from natural language</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;"><strong>Best for:</strong> Exploration, learning, targeted code gen, docs</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-layer-group"></i></div>
+                    <h3>Copilot Edits</h3>
+                    <p style="margin-bottom: 12px;">Multi-file changes driven by a single instruction</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;"><strong>Best for:</strong> Refactors, feature additions, cross-file changes</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-terminal"></i></div>
+                    <h3>Slash Commands</h3>
+                    <p style="margin-bottom: 12px;">Structured prompts for specific developer tasks</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;"><strong>Best for:</strong> Tests, docs, fixes, explanations on demand</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-code-pull-request"></i></div>
+                    <h3>Copilot for PRs</h3>
+                    <p style="margin-bottom: 12px;">Auto-generate PR descriptions and review suggestions</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;"><strong>Best for:</strong> Code reviews, PR descriptions, collaborative feedback</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #3fb950, #238636);"><i class="fas fa-robot"></i></div>
+                    <h3>Agent Mode</h3>
+                    <p style="margin-bottom: 12px;">Autonomous multi-step task execution</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;"><strong>Best for:</strong> Complex workflows, scaffolding, test loops</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SECTION 01: Getting Started
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="8">
+            <span class="section-number">01</span>
+            <h2>Getting Started<br>with Copilot</h2>
+            <p class="subtitle" style="color: var(--text-muted); font-size: 1.3rem;">Installation, sign-in, and your first AI-assisted code</p>
+        </div>
+
+        <!-- Slide: Installation & Prerequisites -->
+        <div class="slide content-slide" data-slide="9">
+            <h2>Installation & Prerequisites</h2>
+            <div class="two-column">
+                <div>
+                    <h3 style="color: var(--secondary); margin-bottom: 20px;"><i class="fas fa-list-check"></i> Prerequisites</h3>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fab fa-github"></i></div>
+                            <div class="feature-content">
+                                <h4>GitHub Account</h4>
+                                <p>Free, Pro, Team, or Enterprise — with a Copilot subscription (Individual / Business / Enterprise)</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-code"></i></div>
+                            <div class="feature-content">
+                                <h4>VS Code (Recommended)</h4>
+                                <p>Version 1.80+ recommended. Also works in JetBrains IDEs, Neovim, and Visual Studio</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-wifi"></i></div>
+                            <div class="feature-content">
+                                <h4>Internet Connection</h4>
+                                <p>Copilot requires connectivity to the GitHub AI backend — no on-premise model (unless enterprise self-hosted)</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="demo-box" style="margin-top: 0;">
+                        <h4 style="color: var(--secondary); margin-bottom: 15px;"><i class="fas fa-download"></i> Install in VS Code</h4>
+                        <ol style="color: var(--text); font-size: 0.95rem; line-height: 2;">
+                            <li>Open <strong>Extensions</strong> panel <code style="background:var(--surface-light);padding:2px 6px;border-radius:4px;">Ctrl+Shift+X</code></li>
+                            <li>Search <strong>"GitHub Copilot"</strong></li>
+                            <li>Install <strong>GitHub Copilot</strong> (+ Chat extension)</li>
+                            <li>Click <strong>Sign in to GitHub</strong> in the notification</li>
+                            <li>Authorize in the browser → return to VS Code</li>
+                        </ol>
+                    </div>
+                    <div class="tip-box" style="margin-top: 20px;">
+                        <h4><i class="fas fa-lightbulb"></i> Verify Installation</h4>
+                        <p>Look for the <i class="fab fa-github"></i> Copilot status icon in the VS Code bottom status bar. A spinning icon = Copilot is generating.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Sign-in & First Experience -->
+        <div class="slide content-slide" data-slide="10">
+            <h2>Sign-In & Your First Copilot Experience</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="card animate">
+                    <div class="card-icon"><i class="fas fa-sign-in-alt"></i></div>
+                    <h3>Authenticate</h3>
+                    <p>Sign in with your GitHub account via OAuth in the browser. Your token is stored securely in the OS keychain</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-user-cog"></i></div>
+                    <h3>Configure Settings</h3>
+                    <p>Enable/disable for specific languages, configure suggestion delay, and set inline suggestions on/off</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-play-circle"></i></div>
+                    <h3>First Suggestion</h3>
+                    <p>Open a new file, write a comment describing a function, then pause — watch ghost text appear</p>
+                </div>
+            </div>
+            <div class="demo-box animate" style="margin-top: 30px; width: 100%;">
+                <h4 style="color: var(--secondary); margin-bottom: 15px;"><i class="fas fa-keyboard"></i> Essential Keyboard Shortcuts</h4>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                    <div style="text-align: center; padding: 12px; background: var(--surface-light); border-radius: 8px;">
+                        <code style="color: var(--secondary); font-size: 1rem;">Tab</code>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Accept suggestion</p>
+                    </div>
+                    <div style="text-align: center; padding: 12px; background: var(--surface-light); border-radius: 8px;">
+                        <code style="color: var(--accent); font-size: 1rem;">Esc</code>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Dismiss suggestion</p>
+                    </div>
+                    <div style="text-align: center; padding: 12px; background: var(--surface-light); border-radius: 8px;">
+                        <code style="color: var(--purple); font-size: 0.9rem;">Alt + ]</code>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Next suggestion</p>
+                    </div>
+                    <div style="text-align: center; padding: 12px; background: var(--surface-light); border-radius: 8px;">
+                        <code style="color: var(--purple); font-size: 0.9rem;">Alt + [</code>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Previous suggestion</p>
+                    </div>
+                    <div style="text-align: center; padding: 12px; background: var(--surface-light); border-radius: 8px;">
+                        <code style="color: var(--secondary); font-size: 0.85rem;">Ctrl+Enter</code>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Open suggestions panel</p>
+                    </div>
+                    <div style="text-align: center; padding: 12px; background: var(--surface-light); border-radius: 8px;">
+                        <code style="color: var(--secondary); font-size: 0.85rem;">Ctrl+I</code>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Open Inline Chat</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Q1: Getting Started -->
+        <div class="slide quiz-slide" data-slide="q1">
+            <h2 class="animate">Quick Check</h2>
+            <p class="quiz-question animate">What keyboard shortcut opens the Copilot suggestions panel showing all alternatives?</p>
+            <div class="quiz-options animate">
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Tab</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Ctrl + Enter</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Ctrl + Space</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SECTION 02: Code Completions
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="11">
+            <span class="section-number">02</span>
+            <h2>Code Completions</h2>
+            <p class="subtitle" style="color: var(--text-muted); font-size: 1.3rem;">Inline suggestions, ghost text, and tab-completion mastery</p>
+        </div>
+
+        <!-- Slide: Inline Suggestions & Ghost Text -->
+        <div class="slide content-slide" data-slide="12">
+            <h2>Inline Suggestions & Ghost Text</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-ghost"></i></div>
+                            <div class="feature-content">
+                                <h4>Ghost Text</h4>
+                                <p>Suggestions appear as greyed-out text directly after your cursor — no modal, no popup, no friction</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-expand-arrows-alt"></i></div>
+                            <div class="feature-content">
+                                <h4>From Single Lines to Whole Functions</h4>
+                                <p>Completions range from finishing a single expression to generating a complete 50-line function with error handling</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-sync-alt"></i></div>
+                            <div class="feature-content">
+                                <h4>Multiple Alternatives</h4>
+                                <p>Copilot generates several candidates. Cycle through them with Alt+[ / Alt+] or open all in the suggestions panel</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            <div class="feature-content">
+                                <h4>Triggered Automatically</h4>
+                                <p>Suggestions fire on pause — no explicit key press required. Start a new line or press Enter after a comment</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="demo-box" style="margin-top: 0;">
+                        <h4 style="color: var(--secondary); margin-bottom: 12px;"><i class="fas fa-code"></i> Ghost Text in Action</h4>
+                        <div class="code-block" style="font-size: 0.85rem; line-height: 1.8;">
+                            <span class="comment">// Calculate the factorial of n recursively</span><br>
+                            <span class="keyword">function</span> <span class="function">factorial</span>(n) {<br>
+                            &nbsp;&nbsp;<span style="color: #3d444d; font-style: italic;">↳ if (n === 0 || n === 1) return 1;</span><br>
+                            &nbsp;&nbsp;<span style="color: #3d444d; font-style: italic;">↳ return n * factorial(n - 1);</span><br>
+                            <span style="color: #3d444d; font-style: italic;">↳ }</span>
+                        </div>
+                        <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;"><i class="fas fa-info-circle"></i> Greyed lines = Copilot ghost text. Press <strong>Tab</strong> to accept.</p>
+                    </div>
+                    <div class="tip-box" style="margin-top: 20px;">
+                        <h4><i class="fas fa-lightbulb"></i> Pro Tip: Partial Accept</h4>
+                        <p>Use <code style="background:var(--surface-light);padding:2px 5px;border-radius:3px;">Ctrl+Right</code> to accept only the first word of a suggestion — great for nudging Copilot in the right direction.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Keyboard Controls -->
+        <div class="slide content-slide" data-slide="13">
+            <h2>Accepting, Rejecting & Cycling Suggestions</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-check"></i></div>
+                    <h3>Accepting</h3>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: disc; padding-left: 20px; margin-top: 10px;">
+                        <li style="margin-bottom: 8px;"><strong style="color:var(--secondary);">Tab</strong> — Accept full suggestion</li>
+                        <li style="margin-bottom: 8px;"><strong style="color:var(--secondary);">Ctrl+Right</strong> — Accept word-by-word</li>
+                        <li><strong style="color:var(--secondary);">Click ghost text</strong> — Accept on mouse click</li>
+                    </ul>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-times"></i></div>
+                    <h3>Rejecting</h3>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: disc; padding-left: 20px; margin-top: 10px;">
+                        <li style="margin-bottom: 8px;"><strong style="color:var(--accent);">Esc</strong> — Dismiss current suggestion</li>
+                        <li style="margin-bottom: 8px;"><strong style="color:var(--accent);">Keep typing</strong> — Overrides the suggestion</li>
+                        <li><strong style="color:var(--accent);">Delete</strong> — Cancel and continue manually</li>
+                    </ul>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-exchange-alt"></i></div>
+                    <h3>Cycling Alternatives</h3>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: disc; padding-left: 20px; margin-top: 10px;">
+                        <li style="margin-bottom: 8px;"><strong style="color:var(--purple);">Alt + ]</strong> — Next suggestion</li>
+                        <li style="margin-bottom: 8px;"><strong style="color:var(--purple);">Alt + [</strong> — Previous suggestion</li>
+                        <li><strong style="color:var(--purple);">Ctrl+Enter</strong> — Open all suggestions panel</li>
+                    </ul>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-toggle-on"></i></div>
+                    <h3>Toggle Copilot</h3>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: disc; padding-left: 20px; margin-top: 10px;">
+                        <li style="margin-bottom: 8px;">Click the <i class="fab fa-github"></i> icon in the status bar</li>
+                        <li style="margin-bottom: 8px;">Disable globally or per-language</li>
+                        <li>Useful when working in sensitive files</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Context Drives Quality -->
+        <div class="slide content-slide" data-slide="14">
+            <h2>What Drives Completion Quality?</h2>
+            <div class="two-column">
+                <div>
+                    <h3 style="color: var(--secondary); margin-bottom: 25px;"><i class="fas fa-arrow-up"></i> Signals That Improve Suggestions</h3>
+                    <ul>
+                        <li class="animate"><span class="highlight-text">Descriptive function names</span> — <code style="background:var(--surface-light);padding:2px 5px;border-radius:3px;">parseAndValidateEmail()</code> vs <code style="background:var(--surface-light);padding:2px 5px;border-radius:3px;">fn()</code></li>
+                        <li class="animate"><span class="highlight-text">Comments before code</span> — Natural language description of intent drives accuracy</li>
+                        <li class="animate"><span class="highlight-text">Open related files</span> — Types, interfaces, and helper functions in open tabs</li>
+                        <li class="animate"><span class="highlight-text">Good examples nearby</span> — Consistent patterns in the same file are learned</li>
+                        <li class="animate"><span class="highlight-text">Type annotations</span> — TypeScript types, Python hints, C++ signatures</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: var(--accent); margin-bottom: 25px;"><i class="fas fa-arrow-down"></i> Signals That Hurt Suggestions</h3>
+                    <ul>
+                        <li class="animate"><span class="highlight-text">Single-letter names</span> — <code style="background:var(--surface-light);padding:2px 5px;border-radius:3px;">x</code>, <code style="background:var(--surface-light);padding:2px 5px;border-radius:3px;">temp</code>, <code style="background:var(--surface-light);padding:2px 5px;border-radius:3px;">foo</code> provide no intent signal</li>
+                        <li class="animate"><span class="highlight-text">No comments</span> — No description = Copilot must guess what you want</li>
+                        <li class="animate"><span class="highlight-text">Closed relevant files</span> — Copilot cannot see files not open in tabs</li>
+                        <li class="animate"><span class="highlight-text">Mixed coding styles</span> — Inconsistent patterns confuse the model</li>
+                        <li class="animate"><span class="highlight-text">Sensitive/secret data</span> — Never put credentials where Copilot can see them</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo: Code Completions & Chat -->
+        <div class="slide demo-slide" data-slide="15">
+            <div class="demo-icon animate"><i class="fas fa-laptop-code"></i></div>
+            <h2 class="animate">Demo Time</h2>
+            <p class="demo-subtitle animate">Code Completions & First Chat</p>
+            <div class="demo-topics animate">
+                <span class="demo-topic">Ghost Text in Action</span>
+                <span class="demo-topic">Cycling Suggestions</span>
+                <span class="demo-topic">Comment-Driven Generation</span>
+                <span class="demo-topic">Writing Tests with Copilot</span>
+            </div>
+            <p class="animate" style="margin-top: 24px; color: var(--text-muted); font-size: 1rem;">
+                Runbook: <span class="highlight-text">demos/demo_01_completions.md</span>
+            </p>
+        </div>
+
+        <!-- Quiz Q2: Code Completions -->
+        <div class="slide quiz-slide" data-slide="q2">
+            <h2 class="animate">Question 1</h2>
+            <p class="quiz-question animate">Which of these practices MOST improves the quality of Copilot's inline suggestions?</p>
+            <div class="quiz-options animate">
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Using short, cryptic variable names to type faster</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Writing descriptive comments and meaningful function names before the implementation</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Closing all other tabs so Copilot focuses on one file</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SECTION 03: Copilot Chat
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="16">
+            <span class="section-number">03</span>
+            <h2>Copilot Chat —<br>Inline & Side Panel</h2>
+            <p class="subtitle" style="color: var(--text-muted); font-size: 1.3rem;">Asking questions, generating code, explaining and documenting</p>
+        </div>
+
+        <!-- Slide: Chat Modes -->
+        <div class="slide content-slide" data-slide="17">
+            <h2>Inline Chat vs Side Panel Chat</h2>
+            <div class="two-column">
+                <div>
+                    <div class="card animate" style="margin-bottom: 24px;">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff); width:48px; height:48px; margin-bottom:16px;"><i class="fas fa-i-cursor" style="font-size:1.2rem;"></i></div>
+                        <h3>Inline Chat <code style="font-size:0.75rem; background:var(--surface-light); padding:2px 6px; border-radius:4px;">Ctrl+I</code></h3>
+                        <p style="margin-bottom: 12px;">Opens a prompt directly in your code — right where you need it. Changes appear as a diff you can accept or discard.</p>
+                        <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: disc; padding-left: 20px;">
+                            <li style="margin-bottom: 6px;">Select code + Ctrl+I to modify a selection</li>
+                            <li style="margin-bottom: 6px;">No context switching out of the editor</li>
+                            <li>Ideal for: quick fixes, refactors, explanations in-place</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="card animate">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff); width:48px; height:48px; margin-bottom:16px;"><i class="fas fa-comments" style="font-size:1.2rem;"></i></div>
+                        <h3>Chat Side Panel <code style="font-size:0.75rem; background:var(--surface-light); padding:2px 6px; border-radius:4px;">Ctrl+Alt+I</code></h3>
+                        <p style="margin-bottom: 12px;">A persistent conversational UI on the side of your editor — retains chat history across your session.</p>
+                        <ul style="color: var(--text-muted); font-size: 0.9rem; list-style: disc; padding-left: 20px;">
+                            <li style="margin-bottom: 6px;">Full conversation history with back-and-forth</li>
+                            <li style="margin-bottom: 6px;">Use @references to pull in files and symbols</li>
+                            <li>Ideal for: exploration, complex tasks, multi-turn Q&A</li>
+                        </ul>
+                    </div>
+                    <div class="tip-box animate" style="margin-top: 20px;">
+                        <h4><i class="fas fa-lightbulb"></i> Rule of Thumb</h4>
+                        <p><strong>Inline Chat</strong> for "do something to this code." <strong>Side Panel</strong> for "help me understand or build something."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Generating Code from Natural Language -->
+        <div class="slide content-slide" data-slide="18">
+            <h2>Generating Code from Natural Language</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-language"></i></div>
+                            <div class="feature-content">
+                                <h4>Describe What You Need</h4>
+                                <p>Write in plain English — "Create a REST endpoint that accepts a JSON body and validates required fields"</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-clipboard-list"></i></div>
+                            <div class="feature-content">
+                                <h4>Specify Constraints</h4>
+                                <p>Include language, framework, style requirements: "Use Express.js, async/await, and return proper HTTP status codes"</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-redo"></i></div>
+                            <div class="feature-content">
+                                <h4>Iterate Conversationally</h4>
+                                <p>"Now add input sanitization" — Copilot builds on previous responses in the same chat thread</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-paste"></i></div>
+                            <div class="feature-content">
+                                <h4>Insert into Editor</h4>
+                                <p>Use the "Insert at Cursor" button or copy the code block directly into your file</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="demo-box" style="margin-top: 0;">
+                        <h4 style="color: var(--secondary); margin-bottom: 12px;"><i class="fas fa-comment-dots"></i> Effective Chat Prompts</h4>
+                        <div class="code-block" style="font-size: 0.82rem; line-height: 1.7;">
+                            <span class="comment">// Weak prompt:</span><br>
+                            <span class="string">"Write a function"</span><br><br>
+                            <span class="comment">// Strong prompt:</span><br>
+                            <span class="string">"Write a TypeScript function that takes</span><br>
+                            <span class="string">a list of User objects and returns only</span><br>
+                            <span class="string">those with verified emails. Include JSDoc</span><br>
+                            <span class="string">and a unit test using Jest."</span>
+                        </div>
+                    </div>
+                    <div class="tip-box" style="margin-top: 20px;">
+                        <h4><i class="fas fa-at"></i> Use @file References</h4>
+                        <p>Type <code style="background:var(--surface-light);padding:2px 5px;border-radius:3px;">@</code> in Chat to reference specific files, symbols, or selections — gives Copilot exact context for better results.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Explaining & Documenting Code -->
+        <div class="slide content-slide" data-slide="19">
+            <h2>Explaining & Documenting Code</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="card animate">
+                    <div class="card-icon"><i class="fas fa-search"></i></div>
+                    <h3>Explain This Code</h3>
+                    <p style="margin-bottom: 12px;">Select any code → Inline Chat → type <code style="background:var(--surface-light);padding:2px 5px;border-radius:3px;">/explain</code></p>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Copilot walks through the logic step by step — perfect for onboarding on unfamiliar codebases</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-file-alt"></i></div>
+                    <h3>Generate Documentation</h3>
+                    <p style="margin-bottom: 12px;">Select a function → <code style="background:var(--surface-light);padding:2px 5px;border-radius:3px;">/doc</code> in Inline Chat</p>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Generates JSDoc, Python docstrings, Javadoc, XML comments — matching your codebase style</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-project-diagram"></i></div>
+                    <h3>Understand Architecture</h3>
+                    <p style="margin-bottom: 12px;">In Side Panel: <em>"Explain how the authentication flow works across these files"</em></p>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Use @workspace to let Copilot trace through your entire project structure</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-exchange-alt"></i></div>
+                    <h3>Translate Code</h3>
+                    <p style="margin-bottom: 12px;"><em>"Convert this Python function to TypeScript"</em></p>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Cross-language translation preserves logic and adapts idioms to the target language</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo: Chat Demo -->
+        <div class="slide demo-slide" data-slide="20">
+            <div class="demo-icon animate"><i class="fas fa-laptop-code"></i></div>
+            <h2 class="animate">Demo Time</h2>
+            <p class="demo-subtitle animate">Copilot Chat — Inline & Side Panel</p>
+            <div class="demo-topics animate">
+                <span class="demo-topic">Inline Chat Fix & Explain</span>
+                <span class="demo-topic">Generate Feature from NL</span>
+                <span class="demo-topic">Generate Docs with /doc</span>
+                <span class="demo-topic">Multi-Turn Conversation</span>
+            </div>
+            <p class="animate" style="margin-top: 24px; color: var(--text-muted); font-size: 1rem;">
+                Runbook: <span class="highlight-text">demos/demo_02_chat.md</span>
+            </p>
+        </div>
+
+        <!-- Quiz Q3: Chat -->
+        <div class="slide quiz-slide" data-slide="q3">
+            <h2 class="animate">Question 2</h2>
+            <p class="quiz-question animate">What is the primary difference between Inline Chat and the Side Panel Chat?</p>
+            <div class="quiz-options animate">
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Inline Chat uses a better AI model</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Inline Chat appears in the editor at your cursor; Side Panel is persistent with conversation history</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Side Panel only works for Python files</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SECTION 04: Copilot Edits & Multi-File Changes
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="21">
+            <span class="section-number">04</span>
+            <h2>Copilot Edits &<br>Multi-File Changes</h2>
+            <p class="subtitle" style="color: var(--text-muted); font-size: 1.3rem;">Apply changes across multiple files in a single pass</p>
+        </div>
+
+        <!-- Slide: What Are Copilot Edits? -->
+        <div class="slide content-slide" data-slide="22">
+            <h2>What Are Copilot Edits?</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-layer-group"></i></div>
+                            <div class="feature-content">
+                                <h4>Multi-File, Single Instruction</h4>
+                                <p>Write one natural language instruction and Copilot applies coordinated edits across all relevant files simultaneously</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-code-branch"></i></div>
+                            <div class="feature-content">
+                                <h4>Diff Review Workflow</h4>
+                                <p>All changes are staged as diffs. You review each file's changes, accept the ones you want, and discard the rest</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-sitemap"></i></div>
+                            <div class="feature-content">
+                                <h4>Working Set Control</h4>
+                                <p>You define the working set — add/remove files from the editing context to keep changes scoped</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-undo"></i></div>
+                            <div class="feature-content">
+                                <h4>Safe Iteration</h4>
+                                <p>Reject all, modify your instruction, and re-run until the changes are exactly what you need</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="demo-box" style="margin-top: 0;">
+                        <h4 style="color: var(--secondary); margin-bottom: 12px;"><i class="fas fa-quote-left"></i> Example Edit Prompt</h4>
+                        <div class="code-block" style="font-size: 0.85rem; line-height: 1.7;">
+                            <span class="string">"Add input validation to all REST endpoints</span><br>
+                            <span class="string">in the controllers/ directory. Use Joi schema</span><br>
+                            <span class="string">validation and return 400 with a structured</span><br>
+                            <span class="string">error message. Do not modify existing tests."</span>
+                        </div>
+                        <p style="color: var(--text-muted); font-size: 0.82rem; margin-top: 12px;"><i class="fas fa-folder"></i> Working set: <code style="background:var(--surface-light);padding:2px 5px;border-radius:3px;">controllers/*.js</code>, <code style="background:var(--surface-light);padding:2px 5px;border-radius:3px;">middleware/</code></p>
+                    </div>
+                    <div class="tip-box" style="margin-top: 20px;">
+                        <h4><i class="fas fa-lightbulb"></i> Edit vs Chat</h4>
+                        <p><strong>Chat</strong> is conversational and exploratory. <strong>Edits</strong> is transactional — you give an instruction, get file changes, review them.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Multi-File Editing -->
+        <div class="slide content-slide" data-slide="23">
+            <h2>Multi-File Editing Workflow</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="card animate" style="text-align: center; padding: 25px 20px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);">
+                        <i class="fas fa-folder-plus"></i>
+                    </div>
+                    <h3 style="font-size: 1rem;">1. Open Edit Mode</h3>
+                    <p style="font-size: 0.85rem;">Click <strong>Copilot Edits</strong> in the sidebar or use <code style="background:var(--surface-light);padding:2px 4px;border-radius:3px;">Ctrl+Shift+I</code></p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 25px 20px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h3 style="font-size: 1rem;">2. Define Working Set</h3>
+                    <p style="font-size: 0.85rem;">Add the files Copilot should edit — drag from Explorer or use the + button</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 25px 20px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                    <h3 style="font-size: 1rem;">3. Describe Changes</h3>
+                    <p style="font-size: 0.85rem;">Write a clear, specific instruction about what to change and what to preserve</p>
+                </div>
+                <div class="card animate" style="text-align: center; padding: 25px 20px;">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);">
+                        <i class="fas fa-check-double"></i>
+                    </div>
+                    <h3 style="font-size: 1rem;">4. Review & Accept</h3>
+                    <p style="font-size: 0.85rem;">Diff view for each file — Accept All, Discard All, or review file by file</p>
+                </div>
+            </div>
+            <div class="warning-box animate" style="margin-top: 30px; width: 100%;">
+                <h4><i class="fas fa-exclamation-triangle"></i> Best Practice: Use Git Before Editing</h4>
+                <p>Always commit or stash your current work before running Copilot Edits on multiple files. If the result isn't what you expected, <code>git checkout .</code> is your fast rollback.</p>
+            </div>
+        </div>
+
+        <!-- Demo: Copilot Edits -->
+        <div class="slide demo-slide" data-slide="24">
+            <div class="demo-icon animate"><i class="fas fa-laptop-code"></i></div>
+            <h2 class="animate">Demo Time</h2>
+            <p class="demo-subtitle animate">Copilot Edits & Multi-File Changes</p>
+            <div class="demo-topics animate">
+                <span class="demo-topic">Add Feature Across Files</span>
+                <span class="demo-topic">Refactor with Guardrails</span>
+                <span class="demo-topic">Review & Accept Diffs</span>
+            </div>
+            <p class="animate" style="margin-top: 24px; color: var(--text-muted); font-size: 1rem;">
+                Runbook: <span class="highlight-text">demos/demo_03_edits.md</span>
+            </p>
+        </div>
+
+        <!-- ============================================================
+             SECTION 05: Slash Commands & Chat Participants
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="25">
+            <span class="section-number">05</span>
+            <h2>Slash Commands &<br>Chat Participants</h2>
+            <p class="subtitle" style="color: var(--text-muted); font-size: 1.3rem;">/explain · /fix · /tests · /doc · @workspace · @terminal</p>
+        </div>
+
+        <!-- Slide: Slash Commands -->
+        <div class="slide content-slide" data-slide="26">
+            <h2>Slash Commands — Structured Shortcuts</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="card animate">
+                    <div class="card-icon"><i class="fas fa-question-circle"></i></div>
+                    <h3><code style="color:var(--secondary);">/explain</code></h3>
+                    <p style="margin-bottom: 12px;">Explains selected code in plain English — what it does, how it works, edge cases</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;"><em>Select code → /explain</em></p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-wrench"></i></div>
+                    <h3><code style="color:var(--accent);">/fix</code></h3>
+                    <p style="margin-bottom: 12px;">Analyzes selected code or error output and proposes a fix with an explanation</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;"><em>Select buggy code → /fix</em></p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-vial"></i></div>
+                    <h3><code style="color:var(--secondary);">/tests</code></h3>
+                    <p style="margin-bottom: 12px;">Generates unit tests for selected code — detects your test framework automatically</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;"><em>Select function → /tests</em></p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-book"></i></div>
+                    <h3><code style="color:var(--secondary);">/doc</code></h3>
+                    <p style="margin-bottom: 12px;">Generates documentation comments in the format your language/codebase uses</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;"><em>Select function → /doc</em></p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-broom"></i></div>
+                    <h3><code style="color:var(--purple);">/optimize</code></h3>
+                    <p style="margin-bottom: 12px;">Suggests performance improvements and cleaner implementations for selected code</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;"><em>Select code → /optimize</em></p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #3fb950, #238636);"><i class="fas fa-trash-alt"></i></div>
+                    <h3><code style="color:var(--secondary);">/clear</code></h3>
+                    <p style="margin-bottom: 12px;">Clears the current chat thread — start fresh without the previous conversation context</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;"><em>New topic? /clear first</em></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Chat Participants -->
+        <div class="slide content-slide" data-slide="27">
+            <h2>Chat Participants — Context Scoping with @</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-folder-open"></i></div>
+                            <div class="feature-content">
+                                <h4><code>@workspace</code></h4>
+                                <p>Gives Copilot access to your entire repository — index-based search across all files. Ask questions about architecture, patterns, and cross-file relationships</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-terminal"></i></div>
+                            <div class="feature-content">
+                                <h4><code>@terminal</code></h4>
+                                <p>Gives Copilot context from the terminal — explain errors, suggest commands, help debug shell output or failing test runs</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-cog"></i></div>
+                            <div class="feature-content">
+                                <h4><code>@vscode</code></h4>
+                                <p>Ask questions about VS Code settings, extensions, and commands — Copilot knows the VS Code API and can configure your editor</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-cube"></i></div>
+                            <div class="feature-content">
+                                <h4><code>#file</code> / <code>#selection</code></h4>
+                                <p>Reference specific files or your current selection in any prompt — precise scoping without copy-pasting code</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="demo-box" style="margin-top: 0;">
+                        <h4 style="color: var(--secondary); margin-bottom: 12px;"><i class="fas fa-star"></i> Power Combinations</h4>
+                        <div class="code-block" style="font-size: 0.82rem; line-height: 2;">
+                            <span class="comment">// Find where a pattern is used project-wide</span><br>
+                            <span class="string">@workspace Where do we handle JWT refresh tokens?</span><br><br>
+                            <span class="comment">// Fix a specific failing test</span><br>
+                            <span class="string">@terminal /fix the last test failure</span><br><br>
+                            <span class="comment">// Generate tests for a specific file</span><br>
+                            <span class="string">#file:userService.ts /tests</span>
+                        </div>
+                    </div>
+                    <div class="tip-box" style="margin-top: 20px;">
+                        <h4><i class="fas fa-lightbulb"></i> Use @workspace Strategically</h4>
+                        <p>@workspace indexes your full repo — powerful but slower. Use it for cross-file questions and architectural understanding, not simple file edits.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo: Commands & Participants -->
+        <div class="slide demo-slide" data-slide="28">
+            <div class="demo-icon animate"><i class="fas fa-laptop-code"></i></div>
+            <h2 class="animate">Demo Time</h2>
+            <p class="demo-subtitle animate">Slash Commands & Chat Participants</p>
+            <div class="demo-topics animate">
+                <span class="demo-topic">/fix a Bug from Test Output</span>
+                <span class="demo-topic">/tests for a Function</span>
+                <span class="demo-topic">@workspace Architecture Q&A</span>
+                <span class="demo-topic">@terminal Error Explanation</span>
+            </div>
+            <p class="animate" style="margin-top: 24px; color: var(--text-muted); font-size: 1rem;">
+                Runbook: <span class="highlight-text">demos/demo_04_commands.md</span>
+            </p>
+        </div>
+
+        <!-- Quiz Q4: Commands -->
+        <div class="slide quiz-slide" data-slide="q4">
+            <h2 class="animate">Question 3</h2>
+            <p class="quiz-question animate">You want to ask Copilot "Where is the authentication logic used across the entire codebase?" Which participant should you use?</p>
+            <div class="quiz-options animate">
+                <div class="quiz-option">
+                    <div class="quiz-option-value">@terminal — to run a grep command</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">@workspace — to let Copilot search the full repository index</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">@vscode — to find it in settings</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SECTION 06: Copilot for Pull Requests
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="29">
+            <span class="section-number">06</span>
+            <h2>Copilot for<br>Pull Requests</h2>
+            <p class="subtitle" style="color: var(--text-muted); font-size: 1.3rem;">PR summaries, review suggestions, and Copilot-generated descriptions</p>
+        </div>
+
+        <!-- Slide: PR Summaries & Descriptions -->
+        <div class="slide content-slide" data-slide="30">
+            <h2>PR Summaries & Auto-Generated Descriptions</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-magic"></i></div>
+                            <div class="feature-content">
+                                <h4>One-Click PR Description</h4>
+                                <p>On GitHub.com, click the Copilot sparkle icon in the PR description field — Copilot reads all diffs and writes a structured description automatically</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-list-ul"></i></div>
+                            <div class="feature-content">
+                                <h4>Structured Summary</h4>
+                                <p>Generates: <strong>What changed</strong>, <strong>Why</strong>, <strong>How to test</strong>, and lists affected files — following your PR template if configured</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-edit"></i></div>
+                            <div class="feature-content">
+                                <h4>Editable & Customizable</h4>
+                                <p>The generated description is a starting point — edit, extend, or regenerate until it matches your team's standards</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-clock"></i></div>
+                            <div class="feature-content">
+                                <h4>Time Saved at Scale</h4>
+                                <p>Teams report 50%+ reduction in time spent writing PR descriptions — especially valuable for large, complex changes</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="demo-box" style="margin-top: 0;">
+                        <h4 style="color: var(--secondary); margin-bottom: 12px;"><i class="fas fa-file-alt"></i> Example Generated Description</h4>
+                        <div class="code-block" style="font-size: 0.82rem; line-height: 1.7;">
+                            <span class="comment">## Summary</span><br>
+                            <span class="string">Adds JWT refresh token rotation to the auth service</span><br><br>
+                            <span class="comment">## Changes</span><br>
+                            <span class="string">- auth/tokenService.ts: Add refreshToken() method</span><br>
+                            <span class="string">- middleware/auth.js: Handle expired token gracefully</span><br>
+                            <span class="string">- tests/auth.test.ts: 8 new test cases</span><br><br>
+                            <span class="comment">## Testing</span><br>
+                            <span class="string">Run npm test -- --testPathPattern=auth</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Code Review Suggestions -->
+        <div class="slide content-slide" data-slide="31">
+            <h2>Copilot Code Review Suggestions</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="card animate">
+                    <div class="card-icon"><i class="fas fa-bug"></i></div>
+                    <h3>Bug Detection</h3>
+                    <p>Copilot flags potential null dereferences, off-by-one errors, race conditions, and missing error handling in diff view</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Security Suggestions</h3>
+                    <p>Highlights common vulnerabilities: SQL injection risks, unsanitized inputs, hardcoded secrets, and insecure configurations</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-lightbulb"></i></div>
+                    <h3>Improvement Hints</h3>
+                    <p>Suggests better variable names, opportunities to extract functions, and patterns that improve readability</p>
+                </div>
+            </div>
+            <div class="two-column" style="margin-top: 30px; gap: 20px;">
+                <div class="tip-box animate">
+                    <h4><i class="fas fa-lightbulb"></i> Request a Review in VS Code</h4>
+                    <p>In VS Code, select changed files → right-click → <strong>"Copilot: Review and Comment"</strong> — Copilot leaves inline review comments before you even open a PR</p>
+                </div>
+                <div class="warning-box animate">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Human Review Still Required</h4>
+                    <p>Copilot review is a <strong>first pass</strong>, not a replacement. Architecture decisions, business logic correctness, and security-critical code need human expert review.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo: PR -->
+        <div class="slide demo-slide" data-slide="32">
+            <div class="demo-icon animate"><i class="fas fa-laptop-code"></i></div>
+            <h2 class="animate">Demo Time</h2>
+            <p class="demo-subtitle animate">Copilot for Pull Requests</p>
+            <div class="demo-topics animate">
+                <span class="demo-topic">Generate PR Description</span>
+                <span class="demo-topic">Copilot Review Comments</span>
+                <span class="demo-topic">Respond to Review Feedback</span>
+            </div>
+            <p class="animate" style="margin-top: 24px; color: var(--text-muted); font-size: 1rem;">
+                Runbook: <span class="highlight-text">demos/demo_05_pull_requests.md</span>
+            </p>
+        </div>
+
+        <!-- Quiz Q5: PRs -->
+        <div class="slide quiz-slide" data-slide="q5">
+            <h2 class="animate">Question 4</h2>
+            <p class="quiz-question animate">Where do you find the Copilot button to auto-generate a PR description on GitHub.com?</p>
+            <div class="quiz-options animate">
+                <div class="quiz-option">
+                    <div class="quiz-option-value">In the repository Settings tab</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">Next to the PR description field — the Copilot sparkle icon</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">In the Actions tab of the PR</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             SECTION 07: Best Practices & Adoption
+             ============================================================ -->
+        <div class="slide section-slide" data-slide="33">
+            <span class="section-number">07</span>
+            <h2>Best Practices for<br>Copilot Adoption</h2>
+            <p class="subtitle" style="color: var(--text-muted); font-size: 1.3rem;">Trust, review, security, and building the right habits</p>
+        </div>
+
+        <!-- Slide: When to Trust -->
+        <div class="slide content-slide" data-slide="34">
+            <h2>When to Trust & When to Verify</h2>
+            <div class="two-column">
+                <div>
+                    <h3 style="color: var(--secondary); margin-bottom: 25px;"><i class="fas fa-check-circle"></i> High-Confidence Areas</h3>
+                    <ul>
+                        <li class="animate"><span class="highlight-text">Boilerplate & scaffolding</span> — Standard patterns Copilot has seen millions of times</li>
+                        <li class="animate"><span class="highlight-text">Common algorithms</span> — Sorting, searching, data transformation on standard types</li>
+                        <li class="animate"><span class="highlight-text">Test generation</span> — Happy path and common edge cases for pure functions</li>
+                        <li class="animate"><span class="highlight-text">Documentation</span> — Docstrings, comments, and README sections</li>
+                        <li class="animate"><span class="highlight-text">SQL & regex patterns</span> — Well-known syntax and common query structures</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: var(--accent); margin-bottom: 25px;"><i class="fas fa-eye"></i> Always Verify These</h3>
+                    <ul>
+                        <li class="animate"><span class="highlight-text">Business logic</span> — Copilot doesn't know your domain rules</li>
+                        <li class="animate"><span class="highlight-text">Security-critical code</span> — Auth, crypto, input handling, permissions</li>
+                        <li class="animate"><span class="highlight-text">External API calls</span> — Endpoints, auth flows, rate limits may be outdated</li>
+                        <li class="animate"><span class="highlight-text">Edge cases</span> — Copilot optimizes for common paths, not adversarial inputs</li>
+                        <li class="animate"><span class="highlight-text">Performance-critical paths</span> — May suggest readable but inefficient approaches</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Security Considerations -->
+        <div class="slide content-slide" data-slide="35">
+            <h2>Security Considerations</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-key"></i></div>
+                    <h3>No Secrets in Context</h3>
+                    <p>Never place API keys, passwords, or tokens in files where Copilot is active. Use environment variables and secrets managers instead</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-clone"></i></div>
+                    <h3>Duplication Detection</h3>
+                    <p>Copilot has a "public code filter" that flags suggestions that match open-source code. Review flagged suggestions for license implications</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon"><i class="fas fa-search"></i></div>
+                    <h3>OWASP-Aware Review</h3>
+                    <p>Manually check Copilot-generated code for injection risks, broken access control, insecure deserialization, and XSS vectors</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-building"></i></div>
+                    <h3>Enterprise Policy</h3>
+                    <p>Copilot Business/Enterprise: prompts are NOT retained for training. Admins can restrict which content policies apply to your org</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-user-shield"></i></div>
+                    <h3>Code Review Gate</h3>
+                    <p>Treat AI-generated code like any other third-party contribution — require PR review, run static analysis, and validate tests pass</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #3fb950, #238636);"><i class="fas fa-graduation-cap"></i></div>
+                    <h3>Developer Responsibility</h3>
+                    <p>You are accountable for all code you commit — Copilot assists but you must understand, verify, and own every line</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Best Practices Summary -->
+        <div class="slide content-slide" data-slide="36">
+            <h2>Best Practices for Maximum Value</h2>
+            <div class="two-column">
+                <div>
+                    <h3 style="color: var(--secondary); margin-bottom: 20px;"><i class="fas fa-pen-fancy"></i> Prompting Excellence</h3>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-comment-alt"></i></div>
+                            <div class="feature-content">
+                                <h4>Comment First, Code Second</h4>
+                                <p>Write a detailed comment explaining what you need before typing the function signature</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-folder-open"></i></div>
+                            <div class="feature-content">
+                                <h4>Open Relevant Files</h4>
+                                <p>Keep related types, interfaces, and utilities open in tabs for richer completions</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-redo-alt"></i></div>
+                            <div class="feature-content">
+                                <h4>Iterate & Refine</h4>
+                                <p>If the first suggestion isn't right, type more context or use inline chat to redirect</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: var(--secondary); margin-bottom: 20px;"><i class="fas fa-users"></i> Team Adoption</h3>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-file-code"></i></div>
+                            <div class="feature-content">
+                                <h4>Shared Copilot Instructions</h4>
+                                <p>Use <code style="background:var(--surface-light);padding:2px 5px;border-radius:3px;">.github/copilot-instructions.md</code> to codify team standards and Copilot behavior</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-book-open"></i></div>
+                            <div class="feature-content">
+                                <h4>Reusable Prompt Files</h4>
+                                <p>Save effective prompts as <code style="background:var(--surface-light);padding:2px 5px;border-radius:3px;">.prompt.md</code> files and share across the team</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                            <div class="feature-content">
+                                <h4>Measure & Celebrate Wins</h4>
+                                <p>Track suggestion acceptance rates in GitHub Copilot metrics dashboard (Business/Enterprise)</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Copilot Instructions File -->
+        <div class="slide content-slide" data-slide="37">
+            <h2>Custom Instructions — Teaching Copilot Your Standards</h2>
+            <div class="two-column">
+                <div>
+                    <ul class="feature-list">
+                        <li class="animate">
+                            <div class="feature-icon"><i class="fas fa-file-code"></i></div>
+                            <div class="feature-content">
+                                <h4>.github/copilot-instructions.md</h4>
+                                <p>A Markdown file at the root of your repo that customizes Copilot's behavior for every developer on the team</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-ruler-combined"></i></div>
+                            <div class="feature-content">
+                                <h4>Team Coding Standards</h4>
+                                <p>Define preferred patterns, naming conventions, error handling approaches, and what libraries to use or avoid</p>
+                            </div>
+                        </li>
+                        <li class="animate">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-scroll"></i></div>
+                            <div class="feature-content">
+                                <h4>Prompt Files (.prompt.md)</h4>
+                                <p>Save complex, reusable prompt templates your team runs repeatedly — for tests, features, migrations, or reviews</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="demo-box" style="margin-top: 0;">
+                        <h4 style="color: var(--secondary); margin-bottom: 12px;"><i class="fas fa-file-alt"></i> Example: copilot-instructions.md</h4>
+                        <div class="code-block" style="font-size: 0.82rem; line-height: 1.7;">
+                            <span class="comment"># Copilot Instructions</span><br>
+                            <span class="string">- Use TypeScript strict mode always</span><br>
+                            <span class="string">- Prefer async/await over callbacks</span><br>
+                            <span class="string">- Use Zod for all input validation</span><br>
+                            <span class="string">- Write Jest tests for all new functions</span><br>
+                            <span class="string">- Never use `any` type — use `unknown` instead</span><br>
+                            <span class="string">- Error messages must be user-friendly strings</span><br>
+                            <span class="string">- Follow REST naming: GET /users/:id</span>
+                        </div>
+                    </div>
+                    <div class="tip-box" style="margin-top: 20px;">
+                        <h4><i class="fas fa-lightbulb"></i> Instructions Apply Automatically</h4>
+                        <p>Once committed to the repo, Copilot reads this file on every interaction — no developer needs to repeat team standards in every prompt.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Q6: Best Practices -->
+        <div class="slide quiz-slide" data-slide="q6">
+            <h2 class="animate">Question 5</h2>
+            <p class="quiz-question animate">What file can you create in your repository to share Copilot coding standards across your entire team automatically?</p>
+            <div class="quiz-options animate">
+                <div class="quiz-option">
+                    <div class="quiz-option-value">.github/copilot-instructions.md</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">.copilotrc</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+                <div class="quiz-option">
+                    <div class="quiz-option-value">VS Code settings.json only</div>
+                    <div class="quiz-option-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             Key Takeaways
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="38">
+            <h2>Key Takeaways</h2>
+            <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="card animate">
+                    <div class="card-icon"><i class="fas fa-brain"></i></div>
+                    <h3>Context is King</h3>
+                    <p>Descriptive names, comments, and open relevant files are the #1 lever for improving suggestion quality</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #58a6ff, #79c0ff);"><i class="fas fa-layer-group"></i></div>
+                    <h3>Right Tool, Right Task</h3>
+                    <p>Inline for speed → Chat for exploration → Edits for multi-file → PRs for review — match the tool to the task</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f78166, #ffa657);"><i class="fas fa-terminal"></i></div>
+                    <h3>Commands Unlock Power</h3>
+                    <p>/explain, /fix, /tests, /doc + @workspace turn Copilot from a suggester into a full development partner</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #a371f7, #d2a8ff);"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Always Review</h3>
+                    <p>AI-generated code is a starting point. You own every line — review for correctness, security, and fit</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #238636, #3fb950);"><i class="fas fa-users"></i></div>
+                    <h3>Team Standards Scale</h3>
+                    <p>copilot-instructions.md multiplies benefit across your team — consistent output without individual prompting effort</p>
+                </div>
+                <div class="card animate">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #3fb950, #238636);"><i class="fas fa-rocket"></i></div>
+                    <h3>Stay in Flow</h3>
+                    <p>The biggest win is staying in your editor — no context switching, no tab juggling, code where you code</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             Q&A
+             ============================================================ -->
+        <div class="slide content-slide" data-slide="39">
+            <h2>Q & A</h2>
+            <div class="two-column" style="gap: 40px;">
+                <div>
+                    <h3 style="color: var(--secondary); margin-bottom: 25px;"><i class="fas fa-question-circle"></i> Open Discussion Topics</h3>
+                    <ul>
+                        <li class="animate"><span class="highlight-text">Adoption blockers</span> — What's preventing your team from using Copilot more?</li>
+                        <li class="animate"><span class="highlight-text">Use case brainstorm</span> — Where would Copilot save the most time on your project?</li>
+                        <li class="animate"><span class="highlight-text">Security concerns</span> — Questions about data privacy, code retention, or license compliance</li>
+                        <li class="animate"><span class="highlight-text">Enterprise features</span> — Policy management, audit logs, metrics dashboards</li>
+                        <li class="animate"><span class="highlight-text">What's next</span> — Agent mode, MCP integrations, and the roadmap</li>
+                    </ul>
+                </div>
+                <div class="animate">
+                    <div class="tip-box" style="margin-top: 0;">
+                        <h4><i class="fas fa-book"></i> Resources to Explore</h4>
+                        <ul style="list-style: none; color: var(--text); font-size: 0.95rem; line-height: 2;">
+                            <li><i class="fab fa-github" style="color:var(--secondary); margin-right:8px;"></i> <strong>docs.github.com/copilot</strong></li>
+                            <li><i class="fas fa-video" style="color:var(--secondary); margin-right:8px;"></i> GitHub Copilot on YouTube</li>
+                            <li><i class="fas fa-graduation-cap" style="color:var(--secondary); margin-right:8px;"></i> GitHub Skills — free learning paths</li>
+                            <li><i class="fab fa-discord" style="color:var(--secondary); margin-right:8px;"></i> GitHub Community Discussions</li>
+                            <li><i class="fas fa-rss" style="color:var(--secondary); margin-right:8px;"></i> github.blog — Copilot changelog</li>
+                        </ul>
+                    </div>
+                    <div class="demo-box" style="margin-top: 20px;">
+                        <h4 style="color: var(--secondary); margin-bottom: 12px;"><i class="fas fa-star"></i> Challenge for This Week</h4>
+                        <p style="color: var(--text); font-size: 0.95rem; line-height: 1.7;">Pick one real task from your backlog and complete it using only Copilot Chat + Edits. Track the time difference vs. your usual approach.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             Thank You
+             ============================================================ -->
+        <div class="slide title-slide" data-slide="40">
+            <div class="logo-container animate">
+                <div class="copilot-logo">
+                    <i class="fab fa-github"></i>
+                </div>
+            </div>
+            <h1 class="animate">Thank You!</h1>
+            <p class="subtitle animate">Questions & Discussion</p>
+            <div class="meta animate">
+                <span><i class="fab fa-github"></i> GitHub Copilot for Developers</span>
+                <span><i class="fas fa-heart" style="color: var(--accent);"></i> Happy coding with your AI pair programmer</span>
+            </div>
+            <div class="animate" style="margin-top: 50px;">
+                <p style="color: var(--text-muted);">From your first <kbd style="background:var(--surface-light);padding:3px 8px;border-radius:4px;">Tab</kbd> acceptance to team-wide adoption — Copilot grows with you</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <span class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides"></span>
+        </span>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        <div style="width: 1px; height: 30px; background: var(--surface-light); margin: 0 5px;"></div>
+        <button class="nav-btn" id="fullscreenBtn" onclick="toggleFullscreen()" title="Fullscreen (F)">
+            <i class="fas fa-expand" id="fullscreenIcon"></i>
+        </button>
+        <div style="width: 1px; height: 30px; background: var(--surface-light); margin: 0 5px;"></div>
+        <button class="nav-btn pdf-btn" onclick="exportToPDF()" title="Save as PDF">
+            <i class="fas fa-file-pdf"></i> PDF
+        </button>
+    </div>
+
+    <script src="../shared/presentation.js"></script>
+    <script>
+        initPresentation({
+            storageKey: 'copilot-for-developers',
+            pdfFilename: 'copilot-for-developers.pdf'
+        });
+    </script>
+</body>
+
+</html>
